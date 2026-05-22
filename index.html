@@ -41,11 +41,10 @@
             <span id="syncStatus">Offline/local only</span>
           </div>
           <form id="loginForm" class="login-form">
-            <label for="loginEmail">Email</label>
-            <div class="login-row">
-              <input id="loginEmail" name="email" type="email" placeholder="you@example.com" autocomplete="email" />
-              <button class="secondary-button" type="submit">Send link</button>
-            </div>
+            <button class="google-button" id="googleLoginBtn" type="submit">
+              <span aria-hidden="true">G</span>
+              Continue with Google
+            </button>
           </form>
           <div class="signed-in-panel" id="signedInPanel" hidden>
             <span id="signedInEmail"></span>
@@ -129,6 +128,6 @@
       </main>
     </div>
 
-    <script src="app.js?v=5"></script>
+    <script src="app.js?v=6"></script>
   </body>
 </html>

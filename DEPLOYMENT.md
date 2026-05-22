@@ -54,12 +54,11 @@ The app stores theme preference in browser `localStorage`. Guest progress stays 
 ## Supabase Setup
 
 1. Create a Supabase project.
-2. Enable email magic link auth in Supabase Auth settings.
-3. Add redirect URLs:
-   - Local: `http://127.0.0.1:5500/index.html`
-   - Production: your Vercel production URL
-4. Run [supabase_learner_progress.sql](supabase_learner_progress.sql) in the Supabase SQL editor.
-5. Add Vercel environment variables:
+2. Enable the Google provider in Supabase Auth settings.
+3. Set Supabase Site URL to your Vercel production URL and add redirect URLs for that domain.
+4. In Google Cloud Console, add the Vercel origin and the Supabase callback URL (`https://<project-ref>.supabase.co/auth/v1/callback`).
+5. Run [supabase_learner_progress.sql](supabase_learner_progress.sql) in the Supabase SQL editor.
+6. Add Vercel environment variables:
    - `SUPABASE_URL`
    - `SUPABASE_ANON_KEY`
 

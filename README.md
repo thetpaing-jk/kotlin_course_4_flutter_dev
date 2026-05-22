@@ -36,7 +36,7 @@ Web app မှာ course reading, lesson progress, exam form, score saving, Q&A 
 Night mode toggle လည်းပါပြီး theme preference ကို browser `localStorage` ထဲမှာသိမ်းထားပါတယ်။
 The web app reads `courses/full/manifest.json`, which now points to the 10 generated files in `courses/flutter_devs/`.
 
-Sign in / cloud sync လည်းပါပါတယ်။ Account မဝင်သေးရင် course content ကို preview ဖတ်နိုင်ပေမဲ့ progress, exams, Q&A draft တွေကို lock ထားပါတယ်။ Supabase config ထည့်ထားတဲ့ production မှာ email magic link နဲ့ login ဝင်ရင် progress ကို user တစ်ယောက်ချင်း cloud sync လုပ်ပါတယ်။
+Sign in / cloud sync လည်းပါပါတယ်။ Account မဝင်သေးရင် course content ကို preview ဖတ်နိုင်ပေမဲ့ progress, exams, Q&A draft တွေကို lock ထားပါတယ်။ Supabase config ထည့်ထားတဲ့ production မှာ Google OAuth နဲ့ login ဝင်ရင် progress ကို user တစ်ယောက်ချင်း cloud sync လုပ်ပါတယ်။
 
 ## Vercel Deployment
 
@@ -54,7 +54,7 @@ Cloud sync setup:
 
 - Run [supabase_learner_progress.sql](supabase_learner_progress.sql) in Supabase.
 - Add Vercel env vars: `SUPABASE_URL`, `SUPABASE_ANON_KEY`.
-- Add Supabase redirect URLs for local and production.
+- Add Supabase redirect URLs for production and enable the Google provider.
 
 ## Flutter Developer Lens
 

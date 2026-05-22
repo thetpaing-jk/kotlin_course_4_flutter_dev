@@ -188,26 +188,31 @@ button {
   gap: 6px;
 }
 
-.login-form label {
-  color: var(--muted);
-  font-size: 12px;
-  font-weight: 800;
-}
-
-.login-row {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 8px;
-}
-
-.login-row input {
-  min-height: 40px;
-  min-width: 0;
-  padding: 8px 10px;
+.google-button {
+  display: flex;
+  gap: 10px;
+  min-height: 42px;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--control);
   color: var(--ink);
+  font-weight: 800;
+}
+
+.google-button span {
+  display: grid;
+  width: 22px;
+  height: 22px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--panel);
+  font-size: 13px;
+  font-weight: 900;
 }
 
 .course-list {
@@ -349,10 +354,10 @@ button {
 .theme-toggle:focus-visible,
 .icon-button:focus-visible,
 .course-button:focus-visible,
+.google-button:focus-visible,
 .tab:focus-visible,
 .primary-button:focus-visible,
-.secondary-button:focus-visible,
-.login-row input:focus-visible {
+.secondary-button:focus-visible {
   outline: 2px solid var(--blue);
   outline-offset: 2px;
 }
@@ -524,6 +529,7 @@ button {
 }
 
 .primary-button:disabled,
+.google-button:disabled,
 .secondary-button:disabled,
 .lesson-chip input:disabled {
   cursor: not-allowed;
@@ -787,7 +793,6 @@ button {
     font-size: 11px;
   }
 
-  .login-row,
   .signed-in-panel {
     grid-template-columns: 1fr;
     flex-direction: column;

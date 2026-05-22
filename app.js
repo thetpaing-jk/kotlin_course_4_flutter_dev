@@ -91,8 +91,7 @@ const SYNC_DEBOUNCE_MS = 700;
 const TEXT = {
   brandSubtitle: "For Flutter developers",
   accountTitle: "Account",
-  emailLabel: "Email",
-  sendLink: "Send link",
+  googleSignIn: "Continue with Google",
   signOut: "Sign out",
   lessonsLabel: "Lessons",
   examLabel: "Exam",
@@ -112,8 +111,7 @@ const TEXT = {
   saving: "Saving...",
   syncError: "Sync error",
   loadingCloud: "Loading cloud progress...",
-  sendingLoginLink: "Sending login link...",
-  loginLinkSent: "Login link sent",
+  redirectingToGoogle: "Redirecting to Google...",
   promptCopied: "Prompt copied.",
   signInToTrack: "Sign in to track",
   noExam: "No exam",
@@ -130,14 +128,12 @@ const TEXT = {
   examAverage: "Exam average {percent}%",
   progressHidden: "Progress is hidden until sign in",
   cloudEnabled: "Cloud sync is enabled for this account.",
-  signInToSync: "Sign in to sync progress across devices.",
+  signInToSync: "Sign in with Google to sync progress across devices.",
   supabaseMissing: "Supabase is not configured. Progress is saved on this browser only.",
   supabaseClientMissing: "Could not load Supabase client. Progress is saved on this browser only.",
-  enterEmailFirst: "Enter your email first.",
-  supabaseConfigureFirst: "Supabase is not configured yet. Add Vercel environment variables first.",
-  checkEmail: "Check your email and open the magic link.",
+  googleConfigureFirst: "Google sign-in is not configured yet. Add Vercel environment variables first.",
   signInRequired: "Please sign in first. Progress, exams, and Q&A are saved per account.",
-  configureSignInRequired: "Please configure Supabase and sign in first. Progress and exams are account-only.",
+  configureSignInRequired: "Please configure Google sign-in first. Progress and exams are account-only.",
   resetConfirm: "Reset current progress, exam answers, and Q&A drafts?",
   examLockedTitle: "Sign in to take exams",
   examLockedMessage: "Your exam answers and scores are saved per account.",
@@ -194,7 +190,7 @@ const els = {
   themeToggleLabel: document.querySelector("#themeToggleLabel"),
   syncStatus: document.querySelector("#syncStatus"),
   loginForm: document.querySelector("#loginForm"),
-  loginEmail: document.querySelector("#loginEmail"),
+  googleLoginBtn: document.querySelector("#googleLoginBtn"),
   signedInPanel: document.querySelector("#signedInPanel"),
   signedInEmail: document.querySelector("#signedInEmail"),
   signOutBtn: document.querySelector("#signOutBtn"),
@@ -463,7 +459,7 @@ function bindEvents() {
 
   els.loginForm.addEventListener("submit", async (event) => {
     event.preventDefault();
-    await sendMagicLink();
+    await signInWithGoogle();
   });
 
   els.signOutBtn.addEventListener("click", async () => {
@@ -545,6 +541,7 @@ function renderAccount() {
   els.loginForm.hidden = !!state.user;
   els.signedInPanel.hidden = !state.user;
   els.signedInEmail.textContent = state.user?.email ?? "";
+  els.googleLoginBtn.disabled = !state.supabase;
   const fallbackMessage = state.user
     ? t("cloudEnabled")
     : state.supabase
@@ -761,34 +758,24 @@ async function initSupabase() {
   });
 }
 
-async function sendMagicLink() {
-  const email = els.loginEmail.value.trim();
-  if (!email) {
-    setAuthMessage(t("enterEmailFirst"));
-    return;
-  }
-
+async function signInWithGoogle() {
   if (!state.supabase) {
-    setAuthMessage(t("supabaseConfigureFirst"));
+    setAuthMessage(t("googleConfigureFirst"));
     return;
   }
 
-  setSyncStatus("sendingLoginLink");
-  const { error } = await state.supabase.auth.signInWithOtp({
-    email,
+  setSyncStatus("redirectingToGoogle");
+  const { error } = await state.supabase.auth.signInWithOAuth({
+    provider: "google",
     options: {
-      emailRedirectTo: window.location.href.split("#")[0],
+      redirectTo: window.location.origin,
     },
   });
 
   if (error) {
     setSyncStatus("localOnly");
     setAuthMessage(error.message);
-    return;
   }
-
-  setSyncStatus("loginLinkSent");
-  setAuthMessage(t("checkEmail"));
 }
 
 async function signOut() {
