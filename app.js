@@ -537,9 +537,12 @@ function renderProgress() {
 }
 
 function renderAccount() {
+  const signedIn = isSignedIn();
   els.syncStatus.textContent = t(state.syncStatus);
-  els.loginForm.hidden = !!state.user;
-  els.signedInPanel.hidden = !state.user;
+  els.loginForm.hidden = signedIn;
+  els.googleLoginBtn.hidden = signedIn;
+  els.signedInPanel.hidden = !signedIn;
+  els.signOutBtn.hidden = !signedIn;
   els.signedInEmail.textContent = state.user?.email ?? "";
   els.googleLoginBtn.disabled = !state.supabase;
   const fallbackMessage = state.user
