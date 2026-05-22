@@ -2,29 +2,61 @@
 
 ## Goal
 
-စာအုပ်ထဲက `Basics, Basic Types, Packages` section တွေကို Flutter developer အတွက် လက်တွေ့သုံးနိုင်တဲ့ Kotlin lesson အဖြစ်ခွဲသင်မယ်။
-
-## PDF Coverage
-
-Basics, Basic Types, Packages
+Build a practical Kotlin skill set for `Basic Types, Packages, and Imports` and connect each idea to practical work a Flutter developer is likely to meet.
 
 ## Lessons
 
 ### 1. Numbers, booleans, characters, strings, arrays
 
-ဒီ lesson မှာ `Numbers, booleans, characters, strings, arrays` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Understand Numbers, booleans, characters, strings, arrays as a practical Kotlin skill, then use it in small, readable programs.
 
+**Flutter angle:** Connect the idea to Flutter architecture, platform channels, app state, or model code.
+
+**Build:** Write a small Kotlin example and explain what would feel similar or different in Dart.
+
+```kotlin
+fun courseLabel(name: String, completed: Int, total: Int): String {
+    return "$name: $completed/$total completed"
+}
+```
 ### 2. Explicit numeric conversions and why Kotlin avoids surprising casts
 
-ဒီ lesson မှာ `Explicit numeric conversions and why Kotlin avoids surprising casts` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Understand Explicit numeric conversions and why Kotlin avoids surprising casts as a practical Kotlin skill, then use it in small, readable programs.
 
+**Flutter angle:** Connect the idea to Flutter architecture, platform channels, app state, or model code.
+
+**Build:** Write a small Kotlin example and explain what would feel similar or different in Dart.
+
+```kotlin
+fun readUserId(args: Map<String, Any?>): String? =
+    (args["userId"] as? String)?.takeIf { it.isNotBlank() }
+```
 ### 3. String operations and raw strings
 
-ဒီ lesson မှာ `String operations and raw strings` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Understand String operations and raw strings as a practical Kotlin skill, then use it in small, readable programs.
 
+**Flutter angle:** Connect the idea to Flutter architecture, platform channels, app state, or model code.
+
+**Build:** Write a small Kotlin example and explain what would feel similar or different in Dart.
+
+```kotlin
+fun courseLabel(name: String, completed: Int, total: Int): String {
+    return "$name: $completed/$total completed"
+}
+```
 ### 4. Packages/imports as project organization tools
 
-ဒီ lesson မှာ `Packages/imports as project organization tools` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Understand Packages/imports as project organization tools as a practical Kotlin skill, then use it in small, readable programs.
+
+**Flutter angle:** Connect the idea to Flutter architecture, platform channels, app state, or model code.
+
+**Build:** Write a small Kotlin example and explain what would feel similar or different in Dart.
+
+```kotlin
+fun courseLabel(name: String, completed: Int, total: Int): String {
+    return "$name: $completed/$total completed"
+}
+```
 
 ## Flutter Bridge
 
@@ -33,14 +65,14 @@ Dart and Kotlin both infer types, but Kotlin is stricter about numeric conversio
 ## Practice
 
 1. Convert an `Int` quantity into a `Double` subtotal safely.
-2. Create one small Kotlin example and explain it with a Dart/Flutter analogy.
+2. Implement the coding exam as a small Kotlin snippet and compare the idea with Dart/Flutter.
 3. Write one mistake you should avoid in production code.
 
 ## Q&A Checkpoint
 
-- `Basic Types, Packages, and Imports` ကို Flutter developer အမြင်နဲ့ ဘယ် use case မှာအရေးကြီးဆုံးလဲ?
-- ဒီ topic အတွက် current Kotlin official docs မှာ PDF-era docs နဲ့ကွာတာရှိလား?
-- Production Android/Flutter plugin code မှာ common mistake ဘာတွေရှိလဲ?
+- How would I use `Basic Types, Packages, and Imports` in a real Flutter + Android integration?
+- What is the closest Dart/Flutter mental model, and where does Kotlin behave differently?
+- What mistake should I avoid when writing production Kotlin for this topic?
 
 ## Exam
 

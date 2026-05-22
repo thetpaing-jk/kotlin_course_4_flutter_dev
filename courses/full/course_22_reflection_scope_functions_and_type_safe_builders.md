@@ -2,29 +2,64 @@
 
 ## Goal
 
-စာအုပ်ထဲက `Reflection, Scope Functions, Type-Safe Builders` section တွေကို Flutter developer အတွက် လက်တွေ့သုံးနိုင်တဲ့ Kotlin lesson အဖြစ်ခွဲသင်မယ်။
-
-## PDF Coverage
-
-Reflection, Scope Functions, Type-Safe Builders
+Build a practical Kotlin skill set for `Reflection, Scope Functions, and Type-Safe Builders` and connect each idea to practical work a Flutter developer is likely to meet.
 
 ## Lessons
 
 ### 1. Reflection overview and when it is costly
 
-ဒီ lesson မှာ `Reflection overview and when it is costly` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Use reflection and scope functions intentionally, not as default style.
 
+**Flutter angle:** Scope functions can clean up setup code but can also hide meaning if nested.
+
+**Build:** Refactor setup code with apply/also and keep names readable.
+
+```kotlin
+fun courseLabel(name: String, completed: Int, total: Int): String {
+    return "$name: $completed/$total completed"
+}
+```
 ### 2. `let`, `run`, `with`, `apply`, and `also`
 
-ဒီ lesson မှာ ``let`, `run`, `with`, `apply`, and `also`` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Understand `let`, `run`, `with`, `apply`, and `also` as a practical Kotlin skill, then use it in small, readable programs.
 
+**Flutter angle:** Connect the idea to Flutter architecture, platform channels, app state, or model code.
+
+**Build:** Write a small Kotlin example and explain what would feel similar or different in Dart.
+
+```kotlin
+fun courseLabel(name: String, completed: Int, total: Int): String {
+    return "$name: $completed/$total completed"
+}
+```
 ### 3. Receiver lambdas and builder-style APIs
 
-ဒီ lesson မှာ `Receiver lambdas and builder-style APIs` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Pass behavior as values and keep callback-heavy code readable.
 
+**Flutter angle:** This maps to Flutter builder callbacks and Dart closures.
+
+**Build:** Write retry(times) { ... } and explain where the lambda runs.
+
+```kotlin
+fun retry(times: Int, block: () -> Unit) {
+    repeat(times) { block() }
+}
+
+retry(2) { println("Trying again") }
+```
 ### 4. Type-safe builders as Kotlin DSL foundations
 
-ဒီ lesson မှာ `Type-safe builders as Kotlin DSL foundations` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Understand Type-safe builders as Kotlin DSL foundations as a practical Kotlin skill, then use it in small, readable programs.
+
+**Flutter angle:** Connect the idea to Flutter architecture, platform channels, app state, or model code.
+
+**Build:** Write a small Kotlin example and explain what would feel similar or different in Dart.
+
+```kotlin
+fun courseLabel(name: String, completed: Int, total: Int): String {
+    return "$name: $completed/$total completed"
+}
+```
 
 ## Flutter Bridge
 
@@ -33,14 +68,14 @@ Scope functions can make native setup code concise, but overuse can become as ha
 ## Practice
 
 1. Configure an object with `apply` and log it with `also`.
-2. Create one small Kotlin example and explain it with a Dart/Flutter analogy.
+2. Implement the coding exam as a small Kotlin snippet and compare the idea with Dart/Flutter.
 3. Write one mistake you should avoid in production code.
 
 ## Q&A Checkpoint
 
-- `Reflection, Scope Functions, and Type-Safe Builders` ကို Flutter developer အမြင်နဲ့ ဘယ် use case မှာအရေးကြီးဆုံးလဲ?
-- ဒီ topic အတွက် current Kotlin official docs မှာ PDF-era docs နဲ့ကွာတာရှိလား?
-- Production Android/Flutter plugin code မှာ common mistake ဘာတွေရှိလဲ?
+- How would I use `Reflection, Scope Functions, and Type-Safe Builders` in a real Flutter + Android integration?
+- What is the closest Dart/Flutter mental model, and where does Kotlin behave differently?
+- What mistake should I avoid when writing production Kotlin for this topic?
 
 ## Exam
 

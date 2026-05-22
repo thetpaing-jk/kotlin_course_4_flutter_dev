@@ -12,6 +12,7 @@
    - Root Directory: repo root က `kotlin_course` မဟုတ်ဘဲ parent folder ဖြစ်နေရင် `kotlin_course` ကိုရွေးပါ။
    - Build Command: blank ထားပါ။
    - Output Directory: `.` ထားပါ။
+   - Install Command: blank ထားပါ။
 5. Deploy ကိုနှိပ်ပါ။
 
 ## CLI Deploy
@@ -29,13 +30,37 @@ Production deploy:
 npx vercel --prod
 ```
 
+## Important
+
+ဒီ repo က pure static site ဖြစ်လို့ Python/Node build မလိုပါ။ Vercel က Python project အဖြစ်မှား detect မလုပ်အောင်:
+
+- `vercel.json` ထဲမှာ `buildCommand`, `installCommand` ကို blank ထားထားပါတယ်။
+- `outputDirectory` ကို `.` ထားထားပါတယ်။
+- Deploy အတွက်မလိုတဲ့ Python generation script ကို repo ထဲကဖယ်ထားပါတယ်။
+- `.vercelignore` ထဲမှာ Python-related files တွေကို exclude ထားပါတယ်။
+
 ## What Vercel Serves
 
 - `index.html` - app entry
 - `styles.css` - UI and dark mode
 - `app.js` - course loading, progress, exam scoring
-- `courses/full/*.md` - 31-course curriculum
+- `api/config.js` - exposes public Supabase browser config from Vercel env vars
+- `courses/flutter_devs/*.md` - 10-module Kotlin course generated from `D:\kotlin\kotlin-for-flutter-devs.md`
 - `courses/full/manifest.json` - course file list
 - `exams/full_answer_key.json` - exam answer key
 
-The app stores progress, exam answers, Q&A drafts, and theme preference in browser `localStorage`.
+The app stores theme preference in browser `localStorage`. Guest progress stays in `localStorage`; signed-in progress syncs to Supabase.
+
+## Supabase Setup
+
+1. Create a Supabase project.
+2. Enable email magic link auth in Supabase Auth settings.
+3. Add redirect URLs:
+   - Local: `http://127.0.0.1:5500/index.html`
+   - Production: your Vercel production URL
+4. Run [supabase_learner_progress.sql](supabase_learner_progress.sql) in the Supabase SQL editor.
+5. Add Vercel environment variables:
+   - `SUPABASE_URL`
+   - `SUPABASE_ANON_KEY`
+
+Never expose a Supabase service role key in this project.

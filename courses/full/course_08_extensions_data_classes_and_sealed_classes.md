@@ -2,29 +2,83 @@
 
 ## Goal
 
-စာအုပ်ထဲက `Extensions, Data Classes, Sealed Classes` section တွေကို Flutter developer အတွက် လက်တွေ့သုံးနိုင်တဲ့ Kotlin lesson အဖြစ်ခွဲသင်မယ်။
-
-## PDF Coverage
-
-Extensions, Data Classes, Sealed Classes
+Build a practical Kotlin skill set for `Extensions, Data Classes, and Sealed Classes` and connect each idea to practical work a Flutter developer is likely to meet.
 
 ## Lessons
 
 ### 1. Extension functions and extension properties
 
-ဒီ lesson မှာ `Extension functions and extension properties` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Add small domain helpers to existing Kotlin types without inheritance.
 
+**Flutter angle:** Use extension functions the way you use Dart extension methods for model formatting and validation.
+
+**Build:** Write one extension that turns raw API/platform data into a UI-safe value.
+
+```kotlin
+fun String.toRouteKey(): String =
+    trim().lowercase().replace(" ", "_")
+
+val route = "Course Detail".toRouteKey()
+```
 ### 2. Data class generated behavior: equality, copy, destructuring
 
-ဒီ lesson မှာ `Data class generated behavior: equality, copy, destructuring` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Model immutable app data with generated equality, copy, and destructuring support.
 
+**Flutter angle:** Use it like a Dart model class with copyWith/equatable-style behavior.
+
+**Build:** Create a data class for a Flutter screen state payload and update it with copy().
+
+```kotlin
+data class CourseProgress(
+    val courseId: String,
+    val completedLessons: Int,
+    val totalLessons: Int
+)
+
+val next = CourseProgress("basic-syntax", 2, 5).copy(completedLessons = 3)
+```
 ### 3. Sealed classes and sealed interfaces for finite state models
 
-ဒီ lesson မှာ `Sealed classes and sealed interfaces for finite state models` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Represent a closed set of states or events and handle them exhaustively with when.
 
+**Flutter angle:** Map loading/success/error or BLoC states into type-safe Kotlin models.
+
+**Build:** Create a sealed UiState and render a label with when.
+
+```kotlin
+sealed class UiState {
+    data object Loading : UiState()
+    data class Success(val title: String) : UiState()
+    data class Error(val message: String) : UiState()
+}
+
+fun labelFor(state: UiState): String = when (state) {
+    UiState.Loading -> "Loading"
+    is UiState.Success -> state.title
+    is UiState.Error -> state.message
+}
+```
 ### 4. Using exhaustive `when` for UI/API states
 
-ဒီ lesson မှာ `Using exhaustive `when` for UI/API states` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Understand Using exhaustive `when` for UI/API states as a practical Kotlin skill, then use it in small, readable programs.
+
+**Flutter angle:** Connect the idea to Flutter architecture, platform channels, app state, or model code.
+
+**Build:** Write a small Kotlin example and explain what would feel similar or different in Dart.
+
+```kotlin
+sealed class UiState {
+    data object Loading : UiState()
+    data class Success(val title: String) : UiState()
+    data class Error(val message: String) : UiState()
+}
+
+fun labelFor(state: UiState): String = when (state) {
+    UiState.Loading -> "Loading"
+    is UiState.Success -> state.title
+    is UiState.Error -> state.message
+}
+```
 
 ## Flutter Bridge
 
@@ -33,14 +87,14 @@ This is the Kotlin version of clean app state modeling: `data class` for values,
 ## Practice
 
 1. Model `AuthState` as a sealed class.
-2. Create one small Kotlin example and explain it with a Dart/Flutter analogy.
+2. Implement the coding exam as a small Kotlin snippet and compare the idea with Dart/Flutter.
 3. Write one mistake you should avoid in production code.
 
 ## Q&A Checkpoint
 
-- `Extensions, Data Classes, and Sealed Classes` ကို Flutter developer အမြင်နဲ့ ဘယ် use case မှာအရေးကြီးဆုံးလဲ?
-- ဒီ topic အတွက် current Kotlin official docs မှာ PDF-era docs နဲ့ကွာတာရှိလား?
-- Production Android/Flutter plugin code မှာ common mistake ဘာတွေရှိလဲ?
+- How would I use `Extensions, Data Classes, and Sealed Classes` in a real Flutter + Android integration?
+- What is the closest Dart/Flutter mental model, and where does Kotlin behave differently?
+- What mistake should I avoid when writing production Kotlin for this topic?
 
 ## Exam
 

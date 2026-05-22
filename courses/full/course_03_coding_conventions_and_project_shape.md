@@ -2,29 +2,64 @@
 
 ## Goal
 
-စာအုပ်ထဲက `Coding Conventions` section တွေကို Flutter developer အတွက် လက်တွေ့သုံးနိုင်တဲ့ Kotlin lesson အဖြစ်ခွဲသင်မယ်။
-
-## PDF Coverage
-
-Coding Conventions
+Build a practical Kotlin skill set for `Coding Conventions and Project Shape` and connect each idea to practical work a Flutter developer is likely to meet.
 
 ## Lessons
 
 ### 1. File naming, package naming, and source layout
 
-ဒီ lesson မှာ `File naming, package naming, and source layout` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Understand File naming, package naming, and source layout as a practical Kotlin skill, then use it in small, readable programs.
 
+**Flutter angle:** Connect the idea to Flutter architecture, platform channels, app state, or model code.
+
+**Build:** Write a small Kotlin example and explain what would feel similar or different in Dart.
+
+```kotlin
+fun courseLabel(name: String, completed: Int, total: Int): String {
+    return "$name: $completed/$total completed"
+}
+```
 ### 2. Class, function, property, and constant naming conventions
 
-ဒီ lesson မှာ `Class, function, property, and constant naming conventions` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Build Kotlin classes with constructors, properties, inheritance, and visibility choices.
 
+**Flutter angle:** Use classes for Android-side service wrappers, SDK adapters, and app models.
+
+**Build:** Create a small class that protects mutation behind a method.
+
+```kotlin
+fun retry(times: Int, block: () -> Unit) {
+    repeat(times) { block() }
+}
+
+retry(2) { println("Trying again") }
+```
 ### 3. Formatting style: indentation, braces, expression bodies
 
-ဒီ lesson မှာ `Formatting style: indentation, braces, expression bodies` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Understand Formatting style: indentation, braces, expression bodies as a practical Kotlin skill, then use it in small, readable programs.
 
+**Flutter angle:** Connect the idea to Flutter architecture, platform channels, app state, or model code.
+
+**Build:** Write a small Kotlin example and explain what would feel similar or different in Dart.
+
+```kotlin
+fun courseLabel(name: String, completed: Int, total: Int): String {
+    return "$name: $completed/$total completed"
+}
+```
 ### 4. Writing Kotlin that remains readable inside Android/Flutter plugin projects
 
-ဒီ lesson မှာ `Writing Kotlin that remains readable inside Android/Flutter plugin projects` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Understand where Kotlin appears in Android projects and Flutter plugin integrations.
+
+**Flutter angle:** This is the native layer you touch when a Flutter package needs SDK-specific Android code.
+
+**Build:** Find a MethodChannel-style boundary and validate one argument.
+
+```kotlin
+fun courseLabel(name: String, completed: Int, total: Int): String {
+    return "$name: $completed/$total completed"
+}
+```
 
 ## Flutter Bridge
 
@@ -33,14 +68,14 @@ Think of this like Dart format and Flutter style rules: consistency makes code r
 ## Practice
 
 1. Rename three rough Kotlin identifiers into idiomatic names.
-2. Create one small Kotlin example and explain it with a Dart/Flutter analogy.
+2. Implement the coding exam as a small Kotlin snippet and compare the idea with Dart/Flutter.
 3. Write one mistake you should avoid in production code.
 
 ## Q&A Checkpoint
 
-- `Coding Conventions and Project Shape` ကို Flutter developer အမြင်နဲ့ ဘယ် use case မှာအရေးကြီးဆုံးလဲ?
-- ဒီ topic အတွက် current Kotlin official docs မှာ PDF-era docs နဲ့ကွာတာရှိလား?
-- Production Android/Flutter plugin code မှာ common mistake ဘာတွေရှိလဲ?
+- How would I use `Coding Conventions and Project Shape` in a real Flutter + Android integration?
+- What is the closest Dart/Flutter mental model, and where does Kotlin behave differently?
+- What mistake should I avoid when writing production Kotlin for this topic?
 
 ## Exam
 

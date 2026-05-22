@@ -2,29 +2,65 @@
 
 ## Goal
 
-စာအုပ်ထဲက `Multiplatform Programming, Platform-Specific Declarations, Building Multiplatform Projects with Gradle` section တွေကို Flutter developer အတွက် လက်တွေ့သုံးနိုင်တဲ့ Kotlin lesson အဖြစ်ခွဲသင်မယ်။
-
-## PDF Coverage
-
-Multiplatform Programming, Platform-Specific Declarations, Building Multiplatform Projects with Gradle
+Build a practical Kotlin skill set for `Multiplatform Foundations and Gradle Projects` and connect each idea to practical work a Flutter developer is likely to meet.
 
 ## Lessons
 
 ### 1. Common source sets and platform source sets
 
-ဒီ lesson မှာ `Common source sets and platform source sets` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Understand Common source sets and platform source sets as a practical Kotlin skill, then use it in small, readable programs.
 
+**Flutter angle:** Connect the idea to Flutter architecture, platform channels, app state, or model code.
+
+**Build:** Write a small Kotlin example and explain what would feel similar or different in Dart.
+
+```kotlin
+fun readUserId(args: Map<String, Any?>): String? =
+    (args["userId"] as? String)?.takeIf { it.isNotBlank() }
+```
 ### 2. `expect` and `actual` declarations
 
-ဒီ lesson မှာ ``expect` and `actual` declarations` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Understand `expect` and `actual` declarations as a practical Kotlin skill, then use it in small, readable programs.
 
+**Flutter angle:** Connect the idea to Flutter architecture, platform channels, app state, or model code.
+
+**Build:** Write a small Kotlin example and explain what would feel similar or different in Dart.
+
+```kotlin
+fun courseLabel(name: String, completed: Int, total: Int): String {
+    return "$name: $completed/$total completed"
+}
+```
 ### 3. Sharing models, validation, and networking code
 
-ဒီ lesson မှာ `Sharing models, validation, and networking code` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Understand Sharing models, validation, and networking code as a practical Kotlin skill, then use it in small, readable programs.
 
+**Flutter angle:** Connect the idea to Flutter architecture, platform channels, app state, or model code.
+
+**Build:** Write a small Kotlin example and explain what would feel similar or different in Dart.
+
+```kotlin
+data class CourseProgress(
+    val courseId: String,
+    val completedLessons: Int,
+    val totalLessons: Int
+)
+
+val next = CourseProgress("basic-syntax", 2, 5).copy(completedLessons = 3)
+```
 ### 4. Gradle project shape for KMP
 
-ဒီ lesson မှာ `Gradle project shape for KMP` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Read Kotlin/Android build configuration and dependency declarations.
+
+**Flutter angle:** Flutter projects still contain Android Gradle files, especially for plugins.
+
+**Build:** Identify plugin, dependency, and version lines in a Gradle file.
+
+```kotlin
+fun courseLabel(name: String, completed: Int, total: Int): String {
+    return "$name: $completed/$total completed"
+}
+```
 
 ## Flutter Bridge
 
@@ -33,14 +69,14 @@ KMP is not Flutter, but both care about sharing logic. Flutter shares UI; KMP sh
 ## Practice
 
 1. Identify which parts of a Flutter app could become shared business logic.
-2. Create one small Kotlin example and explain it with a Dart/Flutter analogy.
+2. Implement the coding exam as a small Kotlin snippet and compare the idea with Dart/Flutter.
 3. Write one mistake you should avoid in production code.
 
 ## Q&A Checkpoint
 
-- `Multiplatform Foundations and Gradle Projects` ကို Flutter developer အမြင်နဲ့ ဘယ် use case မှာအရေးကြီးဆုံးလဲ?
-- ဒီ topic အတွက် current Kotlin official docs မှာ PDF-era docs နဲ့ကွာတာရှိလား?
-- Production Android/Flutter plugin code မှာ common mistake ဘာတွေရှိလဲ?
+- How would I use `Multiplatform Foundations and Gradle Projects` in a real Flutter + Android integration?
+- What is the closest Dart/Flutter mental model, and where does Kotlin behave differently?
+- What mistake should I avoid when writing production Kotlin for this topic?
 
 ## Exam
 

@@ -1,19 +1,28 @@
 # Kotlin for Flutter Developers
 
-ဒီ workspace က `Kotlin Language Documentation` PDF ကို အခြေခံပြီး Flutter developer အတွက် ပြန်စီထားတဲ့ Kotlin learning course package ဖြစ်ပါတယ်။ စာအုပ်ထဲက structure ကိုယူထားပေမဲ့ အကြောင်းအရာကို verbatim မကူးဘဲ သင်ခန်းစာ၊ practice, Q&A checkpoint, exam format အဖြစ် ပြန်တည်ဆောက်ထားပါတယ်။
+This workspace is now driven by `D:\kotlin\kotlin-for-flutter-devs.md` as the course source. The web app loads 10 modules for Flutter developers learning Kotlin, with lesson tracking, Q&A prompts, and exams.
 
-## ဘယ်လိုသုံးမလဲ
+## How To Use
 
-1. `courses/` ထဲက course ကိုအစဥ်လိုက်ဖတ်ပါ။
-2. Course တစ်ခုပြီးတိုင်း `Q&A checkpoint` အောက်က prompt နဲ့ မေးခွန်းမေးပါ။ မေးခွန်းကို Kotlin official docs / Android docs / current ecosystem အတိုင်း research ပြီးဖြေပေးနိုင်အောင် `qa/qna_playbook.md` ထဲမှာ workflow ထည့်ထားပါတယ်။
-3. ပြီးရင် course file ထဲက exam ကိုဖြေပါ။
-4. MCQ / fill-in-the-blank answer key နဲ့ coding rubric ကို `exams/exam_bank.md` မှာကြည့်ပါ။
+1. Open the web app and read the courses in order.
+2. Sign in before tracking progress, answering exams, or saving Q&A drafts.
+3. Use each course's Q&A checkpoint to ask research questions after finishing the lesson.
+4. Take the course exam. MCQ and fill-in-the-blank answers are auto-checked; coding answers are saved with a rubric.
 
 ## Course Order
 
-Full book coverage version ကို [courses/full](courses/full) ထဲမှာ 31 courses အဖြစ်ခွဲထားပါတယ်။ Full mapping ကို [references/full_coverage_map.md](references/full_coverage_map.md) မှာကြည့်နိုင်ပါတယ်။
+The active course set is generated from `D:\kotlin\kotlin-for-flutter-devs.md`:
 
-ယခင် 8-course compressed roadmap ကိုလည်း [courses](courses) ထဲမှာ reference အဖြစ်ထားထားပါတယ်။
+1. Variables and Basic Types
+2. Functions
+3. Control Flow
+4. Classes and Inheritance
+5. Data Classes
+6. Null Safety
+7. Collections
+8. Higher-Order Functions and Lambdas
+9. Scope Functions
+10. Coroutines
 
 ## Web App
 
@@ -23,20 +32,29 @@ Full book coverage version ကို [courses/full](courses/full) ထဲမှ�
 - App logic: [app.js](app.js)
 - Styles: [styles.css](styles.css)
 
-Web app မှာ course reading, lesson progress, exam form, score saving, Q&A prompt drafting ပါပါတယ်။ Progress data ကို browser `localStorage` ထဲမှာသိမ်းထားပါတယ်။
+Web app မှာ course reading, lesson progress, exam form, score saving, Q&A prompt drafting ပါပါတယ်။ Guest progress ကို browser `localStorage` ထဲမှာသိမ်းထားပါတယ်။
 Night mode toggle လည်းပါပြီး theme preference ကို browser `localStorage` ထဲမှာသိမ်းထားပါတယ်။
-အခု web app က `courses/full/manifest.json` ကိုဖတ်ပြီး 31-course full coverage version ကိုပြပါတယ်။
+The web app reads `courses/full/manifest.json`, which now points to the 10 generated files in `courses/flutter_devs/`.
+
+Sign in / cloud sync လည်းပါပါတယ်။ Account မဝင်သေးရင် course content ကို preview ဖတ်နိုင်ပေမဲ့ progress, exams, Q&A draft တွေကို lock ထားပါတယ်။ Supabase config ထည့်ထားတဲ့ production မှာ email magic link နဲ့ login ဝင်ရင် progress ကို user တစ်ယောက်ချင်း cloud sync လုပ်ပါတယ်။
 
 ## Vercel Deployment
 
-Vercel မှာ static site အဖြစ်တင်နိုင်အောင် [vercel.json](vercel.json), [.vercelignore](.vercelignore), [package.json](package.json), [404.html](404.html), [DEPLOYMENT.md](DEPLOYMENT.md) ထည့်ထားပါတယ်။
+Vercel မှာ static site အဖြစ်တင်နိုင်အောင် [vercel.json](vercel.json), [.vercelignore](.vercelignore), [404.html](404.html), [DEPLOYMENT.md](DEPLOYMENT.md) ထည့်ထားပါတယ်။
 
 Deploy settings:
 
 - Framework Preset: `Other`
 - Build Command: blank
+- Install Command: blank
 - Output Directory: `.`
 - Root Directory: repo root မဟုတ်ဘဲ parent folder ကနေ import လုပ်ရင် `kotlin_course`
+
+Cloud sync setup:
+
+- Run [supabase_learner_progress.sql](supabase_learner_progress.sql) in Supabase.
+- Add Vercel env vars: `SUPABASE_URL`, `SUPABASE_ANON_KEY`.
+- Add Supabase redirect URLs for local and production.
 
 ## Flutter Developer Lens
 

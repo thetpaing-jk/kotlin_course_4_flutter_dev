@@ -1,498 +1,162 @@
 {
-  "courses/full/course_01_orientation_platforms_and_version_awareness.md": {
+  "courses/flutter_devs/course_01_variables_basic_types.md": {
     "mcq": [
       "A",
       "A"
     ],
     "fill": [
-      "Kotlin",
-      "official"
-    ],
-    "rubric": [
-      "Uses Kotlin syntax relevant to the course topic.",
-      "Handles nullability/type-safety where applicable.",
-      "Names functions/classes clearly.",
-      "Includes a small explanation or structure that a Flutter developer can relate to."
-    ]
-  },
-  "courses/full/course_02_getting_started_basic_syntax_and_idioms.md": {
-    "mcq": [
-      "A",
-      "A"
-    ],
-    "fill": [
-      "main",
+      "val",
       "var"
     ],
     "rubric": [
-      "Uses Kotlin syntax relevant to the course topic.",
-      "Handles nullability/type-safety where applicable.",
-      "Names functions/classes clearly.",
-      "Includes a small explanation or structure that a Flutter developer can relate to."
+      "Demonstrates a concept from Variables နဲ့ Basic Types.",
+      "Uses valid Kotlin syntax.",
+      "Includes a short Dart/Flutter comparison comment.",
+      "Keeps the example focused and readable."
     ]
   },
-  "courses/full/course_03_coding_conventions_and_project_shape.md": {
+  "courses/flutter_devs/course_02_functions.md": {
     "mcq": [
       "A",
       "A"
     ],
     "fill": [
-      "camel",
-      "underscores"
+      "kotlin\nfun greet(name: String): String {\n    return \"Hello, $name!\"\n}\n",
+      "\n\n**Dart (Flutter) နဲ့ နှိုင်းယှဉ်:**\n"
     ],
     "rubric": [
-      "Uses Kotlin syntax relevant to the course topic.",
-      "Handles nullability/type-safety where applicable.",
-      "Names functions/classes clearly.",
-      "Includes a small explanation or structure that a Flutter developer can relate to."
+      "Demonstrates a concept from Functions.",
+      "Uses valid Kotlin syntax.",
+      "Includes a short Dart/Flutter comparison comment.",
+      "Keeps the example focused and readable."
     ]
   },
-  "courses/full/course_04_basic_types_packages_and_imports.md": {
+  "courses/flutter_devs/course_03_control_flow.md": {
     "mcq": [
       "A",
       "A"
     ],
     "fill": [
-      "toDouble",
-      "top"
+      "if",
+      "kotlin\nval max = if (a > b) a else b\n\n// multiline ဆိုရင်\nval result = if (score >= 60) {\n    \"ကျော်\"\n} else {\n    \"ကျ\"\n}\n"
     ],
     "rubric": [
-      "Uses Kotlin syntax relevant to the course topic.",
-      "Handles nullability/type-safety where applicable.",
-      "Names functions/classes clearly.",
-      "Includes a small explanation or structure that a Flutter developer can relate to."
+      "Demonstrates a concept from Control Flow.",
+      "Uses valid Kotlin syntax.",
+      "Includes a short Dart/Flutter comparison comment.",
+      "Keeps the example focused and readable."
     ]
   },
-  "courses/full/course_05_control_flow_ranges_returns_and_jumps.md": {
+  "courses/flutter_devs/course_04_classes_inheritance.md": {
     "mcq": [
       "A",
       "A"
     ],
     "fill": [
-      "when",
-      "downTo"
+      "kotlin\nclass Person(val firstName: String, val lastName: String, var age: Int) {\n    \n    fun fullName(): String = \"$firstName $lastName\"\n    \n    fun birthday() {\n        age++\n    }\n}\n\n// Instance create\nval person = Person(\"Aung\", \"Kyaw\", 25)\nprintln(person.fullName())\nperson.birthday()\n",
+      "\n\n**Dart (Flutter) နဲ့ နှိုင်းယှဉ်:**\n"
     ],
     "rubric": [
-      "Uses Kotlin syntax relevant to the course topic.",
-      "Handles nullability/type-safety where applicable.",
-      "Names functions/classes clearly.",
-      "Includes a small explanation or structure that a Flutter developer can relate to."
+      "Demonstrates a concept from Classes နဲ့ Inheritance.",
+      "Uses valid Kotlin syntax.",
+      "Includes a short Dart/Flutter comparison comment.",
+      "Keeps the example focused and readable."
     ]
   },
-  "courses/full/course_06_classes_constructors_and_inheritance.md": {
+  "courses/flutter_devs/course_05_data_classes.md": {
     "mcq": [
       "A",
       "A"
     ],
     "fill": [
-      "var",
-      "override"
+      "==",
+      "hashCode"
     ],
     "rubric": [
-      "Uses Kotlin syntax relevant to the course topic.",
-      "Handles nullability/type-safety where applicable.",
-      "Names functions/classes clearly.",
-      "Includes a small explanation or structure that a Flutter developer can relate to."
+      "Demonstrates a concept from Data Classes.",
+      "Uses valid Kotlin syntax.",
+      "Includes a short Dart/Flutter comparison comment.",
+      "Keeps the example focused and readable."
     ]
   },
-  "courses/full/course_07_properties_fields_interfaces_and_visibility.md": {
+  "courses/flutter_devs/course_06_null_safety.md": {
     "mcq": [
       "A",
       "A"
     ],
     "fill": [
-      "internal",
-      "lateinit"
+      "kotlin\nvar name: String = \"Aung\"       // null မဖြစ်နိုင် (non-null)\nname = null                      // ❌ Compilation error!\n\nvar nickname: String? = \"Aung\"  // null ဖြစ်နိုင် (nullable)\nnickname = null                  // ✅ OK\n",
+      "\n\n**Dart (Flutter) နဲ့ နှိုင်းယှဉ်:**\n"
     ],
     "rubric": [
-      "Uses Kotlin syntax relevant to the course topic.",
-      "Handles nullability/type-safety where applicable.",
-      "Names functions/classes clearly.",
-      "Includes a small explanation or structure that a Flutter developer can relate to."
+      "Demonstrates a concept from Null Safety.",
+      "Uses valid Kotlin syntax.",
+      "Includes a short Dart/Flutter comparison comment.",
+      "Keeps the example focused and readable."
     ]
   },
-  "courses/full/course_08_extensions_data_classes_and_sealed_classes.md": {
+  "courses/flutter_devs/course_07_collections.md": {
     "mcq": [
       "A",
       "A"
     ],
     "fill": [
-      "copy",
-      "name"
+      "listOf()",
+      "mutableListOf()"
     ],
     "rubric": [
-      "Uses Kotlin syntax relevant to the course topic.",
-      "Handles nullability/type-safety where applicable.",
-      "Names functions/classes clearly.",
-      "Includes a small explanation or structure that a Flutter developer can relate to."
+      "Demonstrates a concept from Collections.",
+      "Uses valid Kotlin syntax.",
+      "Includes a short Dart/Flutter comparison comment.",
+      "Keeps the example focused and readable."
     ]
   },
-  "courses/full/course_09_generics_nested_classes_inner_classes_and_enums.md": {
+  "courses/flutter_devs/course_08_higher_order_functions_lambdas.md": {
     "mcq": [
       "A",
       "A"
     ],
     "fill": [
-      "out",
-      "enum"
+      "kotlin\n// Lambda syntax: { parameters -> body }\nval multiply = { a: Int, b: Int -> a * b }\nprintln(multiply(3, 4))   // 12\n\n// Single parameter — it ကိုသုံးနိုင်\nval double = { it: Int -> it * 2 }\n// အတိုဆုံး\nval double: (Int) -> Int = { it * 2 }\n",
+      "\n\n**Dart (Flutter) နဲ့ နှိုင်းယှဉ်:**\n"
     ],
     "rubric": [
-      "Uses Kotlin syntax relevant to the course topic.",
-      "Handles nullability/type-safety where applicable.",
-      "Names functions/classes clearly.",
-      "Includes a small explanation or structure that a Flutter developer can relate to."
+      "Demonstrates a concept from Higher-Order Functions နဲ့ Lambdas.",
+      "Uses valid Kotlin syntax.",
+      "Includes a short Dart/Flutter comparison comment.",
+      "Keeps the example focused and readable."
     ]
   },
-  "courses/full/course_10_objects_inline_value_classes_and_delegation.md": {
-    "mcq": [
-      "A",
-      "A"
-    ],
-    "fill": [
-      "class",
-      "class"
-    ],
-    "rubric": [
-      "Uses Kotlin syntax relevant to the course topic.",
-      "Handles nullability/type-safety where applicable.",
-      "Names functions/classes clearly.",
-      "Includes a small explanation or structure that a Flutter developer can relate to."
-    ]
-  },
-  "courses/full/course_11_delegated_properties_and_destructuring.md": {
-    "mcq": [
-      "A",
-      "A"
-    ],
-    "fill": [
-      "by",
-      "pair"
-    ],
-    "rubric": [
-      "Uses Kotlin syntax relevant to the course topic.",
-      "Handles nullability/type-safety where applicable.",
-      "Names functions/classes clearly.",
-      "Includes a small explanation or structure that a Flutter developer can relate to."
-    ]
-  },
-  "courses/full/course_12_functions_and_function_design.md": {
-    "mcq": [
-      "A",
-      "A"
-    ],
-    "fill": [
-      "value",
-      "signature"
-    ],
-    "rubric": [
-      "Uses Kotlin syntax relevant to the course topic.",
-      "Handles nullability/type-safety where applicable.",
-      "Names functions/classes clearly.",
-      "Includes a small explanation or structure that a Flutter developer can relate to."
-    ]
-  },
-  "courses/full/course_13_higher_order_functions_lambdas_and_inline_functions.md": {
-    "mcq": [
-      "A",
-      "A"
-    ],
-    "fill": [
-      "Unit",
-      "inline"
-    ],
-    "rubric": [
-      "Uses Kotlin syntax relevant to the course topic.",
-      "Handles nullability/type-safety where applicable.",
-      "Names functions/classes clearly.",
-      "Includes a small explanation or structure that a Flutter developer can relate to."
-    ]
-  },
-  "courses/full/course_14_collections_overview_and_construction.md": {
-    "mcq": [
-      "A",
-      "A"
-    ],
-    "fill": [
-      "listOf",
-      "value"
-    ],
-    "rubric": [
-      "Uses Kotlin syntax relevant to the course topic.",
-      "Handles nullability/type-safety where applicable.",
-      "Names functions/classes clearly.",
-      "Includes a small explanation or structure that a Flutter developer can relate to."
-    ]
-  },
-  "courses/full/course_15_iterators_ranges_progressions_and_sequences.md": {
-    "mcq": [
-      "A",
-      "A"
-    ],
-    "fill": [
-      "asSequence",
-      "ranges"
-    ],
-    "rubric": [
-      "Uses Kotlin syntax relevant to the course topic.",
-      "Handles nullability/type-safety where applicable.",
-      "Names functions/classes clearly.",
-      "Includes a small explanation or structure that a Flutter developer can relate to."
-    ]
-  },
-  "courses/full/course_16_collection_transformations_and_filtering.md": {
-    "mcq": [
-      "A",
-      "A"
-    ],
-    "fill": [
-      "flatMap",
-      "minus"
-    ],
-    "rubric": [
-      "Uses Kotlin syntax relevant to the course topic.",
-      "Handles nullability/type-safety where applicable.",
-      "Names functions/classes clearly.",
-      "Includes a small explanation or structure that a Flutter developer can relate to."
-    ]
-  },
-  "courses/full/course_17_grouping_retrieval_ordering_aggregates_and_writes.md": {
-    "mcq": [
-      "A",
-      "A"
-    ],
-    "fill": [
-      "sorted",
-      "chunked"
-    ],
-    "rubric": [
-      "Uses Kotlin syntax relevant to the course topic.",
-      "Handles nullability/type-safety where applicable.",
-      "Names functions/classes clearly.",
-      "Includes a small explanation or structure that a Flutter developer can relate to."
-    ]
-  },
-  "courses/full/course_18_list_set_and_map_specific_operations.md": {
-    "mcq": [
-      "A",
-      "A"
-    ],
-    "fill": [
-      "key",
-      "indices"
-    ],
-    "rubric": [
-      "Uses Kotlin syntax relevant to the course topic.",
-      "Handles nullability/type-safety where applicable.",
-      "Names functions/classes clearly.",
-      "Includes a small explanation or structure that a Flutter developer can relate to."
-    ]
-  },
-  "courses/full/course_19_multiplatform_foundations_and_gradle_projects.md": {
-    "mcq": [
-      "A",
-      "A"
-    ],
-    "fill": [
-      "common",
-      "Gradle"
-    ],
-    "rubric": [
-      "Uses Kotlin syntax relevant to the course topic.",
-      "Handles nullability/type-safety where applicable.",
-      "Names functions/classes clearly.",
-      "Includes a small explanation or structure that a Flutter developer can relate to."
-    ]
-  },
-  "courses/full/course_20_type_checks_casts_this_equality_and_operators.md": {
-    "mcq": [
-      "A",
-      "A"
-    ],
-    "fill": [
-      "is",
-      "==="
-    ],
-    "rubric": [
-      "Uses Kotlin syntax relevant to the course topic.",
-      "Handles nullability/type-safety where applicable.",
-      "Names functions/classes clearly.",
-      "Includes a small explanation or structure that a Flutter developer can relate to."
-    ]
-  },
-  "courses/full/course_21_null_safety_exceptions_and_annotations.md": {
-    "mcq": [
-      "A",
-      "A"
-    ],
-    "fill": [
-      "?.",
-      "?:"
-    ],
-    "rubric": [
-      "Uses Kotlin syntax relevant to the course topic.",
-      "Handles nullability/type-safety where applicable.",
-      "Names functions/classes clearly.",
-      "Includes a small explanation or structure that a Flutter developer can relate to."
-    ]
-  },
-  "courses/full/course_22_reflection_scope_functions_and_type_safe_builders.md": {
+  "courses/flutter_devs/course_09_scope_functions.md": {
     "mcq": [
       "A",
       "A"
     ],
     "fill": [
       "let",
-      "receiver"
+      "kotlin\nval name: String? = getUserName()\n\n// ❌ Traditional approach\nif (name != null) {\n    println(name.toUpperCase())\n}\n\n// ✅ Using let\nname?.let {\n    println(it.toUpperCase())\n}\n\n// chaining operations\nval result = \"  hello kotlin  \"\n    .let { it.trim() }\n    .let { it.capitalize() }\n    .let { \"Result: $it\" }\nprintln(result)  // \"Result: Hello kotlin\"\n"
     ],
     "rubric": [
-      "Uses Kotlin syntax relevant to the course topic.",
-      "Handles nullability/type-safety where applicable.",
-      "Names functions/classes clearly.",
-      "Includes a small explanation or structure that a Flutter developer can relate to."
+      "Demonstrates a concept from Scope Functions.",
+      "Uses valid Kotlin syntax.",
+      "Includes a short Dart/Flutter comparison comment.",
+      "Keeps the example focused and readable."
     ]
   },
-  "courses/full/course_23_experimental_apis_keywords_operators_and_grammar.md": {
+  "courses/flutter_devs/course_10_coroutines_async_programming.md": {
     "mcq": [
       "A",
       "A"
     ],
     "fill": [
-      "OptIn",
-      "keywords"
+      "async/await",
+      "Future"
     ],
     "rubric": [
-      "Uses Kotlin syntax relevant to the course topic.",
-      "Handles nullability/type-safety where applicable.",
-      "Names functions/classes clearly.",
-      "Includes a small explanation or structure that a Flutter developer can relate to."
-    ]
-  },
-  "courses/full/course_24_java_interop_part_1_calling_java_from_kotlin.md": {
-    "mcq": [
-      "A",
-      "A"
-    ],
-    "fill": [
-      "Kotlin",
-      "conversion"
-    ],
-    "rubric": [
-      "Uses Kotlin syntax relevant to the course topic.",
-      "Handles nullability/type-safety where applicable.",
-      "Names functions/classes clearly.",
-      "Includes a small explanation or structure that a Flutter developer can relate to."
-    ]
-  },
-  "courses/full/course_25_java_interop_part_2_calling_kotlin_from_java.md": {
-    "mcq": [
-      "A",
-      "A"
-    ],
-    "fill": [
-      "@JvmField",
-      "facades"
-    ],
-    "rubric": [
-      "Uses Kotlin syntax relevant to the course topic.",
-      "Handles nullability/type-safety where applicable.",
-      "Names functions/classes clearly.",
-      "Includes a small explanation or structure that a Flutter developer can relate to."
-    ]
-  },
-  "courses/full/course_26_kotlin_javascript.md": {
-    "mcq": [
-      "A",
-      "A"
-    ],
-    "fill": [
-      "elimination",
-      "modules"
-    ],
-    "rubric": [
-      "Uses Kotlin syntax relevant to the course topic.",
-      "Handles nullability/type-safety where applicable.",
-      "Names functions/classes clearly.",
-      "Includes a small explanation or structure that a Flutter developer can relate to."
-    ]
-  },
-  "courses/full/course_27_kotlin_native_and_platform_interop.md": {
-    "mcq": [
-      "A",
-      "A"
-    ],
-    "fill": [
-      "CocoaPods",
-      "libraries"
-    ],
-    "rubric": [
-      "Uses Kotlin syntax relevant to the course topic.",
-      "Handles nullability/type-safety where applicable.",
-      "Names functions/classes clearly.",
-      "Includes a small explanation or structure that a Flutter developer can relate to."
-    ]
-  },
-  "courses/full/course_28_coroutines_part_1_basics_cancellation_composition_and_context.md": {
-    "mcq": [
-      "A",
-      "A"
-    ],
-    "fill": [
-      "IO",
-      "await"
-    ],
-    "rubric": [
-      "Uses Kotlin syntax relevant to the course topic.",
-      "Handles nullability/type-safety where applicable.",
-      "Names functions/classes clearly.",
-      "Includes a small explanation or structure that a Flutter developer can relate to."
-    ]
-  },
-  "courses/full/course_29_coroutines_part_2_flow_channels_exceptions_shared_state_and_sele.md": {
-    "mcq": [
-      "A",
-      "A"
-    ],
-    "fill": [
-      "Flow",
-      "concurrency"
-    ],
-    "rubric": [
-      "Uses Kotlin syntax relevant to the course topic.",
-      "Handles nullability/type-safety where applicable.",
-      "Names functions/classes clearly.",
-      "Includes a small explanation or structure that a Flutter developer can relate to."
-    ]
-  },
-  "courses/full/course_30_documentation_build_tools_compiler_plugins_and_style_migration.md": {
-    "mcq": [
-      "A",
-      "A"
-    ],
-    "fill": [
-      "KAPT",
-      "DSL"
-    ],
-    "rubric": [
-      "Uses Kotlin syntax relevant to the course topic.",
-      "Handles nullability/type-safety where applicable.",
-      "Names functions/classes clearly.",
-      "Includes a small explanation or structure that a Flutter developer can relate to."
-    ]
-  },
-  "courses/full/course_31_evolution_stability_compatibility_faq_and_java_comparison.md": {
-    "mcq": [
-      "A",
-      "A"
-    ],
-    "fill": [
-      "Java",
-      "migration"
-    ],
-    "rubric": [
-      "Uses Kotlin syntax relevant to the course topic.",
-      "Handles nullability/type-safety where applicable.",
-      "Names functions/classes clearly.",
-      "Includes a small explanation or structure that a Flutter developer can relate to."
+      "Demonstrates a concept from Coroutines (Async Programming).",
+      "Uses valid Kotlin syntax.",
+      "Includes a short Dart/Flutter comparison comment.",
+      "Keeps the example focused and readable."
     ]
   }
 }

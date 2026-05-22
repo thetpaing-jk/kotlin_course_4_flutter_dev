@@ -2,29 +2,63 @@
 
 ## Goal
 
-စာအုပ်ထဲက `Grouping, Retrieving Collection Parts, Retrieving Single Elements, Collection Ordering, Collection Aggregate Operations, Collection Write Operations` section တွေကို Flutter developer အတွက် လက်တွေ့သုံးနိုင်တဲ့ Kotlin lesson အဖြစ်ခွဲသင်မယ်။
-
-## PDF Coverage
-
-Grouping, Retrieving Collection Parts, Retrieving Single Elements, Collection Ordering, Collection Aggregate Operations, Collection Write Operations
+Build a practical Kotlin skill set for `Grouping, Retrieval, Ordering, Aggregates, and Writes` and connect each idea to practical work a Flutter developer is likely to meet.
 
 ## Lessons
 
 ### 1. `groupBy` and `groupingBy`
 
-ဒီ lesson မှာ ``groupBy` and `groupingBy`` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Understand `groupBy` and `groupingBy` as a practical Kotlin skill, then use it in small, readable programs.
 
+**Flutter angle:** Connect the idea to Flutter architecture, platform channels, app state, or model code.
+
+**Build:** Write a small Kotlin example and explain what would feel similar or different in Dart.
+
+```kotlin
+fun courseLabel(name: String, completed: Int, total: Int): String {
+    return "$name: $completed/$total completed"
+}
+```
 ### 2. Slices, chunks, windows, first/last/single
 
-ဒီ lesson မှာ `Slices, chunks, windows, first/last/single` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Understand Slices, chunks, windows, first/last/single as a practical Kotlin skill, then use it in small, readable programs.
 
+**Flutter angle:** Connect the idea to Flutter architecture, platform channels, app state, or model code.
+
+**Build:** Write a small Kotlin example and explain what would feel similar or different in Dart.
+
+```kotlin
+fun courseLabel(name: String, completed: Int, total: Int): String {
+    return "$name: $completed/$total completed"
+}
+```
 ### 3. Sorting and ordering
 
-ဒီ lesson မှာ `Sorting and ordering` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Understand Sorting and ordering as a practical Kotlin skill, then use it in small, readable programs.
 
+**Flutter angle:** Connect the idea to Flutter architecture, platform channels, app state, or model code.
+
+**Build:** Write a small Kotlin example and explain what would feel similar or different in Dart.
+
+```kotlin
+fun courseLabel(name: String, completed: Int, total: Int): String {
+    return "$name: $completed/$total completed"
+}
+```
 ### 4. Aggregates and mutable collection writes
 
-ဒီ lesson မှာ `Aggregates and mutable collection writes` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Transform, filter, group, and aggregate app data safely and readably.
+
+**Flutter angle:** Use Kotlin collection operators like Dart map/where/fold, but pay attention to mutability.
+
+**Build:** Shape a list of API models into display rows.
+
+```kotlin
+data class Product(val name: String, val price: Int)
+
+fun visibleProducts(items: List<Product>): List<String> =
+    items.filter { it.price > 0 }.map { "${it.name}: ${it.price}" }
+```
 
 ## Flutter Bridge
 
@@ -33,14 +67,14 @@ These tools are useful when turning API responses into grouped sections for Flut
 ## Practice
 
 1. Group orders by status and calculate totals.
-2. Create one small Kotlin example and explain it with a Dart/Flutter analogy.
+2. Implement the coding exam as a small Kotlin snippet and compare the idea with Dart/Flutter.
 3. Write one mistake you should avoid in production code.
 
 ## Q&A Checkpoint
 
-- `Grouping, Retrieval, Ordering, Aggregates, and Writes` ကို Flutter developer အမြင်နဲ့ ဘယ် use case မှာအရေးကြီးဆုံးလဲ?
-- ဒီ topic အတွက် current Kotlin official docs မှာ PDF-era docs နဲ့ကွာတာရှိလား?
-- Production Android/Flutter plugin code မှာ common mistake ဘာတွေရှိလဲ?
+- How would I use `Grouping, Retrieval, Ordering, Aggregates, and Writes` in a real Flutter + Android integration?
+- What is the closest Dart/Flutter mental model, and where does Kotlin behave differently?
+- What mistake should I avoid when writing production Kotlin for this topic?
 
 ## Exam
 

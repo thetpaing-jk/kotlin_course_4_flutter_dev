@@ -2,29 +2,66 @@
 
 ## Goal
 
-စာအုပ်ထဲက `Kotlin Collections Overview, Constructing Collections` section တွေကို Flutter developer အတွက် လက်တွေ့သုံးနိုင်တဲ့ Kotlin lesson အဖြစ်ခွဲသင်မယ်။
-
-## PDF Coverage
-
-Kotlin Collections Overview, Constructing Collections
+Build a practical Kotlin skill set for `Collections Overview and Construction` and connect each idea to practical work a Flutter developer is likely to meet.
 
 ## Lessons
 
 ### 1. Read-only vs mutable collection interfaces
 
-ဒီ lesson မှာ `Read-only vs mutable collection interfaces` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Transform, filter, group, and aggregate app data safely and readably.
 
+**Flutter angle:** Use Kotlin collection operators like Dart map/where/fold, but pay attention to mutability.
+
+**Build:** Shape a list of API models into display rows.
+
+```kotlin
+data class Product(val name: String, val price: Int)
+
+fun visibleProducts(items: List<Product>): List<String> =
+    items.filter { it.price > 0 }.map { "${it.name}: ${it.price}" }
+```
 ### 2. Lists, sets, and maps
 
-ဒီ lesson မှာ `Lists, sets, and maps` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Use List, Set, and Map operations for indexed data, unique data, and key-value data.
 
+**Flutter angle:** Map<String, Any?> is common in platform channel arguments, so validate values carefully.
+
+**Build:** Read typed values from a map without unsafe casts.
+
+```kotlin
+data class Product(val name: String, val price: Int)
+
+fun visibleProducts(items: List<Product>): List<String> =
+    items.filter { it.price > 0 }.map { "${it.name}: ${it.price}" }
+```
 ### 3. Constructing collections with factory functions
 
-ဒီ lesson မှာ `Constructing collections with factory functions` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Transform, filter, group, and aggregate app data safely and readably.
 
+**Flutter angle:** Use Kotlin collection operators like Dart map/where/fold, but pay attention to mutability.
+
+**Build:** Shape a list of API models into display rows.
+
+```kotlin
+data class Product(val name: String, val price: Int)
+
+fun visibleProducts(items: List<Product>): List<String> =
+    items.filter { it.price > 0 }.map { "${it.name}: ${it.price}" }
+```
 ### 4. Choosing collection types for app data
 
-ဒီ lesson မှာ `Choosing collection types for app data` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Transform, filter, group, and aggregate app data safely and readably.
+
+**Flutter angle:** Use Kotlin collection operators like Dart map/where/fold, but pay attention to mutability.
+
+**Build:** Shape a list of API models into display rows.
+
+```kotlin
+data class Product(val name: String, val price: Int)
+
+fun visibleProducts(items: List<Product>): List<String> =
+    items.filter { it.price > 0 }.map { "${it.name}: ${it.price}" }
+```
 
 ## Flutter Bridge
 
@@ -33,14 +70,14 @@ Kotlin makes mutability more explicit than many Dart list workflows, which helps
 ## Practice
 
 1. Create read-only and mutable product lists.
-2. Create one small Kotlin example and explain it with a Dart/Flutter analogy.
+2. Implement the coding exam as a small Kotlin snippet and compare the idea with Dart/Flutter.
 3. Write one mistake you should avoid in production code.
 
 ## Q&A Checkpoint
 
-- `Collections Overview and Construction` ကို Flutter developer အမြင်နဲ့ ဘယ် use case မှာအရေးကြီးဆုံးလဲ?
-- ဒီ topic အတွက် current Kotlin official docs မှာ PDF-era docs နဲ့ကွာတာရှိလား?
-- Production Android/Flutter plugin code မှာ common mistake ဘာတွေရှိလဲ?
+- How would I use `Collections Overview and Construction` in a real Flutter + Android integration?
+- What is the closest Dart/Flutter mental model, and where does Kotlin behave differently?
+- What mistake should I avoid when writing production Kotlin for this topic?
 
 ## Exam
 

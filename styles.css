@@ -157,6 +157,59 @@ button {
   gap: 3px;
 }
 
+.account-panel {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 18px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+}
+
+.account-heading,
+.signed-in-panel {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.account-heading span,
+.signed-in-panel span {
+  min-width: 0;
+  color: var(--muted);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.login-form {
+  display: grid;
+  gap: 6px;
+}
+
+.login-form label {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.login-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+}
+
+.login-row input {
+  min-height: 40px;
+  min-width: 0;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--control);
+  color: var(--ink);
+}
+
 .course-list {
   display: grid;
   gap: 8px;
@@ -227,7 +280,9 @@ button {
 
 .top-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
+  justify-content: flex-end;
   align-items: center;
 }
 
@@ -263,6 +318,7 @@ button {
   font-weight: 800;
 }
 
+
 .toggle-track {
   display: inline-flex;
   width: 38px;
@@ -295,7 +351,8 @@ button {
 .course-button:focus-visible,
 .tab:focus-visible,
 .primary-button:focus-visible,
-.secondary-button:focus-visible {
+.secondary-button:focus-visible,
+.login-row input:focus-visible {
   outline: 2px solid var(--blue);
   outline-offset: 2px;
 }
@@ -444,6 +501,7 @@ button {
   color: inherit;
 }
 
+
 .exam-toolbar {
   display: flex;
   gap: 16px;
@@ -463,6 +521,13 @@ button {
   padding: 0 14px;
   border-radius: 8px;
   font-weight: 800;
+}
+
+.primary-button:disabled,
+.secondary-button:disabled,
+.lesson-chip input:disabled {
+  cursor: not-allowed;
+  opacity: 0.58;
 }
 
 .primary-button {
@@ -536,6 +601,24 @@ button {
   padding: 16px;
 }
 
+.locked-panel {
+  padding: 18px;
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  background: var(--panel-soft);
+}
+
+.locked-panel h3 {
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+
+.locked-panel p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
 .score-panel strong {
   color: var(--green);
 }
@@ -569,10 +652,24 @@ button {
   .sidebar {
     position: static;
     height: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
   }
 
   .course-list {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    display: flex;
+    grid-template-columns: none;
+    gap: 8px;
+    margin: 0 -20px;
+    overflow-x: auto;
+    padding: 0 20px 6px;
+    scroll-snap-type: x proximity;
+    scrollbar-width: thin;
+  }
+
+  .course-button {
+    flex: 0 0 min(44vw, 280px);
+    scroll-snap-align: start;
   }
 
   .qa-layout {
@@ -581,6 +678,65 @@ button {
 }
 
 @media (max-width: 620px) {
+  body {
+    min-width: 0;
+  }
+
+  .sidebar {
+    padding: 14px 12px 12px;
+  }
+
+  .brand-block {
+    grid-template-columns: 38px minmax(0, 1fr);
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .brand-mark {
+    width: 38px;
+    height: 38px;
+    font-size: 21px;
+  }
+
+  .brand-block h1 {
+    font-size: 16px;
+  }
+
+  .progress-panel {
+    grid-template-columns: 56px minmax(0, 1fr);
+    gap: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+  }
+
+  .progress-ring {
+    width: 52px;
+    height: 52px;
+  }
+
+  .progress-ring span {
+    width: 40px;
+    height: 40px;
+    font-size: 12px;
+  }
+
+  .account-panel {
+    gap: 8px;
+    margin-bottom: 12px;
+    padding: 10px;
+  }
+
+  .course-list {
+    margin: 0 -12px;
+    padding: 0 12px 4px;
+  }
+
+  .course-button {
+    flex: 0 0 min(78vw, 270px);
+    min-height: 62px;
+    scroll-snap-align: start;
+  }
+
   .workspace {
     padding: 18px 12px 36px;
   }
@@ -592,12 +748,50 @@ button {
   }
 
   .top-actions {
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 40px;
+    justify-content: stretch;
+    width: 100%;
   }
 
-  .stats-grid,
-  .course-list {
+  .theme-toggle,
+  .icon-button {
+    width: 100%;
+  }
+
+
+  .theme-toggle {
+    justify-content: center;
+  }
+
+  .topbar h2 {
+    font-size: 24px;
+    overflow-wrap: anywhere;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .stats-grid div {
+    min-height: 62px;
+    padding: 10px 8px;
+  }
+
+  .stats-grid strong {
+    font-size: 15px;
+  }
+
+  .stats-grid span {
+    font-size: 11px;
+  }
+
+  .login-row,
+  .signed-in-panel {
     grid-template-columns: 1fr;
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .tabs {
@@ -607,5 +801,50 @@ button {
 
   .tab {
     min-width: 0;
+  }
+
+  .lesson-track {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .lesson-chip {
+    width: 100%;
+  }
+
+  .content-surface,
+  .exam-form,
+  .prompt-box,
+  .score-panel {
+    box-shadow: none;
+  }
+
+  .content-surface {
+    padding: 16px 14px;
+  }
+
+  .exam-card,
+  .locked-panel {
+    padding: 14px;
+  }
+
+  .content-surface h1,
+  .content-surface h2,
+  .content-surface h3 {
+    overflow-wrap: anywhere;
+  }
+
+  .content-surface p code,
+  .content-surface li code,
+  .exam-card p code,
+  .exam-card li code {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .content-surface pre,
+  .exam-card pre {
+    margin-right: -6px;
+    margin-left: -6px;
   }
 }

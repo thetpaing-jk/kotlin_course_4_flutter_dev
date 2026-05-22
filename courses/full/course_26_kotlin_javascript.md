@@ -2,29 +2,62 @@
 
 ## Goal
 
-စာအုပ်ထဲက `JavaScript, Dynamic Type, Calling JavaScript from Kotlin, Calling Kotlin from JavaScript, JavaScript Modules, JavaScript Reflection, JavaScript DCE, Example` section တွေကို Flutter developer အတွက် လက်တွေ့သုံးနိုင်တဲ့ Kotlin lesson အဖြစ်ခွဲသင်မယ်။
-
-## PDF Coverage
-
-JavaScript, Dynamic Type, Calling JavaScript from Kotlin, Calling Kotlin from JavaScript, JavaScript Modules, JavaScript Reflection, JavaScript DCE, Example
+Understand Kotlin/JS as a separate Kotlin target so you can evaluate it clearly without confusing it with Flutter web.
 
 ## Lessons
 
 ### 1. Kotlin/JS target overview
 
-ဒီ lesson မှာ `Kotlin/JS target overview` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Understand Kotlin/JS target overview as a practical Kotlin skill, then use it in small, readable programs.
 
+**Flutter angle:** Flutter web renders Dart/Flutter UI in the browser; Kotlin/JS compiles Kotlin code for JavaScript ecosystems.
+
+**Build:** Write a comparison note: what Flutter web owns, what Kotlin/JS owns, and where each might fit in a product.
+
+```kotlin
+fun courseLabel(name: String, completed: Int, total: Int): String {
+    return "$name: $completed/$total completed"
+}
+```
 ### 2. `dynamic` and JavaScript interop
 
-ဒီ lesson မှာ ``dynamic` and JavaScript interop` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Use `dynamic` only when Kotlin cannot know the JavaScript shape at compile time. Keep dynamic values near the interop boundary.
 
+**Flutter angle:** This is closer to JavaScript interop in Dart web than to Android plugin work.
+
+**Build:** Sketch one external JavaScript API you would call from Kotlin/JS and note the type-safety tradeoff.
+
+```kotlin
+external fun alert(message: String)
+
+fun showCourseMessage(title: String) = alert("Course: $title")
+```
 ### 3. Modules and calling across Kotlin/JS boundaries
 
-ဒီ lesson မှာ `Modules and calling across Kotlin/JS boundaries` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Understand Modules and calling across Kotlin/JS boundaries as a practical Kotlin skill, then use it in small, readable programs.
 
+**Flutter angle:** Think of modules as package boundaries: you need to know what is exported, imported, and safe to call.
+
+**Build:** Identify one JS package and decide what Kotlin declarations would be needed before calling it.
+
+```kotlin
+fun courseLabel(name: String, completed: Int, total: Int): String {
+    return "$name: $completed/$total completed"
+}
+```
 ### 4. Dead code elimination and JS-specific limitations
 
-ဒီ lesson မှာ `Dead code elimination and JS-specific limitations` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Understand Dead code elimination and JS-specific limitations as a practical Kotlin skill, then use it in small, readable programs.
+
+**Flutter angle:** Like Flutter web tree-shaking, unused code should not become unnecessary browser payload.
+
+**Build:** List two things that should stay out of browser-targeted code: secrets and platform-only APIs.
+
+```kotlin
+fun courseLabel(name: String, completed: Int, total: Int): String {
+    return "$name: $completed/$total completed"
+}
+```
 
 ## Flutter Bridge
 
@@ -33,14 +66,14 @@ Kotlin/JS is not Flutter web; it is Kotlin compiled for JavaScript ecosystems.
 ## Practice
 
 1. Write a comparison note between Flutter web and Kotlin/JS.
-2. Create one small Kotlin example and explain it with a Dart/Flutter analogy.
+2. Implement the coding exam as a small Kotlin snippet and compare the idea with Dart/Flutter.
 3. Write one mistake you should avoid in production code.
 
 ## Q&A Checkpoint
 
-- `Kotlin JavaScript` ကို Flutter developer အမြင်နဲ့ ဘယ် use case မှာအရေးကြီးဆုံးလဲ?
-- ဒီ topic အတွက် current Kotlin official docs မှာ PDF-era docs နဲ့ကွာတာရှိလား?
-- Production Android/Flutter plugin code မှာ common mistake ဘာတွေရှိလဲ?
+- How would I evaluate `Kotlin JavaScript` beside Flutter web in a real project?
+- What is the closest Dart/Flutter mental model, and where does Kotlin behave differently?
+- What mistake should I avoid when writing production Kotlin for this topic?
 
 ## Exam
 

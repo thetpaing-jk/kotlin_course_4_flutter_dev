@@ -2,4 +2,9 @@
 .vercel
 node_modules
 tools
+*.py
+pyproject.toml
+requirements.txt
+Pipfile
+supabase_learner_progress.sql
 *.log

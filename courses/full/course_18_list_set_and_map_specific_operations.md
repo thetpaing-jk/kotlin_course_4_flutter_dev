@@ -2,29 +2,64 @@
 
 ## Goal
 
-စာအုပ်ထဲက `List Specific Operations, Set Specific Operations, Map Specific Operations` section တွေကို Flutter developer အတွက် လက်တွေ့သုံးနိုင်တဲ့ Kotlin lesson အဖြစ်ခွဲသင်မယ်။
-
-## PDF Coverage
-
-List Specific Operations, Set Specific Operations, Map Specific Operations
+Build a practical Kotlin skill set for `List, Set, and Map Specific Operations` and connect each idea to practical work a Flutter developer is likely to meet.
 
 ## Lessons
 
 ### 1. List index operations and sublists
 
-ဒီ lesson မှာ `List index operations and sublists` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Use List, Set, and Map operations for indexed data, unique data, and key-value data.
 
+**Flutter angle:** Map<String, Any?> is common in platform channel arguments, so validate values carefully.
+
+**Build:** Read typed values from a map without unsafe casts.
+
+```kotlin
+data class Product(val name: String, val price: Int)
+
+fun visibleProducts(items: List<Product>): List<String> =
+    items.filter { it.price > 0 }.map { "${it.name}: ${it.price}" }
+```
 ### 2. Set union, intersect, and subtract
 
-ဒီ lesson မှာ `Set union, intersect, and subtract` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Understand Set union, intersect, and subtract as a practical Kotlin skill, then use it in small, readable programs.
 
+**Flutter angle:** Connect the idea to Flutter architecture, platform channels, app state, or model code.
+
+**Build:** Write a small Kotlin example and explain what would feel similar or different in Dart.
+
+```kotlin
+fun courseLabel(name: String, completed: Int, total: Int): String {
+    return "$name: $completed/$total completed"
+}
+```
 ### 3. Map keys, values, entries, and transformations
 
-ဒီ lesson မှာ `Map keys, values, entries, and transformations` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Use key-value data structures for lookup, grouping, and platform argument parsing.
 
+**Flutter angle:** PlatformChannel arguments often arrive as maps, so safe casts matter.
+
+**Build:** Write a helper that extracts a non-blank String by key.
+
+```kotlin
+data class Product(val name: String, val price: Int)
+
+fun visibleProducts(items: List<Product>): List<String> =
+    items.filter { it.price > 0 }.map { "${it.name}: ${it.price}" }
+```
 ### 4. Choosing data structures for app features
 
-ဒီ lesson မှာ `Choosing data structures for app features` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Understand Choosing data structures for app features as a practical Kotlin skill, then use it in small, readable programs.
+
+**Flutter angle:** Connect the idea to Flutter architecture, platform channels, app state, or model code.
+
+**Build:** Write a small Kotlin example and explain what would feel similar or different in Dart.
+
+```kotlin
+fun courseLabel(name: String, completed: Int, total: Int): String {
+    return "$name: $completed/$total completed"
+}
+```
 
 ## Flutter Bridge
 
@@ -33,14 +68,14 @@ Maps often represent platform channel arguments; Kotlin lets you validate them c
 ## Practice
 
 1. Read a user id safely from `Map<String, Any?>`.
-2. Create one small Kotlin example and explain it with a Dart/Flutter analogy.
+2. Implement the coding exam as a small Kotlin snippet and compare the idea with Dart/Flutter.
 3. Write one mistake you should avoid in production code.
 
 ## Q&A Checkpoint
 
-- `List, Set, and Map Specific Operations` ကို Flutter developer အမြင်နဲ့ ဘယ် use case မှာအရေးကြီးဆုံးလဲ?
-- ဒီ topic အတွက် current Kotlin official docs မှာ PDF-era docs နဲ့ကွာတာရှိလား?
-- Production Android/Flutter plugin code မှာ common mistake ဘာတွေရှိလဲ?
+- How would I use `List, Set, and Map Specific Operations` in a real Flutter + Android integration?
+- What is the closest Dart/Flutter mental model, and where does Kotlin behave differently?
+- What mistake should I avoid when writing production Kotlin for this topic?
 
 ## Exam
 

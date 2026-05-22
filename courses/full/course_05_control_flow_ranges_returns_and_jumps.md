@@ -2,29 +2,64 @@
 
 ## Goal
 
-စာအုပ်ထဲက `Control Flow: if, when, for, while; Returns and Jumps` section တွေကို Flutter developer အတွက် လက်တွေ့သုံးနိုင်တဲ့ Kotlin lesson အဖြစ်ခွဲသင်မယ်။
-
-## PDF Coverage
-
-Control Flow: if, when, for, while; Returns and Jumps
+Build a practical Kotlin skill set for `Control Flow, Ranges, Returns, and Jumps` and connect each idea to practical work a Flutter developer is likely to meet.
 
 ## Lessons
 
 ### 1. `if` as an expression
 
-ဒီ lesson မှာ ``if` as an expression` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Understand `if` as an expression as a practical Kotlin skill, then use it in small, readable programs.
 
+**Flutter angle:** Connect the idea to Flutter architecture, platform channels, app state, or model code.
+
+**Build:** Write a small Kotlin example and explain what would feel similar or different in Dart.
+
+```kotlin
+fun courseLabel(name: String, completed: Int, total: Int): String {
+    return "$name: $completed/$total completed"
+}
+```
 ### 2. `when` for branch-heavy logic
 
-ဒီ lesson မှာ ``when` for branch-heavy logic` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Understand `when` for branch-heavy logic as a practical Kotlin skill, then use it in small, readable programs.
 
+**Flutter angle:** Connect the idea to Flutter architecture, platform channels, app state, or model code.
+
+**Build:** Write a small Kotlin example and explain what would feel similar or different in Dart.
+
+```kotlin
+fun courseLabel(name: String, completed: Int, total: Int): String {
+    return "$name: $completed/$total completed"
+}
+```
 ### 3. `for`, `while`, ranges, progressions, and loop labels
 
-ဒီ lesson မှာ ``for`, `while`, ranges, progressions, and loop labels` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Understand `for`, `while`, ranges, progressions, and loop labels as a practical Kotlin skill, then use it in small, readable programs.
 
+**Flutter angle:** Connect the idea to Flutter architecture, platform channels, app state, or model code.
+
+**Build:** Write a small Kotlin example and explain what would feel similar or different in Dart.
+
+```kotlin
+fun courseLabel(name: String, completed: Int, total: Int): String {
+    return "$name: $completed/$total completed"
+}
+```
 ### 4. `return`, `break`, `continue`, and local returns in lambdas
 
-ဒီ lesson မှာ ``return`, `break`, `continue`, and local returns in lambdas` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Pass behavior as values and keep callback-heavy code readable.
+
+**Flutter angle:** This maps to Flutter builder callbacks and Dart closures.
+
+**Build:** Write retry(times) { ... } and explain where the lambda runs.
+
+```kotlin
+fun retry(times: Int, block: () -> Unit) {
+    repeat(times) { block() }
+}
+
+retry(2) { println("Trying again") }
+```
 
 ## Flutter Bridge
 
@@ -33,14 +68,14 @@ Use `when` the way you might model tab routing, API result states, or platform a
 ## Practice
 
 1. Map tab index values to screen names with `when`.
-2. Create one small Kotlin example and explain it with a Dart/Flutter analogy.
+2. Implement the coding exam as a small Kotlin snippet and compare the idea with Dart/Flutter.
 3. Write one mistake you should avoid in production code.
 
 ## Q&A Checkpoint
 
-- `Control Flow, Ranges, Returns, and Jumps` ကို Flutter developer အမြင်နဲ့ ဘယ် use case မှာအရေးကြီးဆုံးလဲ?
-- ဒီ topic အတွက် current Kotlin official docs မှာ PDF-era docs နဲ့ကွာတာရှိလား?
-- Production Android/Flutter plugin code မှာ common mistake ဘာတွေရှိလဲ?
+- How would I use `Control Flow, Ranges, Returns, and Jumps` in a real Flutter + Android integration?
+- What is the closest Dart/Flutter mental model, and where does Kotlin behave differently?
+- What mistake should I avoid when writing production Kotlin for this topic?
 
 ## Exam
 

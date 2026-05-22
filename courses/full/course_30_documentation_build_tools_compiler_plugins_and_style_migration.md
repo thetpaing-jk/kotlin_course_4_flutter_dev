@@ -2,29 +2,62 @@
 
 ## Goal
 
-စာအုပ်ထဲက `Tools, Documenting Kotlin Code, Annotation Processing, Using Gradle, Using Maven, Using Ant, Kotlin and OSGi, Compiler Plugins, Code Style Migration Guide` section တွေကို Flutter developer အတွက် လက်တွေ့သုံးနိုင်တဲ့ Kotlin lesson အဖြစ်ခွဲသင်မယ်။
-
-## PDF Coverage
-
-Tools, Documenting Kotlin Code, Annotation Processing, Using Gradle, Using Maven, Using Ant, Kotlin and OSGi, Compiler Plugins, Code Style Migration Guide
+Build a practical Kotlin skill set for `Documentation, Build Tools, Compiler Plugins, and Style Migration` and connect each idea to practical work a Flutter developer is likely to meet.
 
 ## Lessons
 
 ### 1. KDoc and documentation habits
 
-ဒီ lesson မှာ `KDoc and documentation habits` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Document Kotlin APIs and understand build/codegen tools around a project.
 
+**Flutter angle:** Good native documentation helps your future Flutter-side debugging.
+
+**Build:** Write KDoc for a MethodChannel helper.
+
+```kotlin
+fun courseLabel(name: String, completed: Int, total: Int): String {
+    return "$name: $completed/$total completed"
+}
+```
 ### 2. KAPT/annotation processing overview
 
-ဒီ lesson မှာ `KAPT/annotation processing overview` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Recognize annotations and opt-in APIs used by frameworks and tools.
 
+**Flutter angle:** Android/Kotlin libraries often use annotations for codegen, interop, or API stability.
+
+**Build:** Identify what an annotation changes in a small example.
+
+```kotlin
+fun courseLabel(name: String, completed: Int, total: Int): String {
+    return "$name: $completed/$total completed"
+}
+```
 ### 3. Gradle, Maven, Ant, and build tool awareness
 
-ဒီ lesson မှာ `Gradle, Maven, Ant, and build tool awareness` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Read Kotlin/Android build configuration and dependency declarations.
 
+**Flutter angle:** Flutter projects still contain Android Gradle files, especially for plugins.
+
+**Build:** Identify plugin, dependency, and version lines in a Gradle file.
+
+```kotlin
+fun courseLabel(name: String, completed: Int, total: Int): String {
+    return "$name: $completed/$total completed"
+}
+```
 ### 4. Compiler plugins and code style migration
 
-ဒီ lesson မှာ `Compiler plugins and code style migration` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Understand Compiler plugins and code style migration as a practical Kotlin skill, then use it in small, readable programs.
+
+**Flutter angle:** Connect the idea to Flutter architecture, platform channels, app state, or model code.
+
+**Build:** Write a small Kotlin example and explain what would feel similar or different in Dart.
+
+```kotlin
+fun courseLabel(name: String, completed: Int, total: Int): String {
+    return "$name: $completed/$total completed"
+}
+```
 
 ## Flutter Bridge
 
@@ -33,14 +66,14 @@ Flutter projects still contain Android Gradle files, so Gradle literacy makes na
 ## Practice
 
 1. Find one dependency declaration in an Android Gradle file and identify group/artifact/version.
-2. Create one small Kotlin example and explain it with a Dart/Flutter analogy.
+2. Implement the coding exam as a small Kotlin snippet and compare the idea with Dart/Flutter.
 3. Write one mistake you should avoid in production code.
 
 ## Q&A Checkpoint
 
-- `Documentation, Build Tools, Compiler Plugins, and Style Migration` ကို Flutter developer အမြင်နဲ့ ဘယ် use case မှာအရေးကြီးဆုံးလဲ?
-- ဒီ topic အတွက် current Kotlin official docs မှာ PDF-era docs နဲ့ကွာတာရှိလား?
-- Production Android/Flutter plugin code မှာ common mistake ဘာတွေရှိလဲ?
+- How would I use `Documentation, Build Tools, Compiler Plugins, and Style Migration` in a real Flutter + Android integration?
+- What is the closest Dart/Flutter mental model, and where does Kotlin behave differently?
+- What mistake should I avoid when writing production Kotlin for this topic?
 
 ## Exam
 

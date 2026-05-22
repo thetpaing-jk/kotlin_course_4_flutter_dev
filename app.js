@@ -1,5 +1,6 @@
 const COURSE_MANIFEST = "courses/full/manifest.json";
 const ANSWER_KEY_FILE = "exams/full_answer_key.json";
+const SUPABASE_CONFIG_ENDPOINT = "/api/config";
 
 const FALLBACK_ANSWER_KEY = {
   0: {
@@ -85,6 +86,73 @@ const FALLBACK_ANSWER_KEY = {
 
 const STORAGE_KEY = "kotlinCourseStudio.v1";
 const THEME_KEY = "kotlinCourseStudio.theme";
+const SYNC_DEBOUNCE_MS = 700;
+
+const TEXT = {
+  brandSubtitle: "For Flutter developers",
+  accountTitle: "Account",
+  emailLabel: "Email",
+  sendLink: "Send link",
+  signOut: "Sign out",
+  lessonsLabel: "Lessons",
+  examLabel: "Exam",
+  statusLabel: "Status",
+  learnTab: "Learn",
+  examTab: "Exam",
+  qaTab: "Q&A",
+  courseExamTitle: "Course Exam",
+  courseExamDescription: "MCQ and fill-in-the-blank are auto checked. Coding answer is saved with a rubric.",
+  submitExam: "Submit Exam",
+  qaCheckpointTitle: "Q&A Checkpoint",
+  researchPromptLabel: "Your research prompt",
+  copyPrompt: "Copy Prompt",
+  offlineLocalOnly: "Offline/local only",
+  localOnly: "Local only",
+  saved: "Saved",
+  saving: "Saving...",
+  syncError: "Sync error",
+  loadingCloud: "Loading cloud progress...",
+  sendingLoginLink: "Sending login link...",
+  loginLinkSent: "Login link sent",
+  promptCopied: "Prompt copied.",
+  signInToTrack: "Sign in to track",
+  noExam: "No exam",
+  courseLabel: "Course",
+  signIn: "Sign in",
+  notTaken: "Not taken",
+  locked: "Locked",
+  complete: "Complete",
+  inProgress: "In progress",
+  preview: "Preview",
+  coursesCompleted: "{done} of {total} courses",
+  signInToTrackProgress: "Sign in to track progress",
+  noExamScores: "No exam scores yet",
+  examAverage: "Exam average {percent}%",
+  progressHidden: "Progress is hidden until sign in",
+  cloudEnabled: "Cloud sync is enabled for this account.",
+  signInToSync: "Sign in to sync progress across devices.",
+  supabaseMissing: "Supabase is not configured. Progress is saved on this browser only.",
+  supabaseClientMissing: "Could not load Supabase client. Progress is saved on this browser only.",
+  enterEmailFirst: "Enter your email first.",
+  supabaseConfigureFirst: "Supabase is not configured yet. Add Vercel environment variables first.",
+  checkEmail: "Check your email and open the magic link.",
+  signInRequired: "Please sign in first. Progress, exams, and Q&A are saved per account.",
+  configureSignInRequired: "Please configure Supabase and sign in first. Progress and exams are account-only.",
+  resetConfirm: "Reset current progress, exam answers, and Q&A drafts?",
+  examLockedTitle: "Sign in to take exams",
+  examLockedMessage: "Your exam answers and scores are saved per account.",
+  qaLockedTitle: "Sign in to use Q&A",
+  qaLockedMessage: "Your question drafts are saved per account after sign in.",
+  multipleChoice: "Multiple Choice",
+  fillBlank: "Fill In The Blank",
+  codingExam: "Coding Exam",
+  rubric: "Rubric",
+  codingPlaceholder: "Write your Kotlin answer here",
+  latestScore: "Latest score: {score}",
+  codingReviewNote: "Coding answer is saved, but review it manually with the rubric.",
+  qaDefaultPrompt: "Course: {course}\nQuestion:\n\nContext:\nI am a Flutter developer learning Kotlin. Please research current Kotlin/Android docs and explain with Flutter comparisons.",
+  resetProgressTitle: "Reset progress",
+};
 
 const state = {
   courses: [],
@@ -93,6 +161,12 @@ const state = {
   activeTab: "learn",
   theme: document.documentElement.dataset.theme || "light",
   saved: loadState(),
+  supabase: null,
+  user: null,
+  syncStatus: "offlineLocalOnly",
+  authMessage: "",
+  syncTimer: null,
+  loadingCloud: false,
 };
 
 const els = {
@@ -118,6 +192,13 @@ const els = {
   resetProgressBtn: document.querySelector("#resetProgressBtn"),
   themeToggle: document.querySelector("#themeToggle"),
   themeToggleLabel: document.querySelector("#themeToggleLabel"),
+  syncStatus: document.querySelector("#syncStatus"),
+  loginForm: document.querySelector("#loginForm"),
+  loginEmail: document.querySelector("#loginEmail"),
+  signedInPanel: document.querySelector("#signedInPanel"),
+  signedInEmail: document.querySelector("#signedInEmail"),
+  signOutBtn: document.querySelector("#signOutBtn"),
+  authMessage: document.querySelector("#authMessage"),
 };
 
 init();
@@ -130,6 +211,8 @@ async function init() {
   state.courses = markdownFiles.map(parseCourse);
   state.activeCourse = clamp(state.saved.activeCourse ?? 0, 0, state.courses.length - 1);
   bindEvents();
+  render();
+  await initSupabase();
   render();
 }
 
@@ -170,11 +253,48 @@ async function loadAnswerKey() {
   return response.json();
 }
 
+async function loadSupabaseConfig() {
+  try {
+    const response = await fetch(SUPABASE_CONFIG_ENDPOINT, { cache: "no-store" });
+    if (!response.ok) return null;
+    const config = await response.json();
+    if (!config.supabaseUrl || !config.supabaseAnonKey) return null;
+    return config;
+  } catch {
+    return null;
+  }
+}
+
+function loadSupabaseScript() {
+  if (window.supabase?.createClient) return Promise.resolve(true);
+
+  return new Promise((resolve) => {
+    const existingScript = document.querySelector("script[data-supabase-client]");
+    if (existingScript) {
+      existingScript.addEventListener("load", () => resolve(true), { once: true });
+      existingScript.addEventListener("error", () => resolve(false), { once: true });
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+    script.async = true;
+    script.dataset.supabaseClient = "true";
+    script.addEventListener("load", () => resolve(true), { once: true });
+    script.addEventListener("error", () => resolve(false), { once: true });
+    document.head.appendChild(script);
+  });
+}
+
 function parseCourse(file, index) {
   const lines = file.text.split(/\r?\n/);
   const title = lines.find((line) => line.startsWith("# "))?.replace("# ", "").trim() ?? `Course ${index + 1}`;
+  const goal = sectionBetween(file.text, "## Goal", "## Lessons");
   const lessonSection = sectionBetween(file.text, "## Lessons", "## Flutter Bridge");
-  const lessons = [...lessonSection.matchAll(/^###\s+(.+)$/gm)].map((match) => match[1].trim());
+  const lessonDetails = parseLessonDetails(lessonSection);
+  const lessons = lessonDetails.map((lesson) => lesson.title);
+  const bridge = sectionBetween(file.text, "## Flutter Bridge", "## Practice");
+  const practice = sectionBetween(file.text, "## Practice", "## Q&A Checkpoint");
   const qna = sectionBetween(file.text, "## Q&A Checkpoint", "## Exam");
   const exam = parseExam(sectionAfter(file.text, "## Exam"));
 
@@ -183,11 +303,36 @@ function parseCourse(file, index) {
     path: file.path,
     title,
     shortTitle: title.replace(/^Course\s+\d+\s+-\s+/, ""),
+    goal,
     markdown: file.text,
     lessons,
+    lessonDetails,
+    bridge,
+    practice,
     qna,
     exam,
   };
+}
+
+function parseLessonDetails(lessonSection) {
+  const matches = [...lessonSection.matchAll(/^###\s+(.+)$/gm)];
+  return matches.map((match, index) => {
+    const start = match.index + match[0].length;
+    const end = index + 1 < matches.length ? matches[index + 1].index : lessonSection.length;
+    const body = lessonSection.slice(start, end).trim();
+    return {
+      title: match[1].trim(),
+      learn: extractBoldLine(body, "Learn"),
+      flutter: extractBoldLine(body, "Flutter angle"),
+      build: extractBoldLine(body, "Build"),
+    };
+  });
+}
+
+function extractBoldLine(text, label) {
+  const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const match = text.match(new RegExp(`\\*\\*${escaped}:\\*\\*\\s*(.+)`));
+  return match ? match[1].trim() : "";
 }
 
 function parseExam(examText) {
@@ -240,8 +385,10 @@ function bindEvents() {
     const button = event.target.closest("[data-course-index]");
     if (!button) return;
     state.activeCourse = Number(button.dataset.courseIndex);
-    state.saved.activeCourse = state.activeCourse;
-    saveState();
+    if (isSignedIn()) {
+      state.saved.activeCourse = state.activeCourse;
+      saveState();
+    }
     render();
   });
 
@@ -255,6 +402,12 @@ function bindEvents() {
   els.lessonTrack.addEventListener("change", (event) => {
     const input = event.target.closest("[data-lesson-index]");
     if (!input) return;
+    if (!isSignedIn()) {
+      input.checked = false;
+      showSignInRequired();
+      render();
+      return;
+    }
     const courseState = getCourseState(state.activeCourse);
     const lessonIndex = String(input.dataset.lessonIndex);
     courseState.lessons[lessonIndex] = input.checked;
@@ -265,28 +418,56 @@ function bindEvents() {
   els.submitExamBtn.addEventListener("click", gradeCurrentExam);
 
   els.copyPromptBtn.addEventListener("click", async () => {
+    if (!isSignedIn()) {
+      showSignInRequired();
+      return;
+    }
     await navigator.clipboard.writeText(els.qaPrompt.value);
-    els.copyStatus.textContent = "Prompt copied.";
+    els.copyStatus.textContent = t("promptCopied");
     setTimeout(() => {
       els.copyStatus.textContent = "";
     }, 1800);
   });
 
   els.qaPrompt.addEventListener("input", () => {
+    if (!isSignedIn()) {
+      els.qaPrompt.value = "";
+      showSignInRequired();
+      return;
+    }
     getCourseState(state.activeCourse).qaPrompt = els.qaPrompt.value;
     saveState();
   });
 
   els.resetProgressBtn.addEventListener("click", () => {
-    const ok = window.confirm("Reset all progress, exam answers, and Q&A drafts?");
+    if (!isSignedIn()) {
+      showSignInRequired();
+      return;
+    }
+    const ok = window.confirm(t("resetConfirm"));
     if (!ok) return;
-    localStorage.removeItem(STORAGE_KEY);
-    state.saved = loadState();
+    if (state.user) {
+      state.saved = { activeCourse: 0, courses: {} };
+    } else {
+      localStorage.removeItem(STORAGE_KEY);
+      state.saved = loadState();
+    }
+    state.activeCourse = 0;
+    saveState();
     render();
   });
 
   els.themeToggle.addEventListener("click", () => {
     applyTheme(state.theme === "dark" ? "light" : "dark");
+  });
+
+  els.loginForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    await sendMagicLink();
+  });
+
+  els.signOutBtn.addEventListener("click", async () => {
+    await signOut();
   });
 }
 
@@ -297,6 +478,7 @@ function render() {
   renderLearn();
   renderExam();
   renderQa();
+  renderAccount();
   renderTabs();
 }
 
@@ -307,11 +489,14 @@ function renderCourseList() {
       const complete = isCourseComplete(course.index);
       const lessonCount = course.lessons.length;
       const doneCount = countDoneLessons(course.index);
+      const progressLabel = isSignedIn()
+        ? `${doneCount}/${lessonCount} ${t("lessonsLabel").toLowerCase()} / ${courseState.examScoreText ?? t("noExam")}`
+        : t("signInToTrack");
       return `
         <button class="course-button ${course.index === state.activeCourse ? "is-active" : ""} ${complete ? "is-done" : ""}" data-course-index="${course.index}" type="button">
           <span>
             <strong>${escapeHtml(course.shortTitle)}</strong>
-            <span>${doneCount}/${lessonCount} lessons / ${courseState.examScoreText ?? "No exam"}</span>
+            <span>${progressLabel}</span>
           </span>
           <span class="course-badge">${complete ? "OK" : course.index + 1}</span>
         </button>
@@ -325,26 +510,47 @@ function renderHeader() {
   const courseState = getCourseState(course.index);
   const lessonCount = course.lessons.length;
   const doneCount = countDoneLessons(course.index);
-  els.courseNumber.textContent = `Course ${String(course.index + 1).padStart(2, "0")}`;
+  els.courseNumber.textContent = `${t("courseLabel")} ${String(course.index + 1).padStart(2, "0")}`;
   els.courseTitle.textContent = course.shortTitle;
-  els.lessonStat.textContent = `${doneCount}/${lessonCount}`;
-  els.examStat.textContent = courseState.examScoreText ?? "Not taken";
-  els.statusStat.textContent = isCourseComplete(course.index) ? "Complete" : "In progress";
+  els.lessonStat.textContent = isSignedIn() ? `${doneCount}/${lessonCount}` : t("signIn");
+  els.examStat.textContent = isSignedIn() ? courseState.examScoreText ?? t("notTaken") : t("locked");
+  els.statusStat.textContent = isSignedIn() ? (isCourseComplete(course.index) ? t("complete") : t("inProgress")) : t("preview");
 }
 
 function renderProgress() {
   const courseCount = state.courses.length;
-  const completeCount = state.courses.filter((course) => isCourseComplete(course.index)).length;
+  const completeCount = isSignedIn() ? state.courses.filter((course) => isCourseComplete(course.index)).length : 0;
   const percent = Math.round((completeCount / courseCount) * 100);
-  const scores = Object.values(state.saved.courses)
-    .map((course) => course.examPercent)
-    .filter((score) => Number.isFinite(score));
+  const scores = isSignedIn()
+    ? Object.values(state.saved.courses)
+        .map((course) => course.examPercent)
+        .filter((score) => Number.isFinite(score))
+    : [];
   const average = scores.length ? Math.round(scores.reduce((sum, score) => sum + score, 0) / scores.length) : null;
 
   els.progressRing.style.background = `conic-gradient(var(--green) ${percent * 3.6}deg, var(--track) 0deg)`;
-  els.progressPercent.textContent = `${percent}%`;
-  els.completedCount.textContent = `${completeCount} of ${courseCount} courses`;
-  els.examAverage.textContent = average === null ? "No exam scores yet" : `Exam average ${average}%`;
+  els.progressPercent.textContent = isSignedIn() ? `${percent}%` : "--";
+  els.completedCount.textContent = isSignedIn()
+    ? t("coursesCompleted", { done: completeCount, total: courseCount })
+    : t("signInToTrackProgress");
+  els.examAverage.textContent = isSignedIn()
+    ? average === null
+      ? t("noExamScores")
+      : t("examAverage", { percent: average })
+    : t("progressHidden");
+}
+
+function renderAccount() {
+  els.syncStatus.textContent = t(state.syncStatus);
+  els.loginForm.hidden = !!state.user;
+  els.signedInPanel.hidden = !state.user;
+  els.signedInEmail.textContent = state.user?.email ?? "";
+  const fallbackMessage = state.user
+    ? t("cloudEnabled")
+    : state.supabase
+      ? t("signInToSync")
+      : t("supabaseMissing");
+  els.authMessage.textContent = state.authMessage || fallbackMessage;
 }
 
 function renderLearn() {
@@ -352,10 +558,11 @@ function renderLearn() {
   const courseState = getCourseState(course.index);
   els.lessonTrack.innerHTML = course.lessons
     .map((lesson, index) => {
-      const checked = courseState.lessons[String(index)] ? "checked" : "";
+      const checked = isSignedIn() && courseState.lessons[String(index)] ? "checked" : "";
+      const disabled = isSignedIn() ? "" : "disabled";
       return `
         <label class="lesson-chip">
-          <input type="checkbox" data-lesson-index="${index}" ${checked} />
+          <input type="checkbox" data-lesson-index="${index}" ${checked} ${disabled} />
           <span>${escapeHtml(lesson)}</span>
         </label>
       `;
@@ -365,6 +572,15 @@ function renderLearn() {
 }
 
 function renderExam() {
+  if (!isSignedIn()) {
+    els.submitExamBtn.disabled = true;
+    els.examForm.innerHTML = lockedPanelHtml(t("examLockedTitle"), t("examLockedMessage"));
+    els.scorePanel.hidden = true;
+    els.scorePanel.innerHTML = "";
+    return;
+  }
+
+  els.submitExamBtn.disabled = false;
   const course = currentCourse();
   const courseState = getCourseState(course.index);
   const answers = courseState.examAnswers ?? {};
@@ -407,20 +623,20 @@ function renderExam() {
 
   els.examForm.innerHTML = `
     <section>
-      <h3>Multiple Choice</h3>
+      <h3>${escapeHtml(t("multipleChoice"))}</h3>
       ${mcqHtml}
     </section>
     <section>
-      <h3>Fill In The Blank</h3>
+      <h3>${escapeHtml(t("fillBlank"))}</h3>
       ${fillHtml}
     </section>
     <section>
-      <h3>Coding Exam</h3>
+      <h3>${escapeHtml(t("codingExam"))}</h3>
       <div class="exam-card">
         ${markdownToHtml(course.exam.coding)}
-        <h4>Rubric</h4>
+        <h4>${escapeHtml(t("rubric"))}</h4>
         <ul>${(key?.rubric ?? []).map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
-        <textarea class="coding-answer" name="coding" placeholder="Write your Kotlin answer here">${escapeHtml(answers.coding ?? "")}</textarea>
+        <textarea class="coding-answer" name="coding" placeholder="${escapeHtml(t("codingPlaceholder"))}">${escapeHtml(answers.coding ?? "")}</textarea>
       </div>
     </section>
   `;
@@ -429,12 +645,22 @@ function renderExam() {
 }
 
 function renderQa() {
+  if (!isSignedIn()) {
+    els.qaQuestions.innerHTML = lockedPanelHtml(t("qaLockedTitle"), t("qaLockedMessage"));
+    els.qaPrompt.value = "";
+    els.qaPrompt.disabled = true;
+    els.copyPromptBtn.disabled = true;
+    return;
+  }
+
   const course = currentCourse();
   const courseState = getCourseState(course.index);
   els.qaQuestions.innerHTML = markdownToHtml(course.qna);
+  els.qaPrompt.disabled = false;
+  els.copyPromptBtn.disabled = false;
   els.qaPrompt.value =
     courseState.qaPrompt ??
-    `Course: ${course.shortTitle}\nQuestion:\n\nContext:\nI am a Flutter developer learning Kotlin. Please research current Kotlin/Android docs and explain with Flutter comparisons.`;
+    t("qaDefaultPrompt", { course: course.shortTitle });
 }
 
 function renderTabs() {
@@ -447,6 +673,10 @@ function renderTabs() {
 }
 
 function gradeCurrentExam() {
+  if (!isSignedIn()) {
+    showSignInRequired();
+    return;
+  }
   const course = currentCourse();
   const key = answerKeyFor(course);
   if (!key) return;
@@ -483,8 +713,181 @@ function renderScorePanel(courseState) {
   const labelClass = courseState.examPercent >= 70 ? "" : "needs-work";
   els.scorePanel.hidden = false;
   els.scorePanel.innerHTML = `
-    <p><strong class="${labelClass}">Latest score: ${courseState.examScoreText}</strong></p>
-    <p class="muted">Coding answer is saved, but review it manually with the rubric.</p>
+    <p><strong class="${labelClass}">${escapeHtml(t("latestScore", { score: courseState.examScoreText }))}</strong></p>
+    <p class="muted">${escapeHtml(t("codingReviewNote"))}</p>
+  `;
+}
+
+async function initSupabase() {
+  const config = await loadSupabaseConfig();
+  if (!config) {
+    setSyncStatus("offlineLocalOnly");
+    return;
+  }
+
+  const scriptLoaded = await loadSupabaseScript();
+  if (!scriptLoaded || !window.supabase?.createClient) {
+    setSyncStatus("offlineLocalOnly");
+    setAuthMessage(t("supabaseClientMissing"));
+    return;
+  }
+
+  state.supabase = window.supabase.createClient(config.supabaseUrl, config.supabaseAnonKey);
+
+  const { data } = await state.supabase.auth.getSession();
+  if (data.session?.user) {
+    state.user = data.session.user;
+    await loadCloudProgress();
+  } else {
+    setSyncStatus("localOnly");
+  }
+
+  state.supabase.auth.onAuthStateChange(async (event, session) => {
+    if (event === "SIGNED_OUT") {
+      state.user = null;
+      state.saved = { activeCourse: state.activeCourse, courses: {} };
+      state.authMessage = "";
+      setSyncStatus("localOnly");
+      render();
+      return;
+    }
+
+    if (session?.user && session.user.id !== state.user?.id) {
+      state.user = session.user;
+      state.authMessage = "";
+      await loadCloudProgress();
+      render();
+    }
+  });
+}
+
+async function sendMagicLink() {
+  const email = els.loginEmail.value.trim();
+  if (!email) {
+    setAuthMessage(t("enterEmailFirst"));
+    return;
+  }
+
+  if (!state.supabase) {
+    setAuthMessage(t("supabaseConfigureFirst"));
+    return;
+  }
+
+  setSyncStatus("sendingLoginLink");
+  const { error } = await state.supabase.auth.signInWithOtp({
+    email,
+    options: {
+      emailRedirectTo: window.location.href.split("#")[0],
+    },
+  });
+
+  if (error) {
+    setSyncStatus("localOnly");
+    setAuthMessage(error.message);
+    return;
+  }
+
+  setSyncStatus("loginLinkSent");
+  setAuthMessage(t("checkEmail"));
+}
+
+async function signOut() {
+  if (!state.supabase) return;
+  await state.supabase.auth.signOut();
+}
+
+async function loadCloudProgress() {
+  if (!state.supabase || !state.user) return;
+
+  state.loadingCloud = true;
+  setSyncStatus("loadingCloud");
+  const { data, error } = await state.supabase
+    .from("learner_progress")
+    .select("progress")
+    .eq("user_id", state.user.id)
+    .maybeSingle();
+
+  if (error) {
+    state.saved = loadUserCache() ?? state.saved;
+    state.activeCourse = clamp(state.saved.activeCourse ?? 0, 0, state.courses.length - 1);
+    state.loadingCloud = false;
+    setSyncStatus("syncError");
+    setAuthMessage(error.message);
+    return;
+  }
+
+  if (data?.progress) {
+    state.saved = normalizeProgress(data.progress);
+    saveUserCache();
+  } else if (hasLocalProgress(state.saved)) {
+    await saveCloudProgress();
+  } else {
+    state.saved = loadState();
+  }
+
+  state.activeCourse = clamp(state.saved.activeCourse ?? 0, 0, state.courses.length - 1);
+  state.loadingCloud = false;
+  setSyncStatus("saved");
+}
+
+function scheduleCloudSave() {
+  if (!state.supabase || !state.user || state.loadingCloud) {
+    setSyncStatus(state.supabase ? "localOnly" : "offlineLocalOnly");
+    return;
+  }
+
+  clearTimeout(state.syncTimer);
+  setSyncStatus("saving");
+  state.syncTimer = setTimeout(() => {
+    saveCloudProgress();
+  }, SYNC_DEBOUNCE_MS);
+}
+
+async function saveCloudProgress() {
+  if (!state.supabase || !state.user) return;
+
+  setSyncStatus("saving");
+  const { error } = await state.supabase.from("learner_progress").upsert({
+    user_id: state.user.id,
+    progress: state.saved,
+    updated_at: new Date().toISOString(),
+  });
+
+  if (error) {
+    setSyncStatus("syncError");
+    setAuthMessage(error.message);
+    renderAccount();
+    return;
+  }
+
+  saveUserCache();
+  setSyncStatus("saved");
+}
+
+function setSyncStatus(status) {
+  state.syncStatus = status;
+  renderAccount();
+}
+
+function setAuthMessage(message) {
+  state.authMessage = message;
+  renderAccount();
+}
+
+function isSignedIn() {
+  return Boolean(state.user);
+}
+
+function showSignInRequired() {
+  setAuthMessage(state.supabase ? t("signInRequired") : t("configureSignInRequired"));
+}
+
+function lockedPanelHtml(title, message) {
+  return `
+    <div class="locked-panel">
+      <h3>${escapeHtml(title)}</h3>
+      <p>${escapeHtml(message)}</p>
+    </div>
   `;
 }
 
@@ -520,14 +923,73 @@ function isCourseComplete(courseIndex) {
 
 function loadState() {
   try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) ?? { activeCourse: 0, courses: {} };
+    return normalizeProgress(JSON.parse(localStorage.getItem(STORAGE_KEY)));
   } catch {
     return { activeCourse: 0, courses: {} };
   }
 }
 
 function saveState() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state.saved));
+  if (state.user) {
+    saveUserCache();
+  } else {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state.saved));
+  }
+  scheduleCloudSave();
+}
+
+function saveUserCache() {
+  if (!state.user) return;
+  localStorage.setItem(userStorageKey(state.user.id), JSON.stringify(state.saved));
+}
+
+function loadUserCache() {
+  if (!state.user) return null;
+  try {
+    const cached = localStorage.getItem(userStorageKey(state.user.id));
+    return cached ? normalizeProgress(JSON.parse(cached)) : null;
+  } catch {
+    return null;
+  }
+}
+
+function userStorageKey(userId) {
+  return `${STORAGE_KEY}.user.${userId}`;
+}
+
+function normalizeProgress(progress) {
+  if (!progress || typeof progress !== "object") {
+    return { activeCourse: 0, courses: {} };
+  }
+
+  return {
+    activeCourse: Number.isFinite(progress.activeCourse) ? progress.activeCourse : 0,
+    courses: progress.courses && typeof progress.courses === "object" ? progress.courses : {},
+  };
+}
+
+function hasLocalProgress(progress) {
+  return Boolean(
+    progress &&
+      (Number(progress.activeCourse) > 0 ||
+        Object.keys(progress.courses ?? {}).some((key) => {
+          const course = progress.courses[key];
+          return (
+            Object.values(course?.lessons ?? {}).some(Boolean) ||
+            Boolean(course?.examScoreText) ||
+            Boolean(course?.qaPrompt) ||
+            Boolean(course?.examAnswers)
+          );
+        }))
+  );
+}
+
+function t(key, vars = {}) {
+  let value = TEXT[key] ?? key;
+  Object.entries(vars).forEach(([name, replacement]) => {
+    value = value.replaceAll(`{${name}}`, String(replacement));
+  });
+  return value;
 }
 
 function applyTheme(theme) {

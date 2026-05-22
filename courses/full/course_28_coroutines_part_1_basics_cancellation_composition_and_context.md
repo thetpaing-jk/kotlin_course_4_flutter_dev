@@ -2,29 +2,68 @@
 
 ## Goal
 
-စာအုပ်ထဲက `Coroutines, Coroutine Basics, Cancellation and Timeouts, Composing Suspending Functions, Coroutine Context and Dispatchers` section တွေကို Flutter developer အတွက် လက်တွေ့သုံးနိုင်တဲ့ Kotlin lesson အဖြစ်ခွဲသင်မယ်။
-
-## PDF Coverage
-
-Coroutines, Coroutine Basics, Cancellation and Timeouts, Composing Suspending Functions, Coroutine Context and Dispatchers
+Build a practical Kotlin skill set for `Coroutines Part 1: Basics, Cancellation, Composition, and Context` and connect each idea to practical work a Flutter developer is likely to meet.
 
 ## Lessons
 
 ### 1. Coroutine basics and suspending functions
 
-ဒီ lesson မှာ `Coroutine basics and suspending functions` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Write asynchronous Kotlin code with suspend functions, scopes, cancellation, and dispatchers.
 
+**Flutter angle:** Compare suspend functions with Dart Future and Flow with Dart Stream.
+
+**Build:** Build a fake repository call and decide where IO/main-thread work belongs.
+
+```kotlin
+suspend fun loadTitle(): String {
+    return "Kotlin Course"
+}
+
+// In Android apps, call suspend functions from a lifecycle-aware scope.
+```
 ### 2. Cancellation and timeout handling
 
-ဒီ lesson မှာ `Cancellation and timeout handling` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Understand Cancellation and timeout handling as a practical Kotlin skill, then use it in small, readable programs.
 
+**Flutter angle:** Connect the idea to Flutter architecture, platform channels, app state, or model code.
+
+**Build:** Write a small Kotlin example and explain what would feel similar or different in Dart.
+
+```kotlin
+fun courseLabel(name: String, completed: Int, total: Int): String {
+    return "$name: $completed/$total completed"
+}
+```
 ### 3. Sequential vs concurrent composition with `async`
 
-ဒီ lesson မှာ `Sequential vs concurrent composition with `async`` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Understand Sequential vs concurrent composition with `async` as a practical Kotlin skill, then use it in small, readable programs.
 
+**Flutter angle:** Connect the idea to Flutter architecture, platform channels, app state, or model code.
+
+**Build:** Write a small Kotlin example and explain what would feel similar or different in Dart.
+
+```kotlin
+suspend fun loadTitle(): String {
+    return "Kotlin Course"
+}
+
+// In Android apps, call suspend functions from a lifecycle-aware scope.
+```
 ### 4. Coroutine context and dispatchers
 
-ဒီ lesson မှာ `Coroutine context and dispatchers` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Write asynchronous Kotlin code with suspend functions, scopes, cancellation, and dispatchers.
+
+**Flutter angle:** Compare suspend functions with Dart Future and Flow with Dart Stream.
+
+**Build:** Build a fake repository call and decide where IO/main-thread work belongs.
+
+```kotlin
+suspend fun loadTitle(): String {
+    return "Kotlin Course"
+}
+
+// In Android apps, call suspend functions from a lifecycle-aware scope.
+```
 
 ## Flutter Bridge
 
@@ -33,14 +72,14 @@ Dart `Future` maps conceptually to suspend work, but Kotlin adds structured conc
 ## Practice
 
 1. Run two fake network requests concurrently with `async`.
-2. Create one small Kotlin example and explain it with a Dart/Flutter analogy.
+2. Implement the coding exam as a small Kotlin snippet and compare the idea with Dart/Flutter.
 3. Write one mistake you should avoid in production code.
 
 ## Q&A Checkpoint
 
-- `Coroutines Part 1: Basics, Cancellation, Composition, and Context` ကို Flutter developer အမြင်နဲ့ ဘယ် use case မှာအရေးကြီးဆုံးလဲ?
-- ဒီ topic အတွက် current Kotlin official docs မှာ PDF-era docs နဲ့ကွာတာရှိလား?
-- Production Android/Flutter plugin code မှာ common mistake ဘာတွေရှိလဲ?
+- How would I use `Coroutines Part 1: Basics, Cancellation, Composition, and Context` in a real Flutter + Android integration?
+- What is the closest Dart/Flutter mental model, and where does Kotlin behave differently?
+- What mistake should I avoid when writing production Kotlin for this topic?
 
 ## Exam
 

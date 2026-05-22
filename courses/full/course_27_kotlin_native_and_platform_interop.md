@@ -2,29 +2,61 @@
 
 ## Goal
 
-စာအုပ်ထဲက `Native, Concurrency in Kotlin/Native, Immutability in Kotlin/Native, Kotlin/Native libraries, Advanced topics, Platform libraries, Kotlin/Native interoperability, Swift/Objective-C, CocoaPods, Kotlin/Native Gradle plugin` section တွေကို Flutter developer အတွက် လက်တွေ့သုံးနိုင်တဲ့ Kotlin lesson အဖြစ်ခွဲသင်မယ်။
-
-## PDF Coverage
-
-Native, Concurrency in Kotlin/Native, Immutability in Kotlin/Native, Kotlin/Native libraries, Advanced topics, Platform libraries, Kotlin/Native interoperability, Swift/Objective-C, CocoaPods, Kotlin/Native Gradle plugin
+Build a practical Kotlin skill set for `Kotlin Native and Platform Interop` and connect each idea to practical work a Flutter developer is likely to meet.
 
 ## Lessons
 
 ### 1. Kotlin/Native target overview
 
-ဒီ lesson မှာ `Kotlin/Native target overview` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Understand Kotlin/Native targets, platform APIs, and iOS interop ideas.
 
+**Flutter angle:** This matters when evaluating KMP modules alongside Flutter native layers.
+
+**Build:** Sketch what shared Kotlin code exposes to iOS.
+
+```kotlin
+fun courseLabel(name: String, completed: Int, total: Int): String {
+    return "$name: $completed/$total completed"
+}
+```
 ### 2. Native libraries and platform libraries
 
-ဒီ lesson မှာ `Native libraries and platform libraries` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Understand Kotlin/Native targets, platform APIs, and iOS interop ideas.
 
+**Flutter angle:** This matters when evaluating KMP modules alongside Flutter native layers.
+
+**Build:** Sketch what shared Kotlin code exposes to iOS.
+
+```kotlin
+fun readUserId(args: Map<String, Any?>): String? =
+    (args["userId"] as? String)?.takeIf { it.isNotBlank() }
+```
 ### 3. Swift/Objective-C interoperability
 
-ဒီ lesson မှာ `Swift/Objective-C interoperability` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Understand Swift/Objective-C interoperability as a practical Kotlin skill, then use it in small, readable programs.
 
+**Flutter angle:** Connect the idea to Flutter architecture, platform channels, app state, or model code.
+
+**Build:** Write a small Kotlin example and explain what would feel similar or different in Dart.
+
+```kotlin
+fun courseLabel(name: String, completed: Int, total: Int): String {
+    return "$name: $completed/$total completed"
+}
+```
 ### 4. CocoaPods and Gradle integration
 
-ဒီ lesson မှာ `CocoaPods and Gradle integration` ကို Kotlin syntax, practical usage, Flutter/Dart comparison ဆိုတဲ့ angle သုံးခုနဲ့ဖတ်ပါ။ စာအုပ်ထဲက section ကိုတိုက်ရိုက်မကူးဘဲ concept ကို developer workflow ထဲသုံးနိုင်အောင်ပြန်ရေးထားပါတယ်။
+**Learn:** Read Kotlin/Android build configuration and dependency declarations.
+
+**Flutter angle:** Flutter projects still contain Android Gradle files, especially for plugins.
+
+**Build:** Identify plugin, dependency, and version lines in a Gradle file.
+
+```kotlin
+fun courseLabel(name: String, completed: Int, total: Int): String {
+    return "$name: $completed/$total completed"
+}
+```
 
 ## Flutter Bridge
 
@@ -33,14 +65,14 @@ Flutter plugins may already expose iOS/Android native layers; Kotlin/Native appe
 ## Practice
 
 1. List what shared Kotlin code would expose to iOS.
-2. Create one small Kotlin example and explain it with a Dart/Flutter analogy.
+2. Implement the coding exam as a small Kotlin snippet and compare the idea with Dart/Flutter.
 3. Write one mistake you should avoid in production code.
 
 ## Q&A Checkpoint
 
-- `Kotlin Native and Platform Interop` ကို Flutter developer အမြင်နဲ့ ဘယ် use case မှာအရေးကြီးဆုံးလဲ?
-- ဒီ topic အတွက် current Kotlin official docs မှာ PDF-era docs နဲ့ကွာတာရှိလား?
-- Production Android/Flutter plugin code မှာ common mistake ဘာတွေရှိလဲ?
+- How would I use `Kotlin Native and Platform Interop` in a real Flutter + Android integration?
+- What is the closest Dart/Flutter mental model, and where does Kotlin behave differently?
+- What mistake should I avoid when writing production Kotlin for this topic?
 
 ## Exam
 
