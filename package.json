@@ -1,0 +1,9 @@
+{
+  "name": "kotlin-course-4-flutter-dev",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Static Kotlin course app for Flutter developers.",
+  "scripts": {
+    "dev": "python -m http.server 5500 --bind 127.0.0.1"
+  }
+}

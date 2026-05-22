@@ -27,6 +27,17 @@ Web app မှာ course reading, lesson progress, exam form, score saving, Q&A 
 Night mode toggle လည်းပါပြီး theme preference ကို browser `localStorage` ထဲမှာသိမ်းထားပါတယ်။
 အခု web app က `courses/full/manifest.json` ကိုဖတ်ပြီး 31-course full coverage version ကိုပြပါတယ်။
 
+## Vercel Deployment
+
+Vercel မှာ static site အဖြစ်တင်နိုင်အောင် [vercel.json](vercel.json), [.vercelignore](.vercelignore), [package.json](package.json), [404.html](404.html), [DEPLOYMENT.md](DEPLOYMENT.md) ထည့်ထားပါတယ်။
+
+Deploy settings:
+
+- Framework Preset: `Other`
+- Build Command: blank
+- Output Directory: `.`
+- Root Directory: repo root မဟုတ်ဘဲ parent folder ကနေ import လုပ်ရင် `kotlin_course`
+
 ## Flutter Developer Lens
 
 Kotlin ကို Dart/Flutter နဲ့ယှဥ်ကြည့်ရင် အဓိကအားဖြင့်:
