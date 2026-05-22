@@ -1,0 +1,33 @@
+# Full Coverage Map
+
+- Course 01: Overview, server-side, Android, JavaScript, Native, Multiplatform, What's New in Kotlin 1.1-1.3
+- Course 02: Getting Started, Basic Syntax, Idioms
+- Course 03: Coding Conventions
+- Course 04: Basics, Basic Types, Packages
+- Course 05: Control Flow: if, when, for, while; Returns and Jumps
+- Course 06: Classes and Objects, Classes and Inheritance
+- Course 07: Properties and Fields, Interfaces, Visibility Modifiers
+- Course 08: Extensions, Data Classes, Sealed Classes
+- Course 09: Generics, Nested and Inner Classes, Enum Classes
+- Course 10: Object Expressions and Declarations, Inline classes, Delegation
+- Course 11: Delegated Properties, Destructuring Declarations
+- Course 12: Functions
+- Course 13: Higher-Order Functions and Lambdas, Inline Functions
+- Course 14: Kotlin Collections Overview, Constructing Collections
+- Course 15: Iterators, Ranges and Progressions, Sequences
+- Course 16: Collection Operations Overview, Collection Transformations, Filtering, plus and minus Operators
+- Course 17: Grouping, Retrieving Collection Parts, Retrieving Single Elements, Collection Ordering, Collection Aggregate Operations, Collection Write Operations
+- Course 18: List Specific Operations, Set Specific Operations, Map Specific Operations
+- Course 19: Multiplatform Programming, Platform-Specific Declarations, Building Multiplatform Projects with Gradle
+- Course 20: Type Checks and Casts: is and as, This Expression, Equality, Operator overloading
+- Course 21: Null Safety, Exceptions, Annotations
+- Course 22: Reflection, Scope Functions, Type-Safe Builders
+- Course 23: Experimental API Markers, Reference, Keywords and Operators, Grammar
+- Course 24: Java Interop, Calling Java code from Kotlin
+- Course 25: Calling Kotlin from Java
+- Course 26: JavaScript, Dynamic Type, Calling JavaScript from Kotlin, Calling Kotlin from JavaScript, JavaScript Modules, JavaScript Reflection, JavaScript DCE, Example
+- Course 27: Native, Concurrency in Kotlin/Native, Immutability in Kotlin/Native, Kotlin/Native libraries, Advanced topics, Platform libraries, Kotlin/Native interoperability, Swift/Objective-C, CocoaPods, Kotlin/Native Gradle plugin
+- Course 28: Coroutines, Coroutine Basics, Cancellation and Timeouts, Composing Suspending Functions, Coroutine Context and Dispatchers
+- Course 29: Asynchronous Flow, Channels, Exception Handling, Shared mutable state and concurrency, Select Expression
+- Course 30: Tools, Documenting Kotlin Code, Annotation Processing, Using Gradle, Using Maven, Using Ant, Kotlin and OSGi, Compiler Plugins, Code Style Migration Guide
+- Course 31: Evolution, Kotlin Evolution, Stability of Different Components, Compatibility Guide for Kotlin 1.3, FAQ, Comparison to Java Programming Language

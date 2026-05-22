@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kotlin Course Studio</title>
+    <script>
+      (() => {
+        const key = "kotlinCourseStudio.theme";
+        const saved = localStorage.getItem(key);
+        const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.dataset.theme = saved || (prefersDark ? "dark" : "light");
+      })();
+    </script>
+    <link rel="stylesheet" href="styles.css?v=2" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Course navigation">
+        <div class="brand-block">
+          <div class="brand-mark">K</div>
+          <div>
+            <h1>Kotlin Course Studio</h1>
+            <p>For Flutter developers</p>
+          </div>
+        </div>
+
+        <section class="progress-panel" aria-label="Learning progress">
+          <div class="progress-ring" id="progressRing" aria-label="Overall progress">
+            <span id="progressPercent">0%</span>
+          </div>
+          <div class="progress-copy">
+            <strong id="completedCount">0 of 8 courses</strong>
+            <span id="examAverage">No exam scores yet</span>
+          </div>
+        </section>
+
+        <nav class="course-list" id="courseList" aria-label="Courses"></nav>
+      </aside>
+
+      <main class="workspace">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow" id="courseNumber">Course</p>
+            <h2 id="courseTitle">Loading...</h2>
+          </div>
+          <div class="top-actions">
+            <button class="theme-toggle" id="themeToggle" type="button" aria-pressed="false">
+              <span class="toggle-track" aria-hidden="true"><span></span></span>
+              <span id="themeToggleLabel">Dark</span>
+            </button>
+            <button class="icon-button" id="resetProgressBtn" type="button" title="Reset progress" aria-label="Reset progress">
+              R
+            </button>
+          </div>
+        </header>
+
+        <section class="stats-grid" aria-label="Course status">
+          <div>
+            <span>Lessons</span>
+            <strong id="lessonStat">0/0</strong>
+          </div>
+          <div>
+            <span>Exam</span>
+            <strong id="examStat">Not taken</strong>
+          </div>
+          <div>
+            <span>Status</span>
+            <strong id="statusStat">In progress</strong>
+          </div>
+        </section>
+
+        <div class="tabs" role="tablist" aria-label="Course sections">
+          <button class="tab is-active" data-tab="learn" type="button" role="tab">Learn</button>
+          <button class="tab" data-tab="exam" type="button" role="tab">Exam</button>
+          <button class="tab" data-tab="qa" type="button" role="tab">Q&A</button>
+        </div>
+
+        <section class="tab-panel is-active" id="learnPanel" role="tabpanel">
+          <div class="lesson-track" id="lessonTrack"></div>
+          <article class="content-surface" id="courseContent"></article>
+        </section>
+
+        <section class="tab-panel" id="examPanel" role="tabpanel">
+          <div class="exam-toolbar">
+            <div>
+              <h3>Course Exam</h3>
+              <p>MCQ and fill-in-the-blank are auto checked. Coding answer is saved with a rubric.</p>
+            </div>
+            <button class="primary-button" id="submitExamBtn" type="button">Submit Exam</button>
+          </div>
+          <form class="exam-form" id="examForm"></form>
+          <div class="score-panel" id="scorePanel" hidden></div>
+        </section>
+
+        <section class="tab-panel" id="qaPanel" role="tabpanel">
+          <div class="qa-layout">
+            <div class="content-surface">
+              <h3>Q&A Checkpoint</h3>
+              <div id="qaQuestions"></div>
+            </div>
+            <div class="prompt-box">
+              <label for="qaPrompt">Your research prompt</label>
+              <textarea id="qaPrompt" rows="9"></textarea>
+              <button class="secondary-button" id="copyPromptBtn" type="button">Copy Prompt</button>
+              <p id="copyStatus" class="muted"></p>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="app.js?v=2"></script>
+  </body>
+</html>

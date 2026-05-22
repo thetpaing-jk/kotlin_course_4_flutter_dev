@@ -1,0 +1,498 @@
+{
+  "courses/full/course_01_orientation_platforms_and_version_awareness.md": {
+    "mcq": [
+      "A",
+      "A"
+    ],
+    "fill": [
+      "Kotlin",
+      "official"
+    ],
+    "rubric": [
+      "Uses Kotlin syntax relevant to the course topic.",
+      "Handles nullability/type-safety where applicable.",
+      "Names functions/classes clearly.",
+      "Includes a small explanation or structure that a Flutter developer can relate to."
+    ]
+  },
+  "courses/full/course_02_getting_started_basic_syntax_and_idioms.md": {
+    "mcq": [
+      "A",
+      "A"
+    ],
+    "fill": [
+      "main",
+      "var"
+    ],
+    "rubric": [
+      "Uses Kotlin syntax relevant to the course topic.",
+      "Handles nullability/type-safety where applicable.",
+      "Names functions/classes clearly.",
+      "Includes a small explanation or structure that a Flutter developer can relate to."
+    ]
+  },
+  "courses/full/course_03_coding_conventions_and_project_shape.md": {
+    "mcq": [
+      "A",
+      "A"
+    ],
+    "fill": [
+      "camel",
+      "underscores"
+    ],
+    "rubric": [
+      "Uses Kotlin syntax relevant to the course topic.",
+      "Handles nullability/type-safety where applicable.",
+      "Names functions/classes clearly.",
+      "Includes a small explanation or structure that a Flutter developer can relate to."
+    ]
+  },
+  "courses/full/course_04_basic_types_packages_and_imports.md": {
+    "mcq": [
+      "A",
+      "A"
+    ],
+    "fill": [
+      "toDouble",
+      "top"
+    ],
+    "rubric": [
+      "Uses Kotlin syntax relevant to the course topic.",
+      "Handles nullability/type-safety where applicable.",
+      "Names functions/classes clearly.",
+      "Includes a small explanation or structure that a Flutter developer can relate to."
+    ]
+  },
+  "courses/full/course_05_control_flow_ranges_returns_and_jumps.md": {
+    "mcq": [
+      "A",
+      "A"
+    ],
+    "fill": [
+      "when",
+      "downTo"
+    ],
+    "rubric": [
+      "Uses Kotlin syntax relevant to the course topic.",
+      "Handles nullability/type-safety where applicable.",
+      "Names functions/classes clearly.",
+      "Includes a small explanation or structure that a Flutter developer can relate to."
+    ]
+  },
+  "courses/full/course_06_classes_constructors_and_inheritance.md": {
+    "mcq": [
+      "A",
+      "A"
+    ],
+    "fill": [
+      "var",
+      "override"
+    ],
+    "rubric": [
+      "Uses Kotlin syntax relevant to the course topic.",
+      "Handles nullability/type-safety where applicable.",
+      "Names functions/classes clearly.",
+      "Includes a small explanation or structure that a Flutter developer can relate to."
+    ]
+  },
+  "courses/full/course_07_properties_fields_interfaces_and_visibility.md": {
+    "mcq": [
+      "A",
+      "A"
+    ],
+    "fill": [
+      "internal",
+      "lateinit"
+    ],
+    "rubric": [
+      "Uses Kotlin syntax relevant to the course topic.",
+      "Handles nullability/type-safety where applicable.",
+      "Names functions/classes clearly.",
+      "Includes a small explanation or structure that a Flutter developer can relate to."
+    ]
+  },
+  "courses/full/course_08_extensions_data_classes_and_sealed_classes.md": {
+    "mcq": [
+      "A",
+      "A"
+    ],
+    "fill": [
+      "copy",
+      "name"
+    ],
+    "rubric": [
+      "Uses Kotlin syntax relevant to the course topic.",
+      "Handles nullability/type-safety where applicable.",
+      "Names functions/classes clearly.",
+      "Includes a small explanation or structure that a Flutter developer can relate to."
+    ]
+  },
+  "courses/full/course_09_generics_nested_classes_inner_classes_and_enums.md": {
+    "mcq": [
+      "A",
+      "A"
+    ],
+    "fill": [
+      "out",
+      "enum"
+    ],
+    "rubric": [
+      "Uses Kotlin syntax relevant to the course topic.",
+      "Handles nullability/type-safety where applicable.",
+      "Names functions/classes clearly.",
+      "Includes a small explanation or structure that a Flutter developer can relate to."
+    ]
+  },
+  "courses/full/course_10_objects_inline_value_classes_and_delegation.md": {
+    "mcq": [
+      "A",
+      "A"
+    ],
+    "fill": [
+      "class",
+      "class"
+    ],
+    "rubric": [
+      "Uses Kotlin syntax relevant to the course topic.",
+      "Handles nullability/type-safety where applicable.",
+      "Names functions/classes clearly.",
+      "Includes a small explanation or structure that a Flutter developer can relate to."
+    ]
+  },
+  "courses/full/course_11_delegated_properties_and_destructuring.md": {
+    "mcq": [
+      "A",
+      "A"
+    ],
+    "fill": [
+      "by",
+      "pair"
+    ],
+    "rubric": [
+      "Uses Kotlin syntax relevant to the course topic.",
+      "Handles nullability/type-safety where applicable.",
+      "Names functions/classes clearly.",
+      "Includes a small explanation or structure that a Flutter developer can relate to."
+    ]
+  },
+  "courses/full/course_12_functions_and_function_design.md": {
+    "mcq": [
+      "A",
+      "A"
+    ],
+    "fill": [
+      "value",
+      "signature"
+    ],
+    "rubric": [
+      "Uses Kotlin syntax relevant to the course topic.",
+      "Handles nullability/type-safety where applicable.",
+      "Names functions/classes clearly.",
+      "Includes a small explanation or structure that a Flutter developer can relate to."
+    ]
+  },
+  "courses/full/course_13_higher_order_functions_lambdas_and_inline_functions.md": {
+    "mcq": [
+      "A",
+      "A"
+    ],
+    "fill": [
+      "Unit",
+      "inline"
+    ],
+    "rubric": [
+      "Uses Kotlin syntax relevant to the course topic.",
+      "Handles nullability/type-safety where applicable.",
+      "Names functions/classes clearly.",
+      "Includes a small explanation or structure that a Flutter developer can relate to."
+    ]
+  },
+  "courses/full/course_14_collections_overview_and_construction.md": {
+    "mcq": [
+      "A",
+      "A"
+    ],
+    "fill": [
+      "listOf",
+      "value"
+    ],
+    "rubric": [
+      "Uses Kotlin syntax relevant to the course topic.",
+      "Handles nullability/type-safety where applicable.",
+      "Names functions/classes clearly.",
+      "Includes a small explanation or structure that a Flutter developer can relate to."
+    ]
+  },
+  "courses/full/course_15_iterators_ranges_progressions_and_sequences.md": {
+    "mcq": [
+      "A",
+      "A"
+    ],
+    "fill": [
+      "asSequence",
+      "ranges"
+    ],
+    "rubric": [
+      "Uses Kotlin syntax relevant to the course topic.",
+      "Handles nullability/type-safety where applicable.",
+      "Names functions/classes clearly.",
+      "Includes a small explanation or structure that a Flutter developer can relate to."
+    ]
+  },
+  "courses/full/course_16_collection_transformations_and_filtering.md": {
+    "mcq": [
+      "A",
+      "A"
+    ],
+    "fill": [
+      "flatMap",
+      "minus"
+    ],
+    "rubric": [
+      "Uses Kotlin syntax relevant to the course topic.",
+      "Handles nullability/type-safety where applicable.",
+      "Names functions/classes clearly.",
+      "Includes a small explanation or structure that a Flutter developer can relate to."
+    ]
+  },
+  "courses/full/course_17_grouping_retrieval_ordering_aggregates_and_writes.md": {
+    "mcq": [
+      "A",
+      "A"
+    ],
+    "fill": [
+      "sorted",
+      "chunked"
+    ],
+    "rubric": [
+      "Uses Kotlin syntax relevant to the course topic.",
+      "Handles nullability/type-safety where applicable.",
+      "Names functions/classes clearly.",
+      "Includes a small explanation or structure that a Flutter developer can relate to."
+    ]
+  },
+  "courses/full/course_18_list_set_and_map_specific_operations.md": {
+    "mcq": [
+      "A",
+      "A"
+    ],
+    "fill": [
+      "key",
+      "indices"
+    ],
+    "rubric": [
+      "Uses Kotlin syntax relevant to the course topic.",
+      "Handles nullability/type-safety where applicable.",
+      "Names functions/classes clearly.",
+      "Includes a small explanation or structure that a Flutter developer can relate to."
+    ]
+  },
+  "courses/full/course_19_multiplatform_foundations_and_gradle_projects.md": {
+    "mcq": [
+      "A",
+      "A"
+    ],
+    "fill": [
+      "common",
+      "Gradle"
+    ],
+    "rubric": [
+      "Uses Kotlin syntax relevant to the course topic.",
+      "Handles nullability/type-safety where applicable.",
+      "Names functions/classes clearly.",
+      "Includes a small explanation or structure that a Flutter developer can relate to."
+    ]
+  },
+  "courses/full/course_20_type_checks_casts_this_equality_and_operators.md": {
+    "mcq": [
+      "A",
+      "A"
+    ],
+    "fill": [
+      "is",
+      "==="
+    ],
+    "rubric": [
+      "Uses Kotlin syntax relevant to the course topic.",
+      "Handles nullability/type-safety where applicable.",
+      "Names functions/classes clearly.",
+      "Includes a small explanation or structure that a Flutter developer can relate to."
+    ]
+  },
+  "courses/full/course_21_null_safety_exceptions_and_annotations.md": {
+    "mcq": [
+      "A",
+      "A"
+    ],
+    "fill": [
+      "?.",
+      "?:"
+    ],
+    "rubric": [
+      "Uses Kotlin syntax relevant to the course topic.",
+      "Handles nullability/type-safety where applicable.",
+      "Names functions/classes clearly.",
+      "Includes a small explanation or structure that a Flutter developer can relate to."
+    ]
+  },
+  "courses/full/course_22_reflection_scope_functions_and_type_safe_builders.md": {
+    "mcq": [
+      "A",
+      "A"
+    ],
+    "fill": [
+      "let",
+      "receiver"
+    ],
+    "rubric": [
+      "Uses Kotlin syntax relevant to the course topic.",
+      "Handles nullability/type-safety where applicable.",
+      "Names functions/classes clearly.",
+      "Includes a small explanation or structure that a Flutter developer can relate to."
+    ]
+  },
+  "courses/full/course_23_experimental_apis_keywords_operators_and_grammar.md": {
+    "mcq": [
+      "A",
+      "A"
+    ],
+    "fill": [
+      "OptIn",
+      "keywords"
+    ],
+    "rubric": [
+      "Uses Kotlin syntax relevant to the course topic.",
+      "Handles nullability/type-safety where applicable.",
+      "Names functions/classes clearly.",
+      "Includes a small explanation or structure that a Flutter developer can relate to."
+    ]
+  },
+  "courses/full/course_24_java_interop_part_1_calling_java_from_kotlin.md": {
+    "mcq": [
+      "A",
+      "A"
+    ],
+    "fill": [
+      "Kotlin",
+      "conversion"
+    ],
+    "rubric": [
+      "Uses Kotlin syntax relevant to the course topic.",
+      "Handles nullability/type-safety where applicable.",
+      "Names functions/classes clearly.",
+      "Includes a small explanation or structure that a Flutter developer can relate to."
+    ]
+  },
+  "courses/full/course_25_java_interop_part_2_calling_kotlin_from_java.md": {
+    "mcq": [
+      "A",
+      "A"
+    ],
+    "fill": [
+      "@JvmField",
+      "facades"
+    ],
+    "rubric": [
+      "Uses Kotlin syntax relevant to the course topic.",
+      "Handles nullability/type-safety where applicable.",
+      "Names functions/classes clearly.",
+      "Includes a small explanation or structure that a Flutter developer can relate to."
+    ]
+  },
+  "courses/full/course_26_kotlin_javascript.md": {
+    "mcq": [
+      "A",
+      "A"
+    ],
+    "fill": [
+      "elimination",
+      "modules"
+    ],
+    "rubric": [
+      "Uses Kotlin syntax relevant to the course topic.",
+      "Handles nullability/type-safety where applicable.",
+      "Names functions/classes clearly.",
+      "Includes a small explanation or structure that a Flutter developer can relate to."
+    ]
+  },
+  "courses/full/course_27_kotlin_native_and_platform_interop.md": {
+    "mcq": [
+      "A",
+      "A"
+    ],
+    "fill": [
+      "CocoaPods",
+      "libraries"
+    ],
+    "rubric": [
+      "Uses Kotlin syntax relevant to the course topic.",
+      "Handles nullability/type-safety where applicable.",
+      "Names functions/classes clearly.",
+      "Includes a small explanation or structure that a Flutter developer can relate to."
+    ]
+  },
+  "courses/full/course_28_coroutines_part_1_basics_cancellation_composition_and_context.md": {
+    "mcq": [
+      "A",
+      "A"
+    ],
+    "fill": [
+      "IO",
+      "await"
+    ],
+    "rubric": [
+      "Uses Kotlin syntax relevant to the course topic.",
+      "Handles nullability/type-safety where applicable.",
+      "Names functions/classes clearly.",
+      "Includes a small explanation or structure that a Flutter developer can relate to."
+    ]
+  },
+  "courses/full/course_29_coroutines_part_2_flow_channels_exceptions_shared_state_and_sele.md": {
+    "mcq": [
+      "A",
+      "A"
+    ],
+    "fill": [
+      "Flow",
+      "concurrency"
+    ],
+    "rubric": [
+      "Uses Kotlin syntax relevant to the course topic.",
+      "Handles nullability/type-safety where applicable.",
+      "Names functions/classes clearly.",
+      "Includes a small explanation or structure that a Flutter developer can relate to."
+    ]
+  },
+  "courses/full/course_30_documentation_build_tools_compiler_plugins_and_style_migration.md": {
+    "mcq": [
+      "A",
+      "A"
+    ],
+    "fill": [
+      "KAPT",
+      "DSL"
+    ],
+    "rubric": [
+      "Uses Kotlin syntax relevant to the course topic.",
+      "Handles nullability/type-safety where applicable.",
+      "Names functions/classes clearly.",
+      "Includes a small explanation or structure that a Flutter developer can relate to."
+    ]
+  },
+  "courses/full/course_31_evolution_stability_compatibility_faq_and_java_comparison.md": {
+    "mcq": [
+      "A",
+      "A"
+    ],
+    "fill": [
+      "Java",
+      "migration"
+    ],
+    "rubric": [
+      "Uses Kotlin syntax relevant to the course topic.",
+      "Handles nullability/type-safety where applicable.",
+      "Names functions/classes clearly.",
+      "Includes a small explanation or structure that a Flutter developer can relate to."
+    ]
+  }
+}
