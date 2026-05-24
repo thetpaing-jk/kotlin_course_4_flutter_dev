@@ -3,5 +3,6 @@ export default function handler(_request, response) {
   response.status(200).json({
     supabaseUrl: process.env.SUPABASE_URL || "",
     supabaseAnonKey: process.env.SUPABASE_ANON_KEY || "",
+    judgeApiUrl: process.env.JUDGE_API_URL || "",
   });
 }

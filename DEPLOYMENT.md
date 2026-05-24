@@ -44,7 +44,7 @@ npx vercel --prod
 - `index.html` - app entry
 - `styles.css` - UI and dark mode
 - `app.js` - course loading, progress, exam scoring
-- `api/config.js` - exposes public Supabase browser config from Vercel env vars
+- `api/config.js` - exposes public Supabase browser config and optional Judge API URL from Vercel env vars
 - `courses/flutter_devs/*.md` - 10-module Kotlin course generated from `D:\kotlin\kotlin-for-flutter-devs.md`
 - `courses/full/manifest.json` - course file list
 - `exams/full_answer_key.json` - exam answer key
@@ -61,5 +61,6 @@ The app stores theme preference in browser `localStorage`. Guest progress stays 
 6. Add Vercel environment variables:
    - `SUPABASE_URL`
    - `SUPABASE_ANON_KEY`
+   - `JUDGE_API_URL` (optional; Kotlin compile/run judge backend. If missing or unavailable, coding exams use static fallback checks.)
 
 Never expose a Supabase service role key in this project.

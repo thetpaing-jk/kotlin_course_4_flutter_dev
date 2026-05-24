@@ -685,6 +685,45 @@ button {
   background: var(--code-bg);
 }
 
+.coding-problem-card {
+  display: grid;
+  gap: 14px;
+}
+
+.coding-problem-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: start;
+}
+
+.coding-problem-header span {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.coding-problem-header h4 {
+  margin: 0;
+}
+
+.coding-problem-nav {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.coding-problem-nav button:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+}
+
+.coding-problem-body p:first-child {
+  margin-top: 0;
+}
+
 .code-editor-bar {
   display: flex;
   min-height: 34px;
@@ -743,6 +782,74 @@ button {
   border-radius: 8px;
   background: var(--code-bg);
   color: var(--code-ink);
+}
+
+.coding-review-card {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.coding-review-card h4 {
+  margin: 0 0 8px;
+}
+
+.checker-line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 10px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.checker-badge {
+  display: inline-flex;
+  min-height: 24px;
+  align-items: center;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: var(--inline-code);
+  color: var(--ink);
+}
+
+.checker-badge.is-judge {
+  background: var(--soft-green);
+  color: var(--green);
+}
+
+.checker-badge.is-fallback {
+  background: var(--soft-blue);
+  color: var(--blue);
+}
+
+.test-results {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.test-results li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 8px;
+  align-items: start;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+}
+
+.test-results .is-pass strong {
+  color: var(--green);
+}
+
+.test-results .is-fail strong {
+  color: var(--red);
 }
 
 .answer-reveal {
@@ -978,6 +1085,15 @@ button {
   .exam-card,
   .locked-panel {
     padding: 14px;
+  }
+
+  .coding-problem-header,
+  .coding-problem-nav {
+    grid-template-columns: 1fr;
+  }
+
+  .coding-problem-nav {
+    display: grid;
   }
 
   .content-surface h1,

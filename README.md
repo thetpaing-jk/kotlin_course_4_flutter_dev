@@ -7,7 +7,7 @@ This workspace is now driven by `D:\kotlin\kotlin-for-flutter-devs.md` as the co
 1. Open the web app and read the courses in order.
 2. Sign in before tracking progress, answering exams, or saving Q&A drafts.
 3. Use each course's Q&A checkpoint to ask research questions after finishing the lesson.
-4. Take the course exam. MCQ and fill-in-the-blank answers are auto-checked; coding answers are saved with a rubric.
+4. Take the course exam. MCQ, fill-in-the-blank, and coding answers are auto-checked. Coding uses a Judge API when configured and static fallback checks otherwise.
 
 ## Course Order
 
@@ -54,6 +54,7 @@ Cloud sync setup:
 
 - Run [supabase_learner_progress.sql](supabase_learner_progress.sql) in Supabase.
 - Add Vercel env vars: `SUPABASE_URL`, `SUPABASE_ANON_KEY`.
+- Optional: add `JUDGE_API_URL` for the Kotlin compile/run judge backend. If it is missing, rate-limited, or unavailable, the app grades coding answers with static fallback checks.
 - Add Supabase redirect URLs for production and enable the Google provider.
 
 ## Flutter Developer Lens

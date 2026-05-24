@@ -90,6 +90,10 @@ const LOCAL_EXAM_FLAG_KEY = "kotlinCourseStudio.localExamMode";
 const SYNC_DEBOUNCE_MS = 700;
 const EXAM_DURATION_MS = 30 * 60 * 1000;
 const EXAM_WARNING_MS = 5 * 60 * 1000;
+const JUDGE_TIMEOUT_MS = 12000;
+const JUDGE_RUN_LIMIT_PER_MINUTE = 5;
+const JUDGE_RUN_LIMIT_PER_DAY = 100;
+const JUDGE_QUOTA_KEY = "kotlinCourseStudio.judgeQuota.v1";
 const LOCAL_TEST_USER = {
   id: "local-exam-preview",
   email: "local-exam-preview@localhost",
@@ -108,7 +112,7 @@ const TEXT = {
   examTab: "Exam",
   qaTab: "Q&A",
   courseExamTitle: "Course Exam",
-  courseExamDescription: "MCQ and fill-in-the-blank are auto checked. Coding answer is saved with a rubric.",
+  courseExamDescription: "MCQ, fill-in-the-blank, and coding checks are auto graded.",
   submitExam: "Submit Exam",
   startExam: "Start Exam",
   retest: "Retest",
@@ -125,6 +129,15 @@ const TEXT = {
   yourAnswer: "Your answer",
   correctAnswer: "Correct answer",
   noAnswer: "No answer",
+  checkedByCompiler: "Checked by Kotlin compiler",
+  checkedByStaticFallback: "Checked by static fallback",
+  judgeFallbackUsed: "Judge unavailable, fallback used",
+  codingPassed: "Passed",
+  codingFailed: "Failed",
+  codingScoreLabel: "Coding score: {score}",
+  codingProblemProgress: "Problem {current} of {total}",
+  previousProblem: "Previous",
+  nextProblem: "Next",
   attemptLabel: "Attempt {number}: {score} - {date}",
   qaCheckpointTitle: "Q&A Checkpoint",
   researchPromptLabel: "Your research prompt",
@@ -170,7 +183,7 @@ const TEXT = {
   rubric: "Rubric",
   codingPlaceholder: "Write your Kotlin answer here",
   latestScore: "Latest score: {score}",
-  codingReviewNote: "Coding answer is saved, but review it manually with the rubric.",
+  codingReviewNote: "Coding is auto checked. Compiler results are used when the judge is available; static fallback is used otherwise.",
   qaDefaultPrompt: "Course: {course}\nQuestion:\n\nContext:\nI am a Flutter developer learning Kotlin. Please research current Kotlin/Android docs and explain with Flutter comparisons.",
   resetProgressTitle: "Reset progress",
 };
@@ -188,6 +201,7 @@ const state = {
   authMessage: "",
   syncTimer: null,
   examTimerId: null,
+  judgeApiUrl: "",
   loadingCloud: false,
 };
 
@@ -283,6 +297,7 @@ async function loadSupabaseConfig() {
     const response = await fetch(SUPABASE_CONFIG_ENDPOINT, { cache: "no-store" });
     if (!response.ok) return null;
     const config = await response.json();
+    state.judgeApiUrl = String(config.judgeApiUrl || "").replace(/\/$/, "");
     if (!config.supabaseUrl || !config.supabaseAnonKey) return null;
     return config;
   } catch {
@@ -368,6 +383,31 @@ function parseExam(examText) {
   };
 }
 
+function splitCodingProblems(markdown) {
+  const matches = [...markdown.matchAll(/^\*\*(Problem\s+\d+\s+[—-]\s+.+?)\*\*\s*$/gm)];
+  if (!matches.length) {
+    return [{ title: t("codingExam"), body: markdown.trim() }];
+  }
+  return matches.map((match, index) => {
+    const start = match.index + match[0].length;
+    const end = index + 1 < matches.length ? matches[index + 1].index : markdown.length;
+    return {
+      title: match[1].trim(),
+      body: markdown.slice(start, end).trim(),
+    };
+  });
+}
+
+function normalizeCodingAnswers(value, count) {
+  const answers = Array.isArray(value) ? value : [String(value ?? "")];
+  return Array.from({ length: count }, (_, index) => String(answers[index] ?? ""));
+}
+
+function clampNumber(value, min, max) {
+  if (max < min) return min;
+  return Math.min(Math.max(Number(value) || min, min), max);
+}
+
 function parseMcq(text) {
   const questions = [];
   const blocks = text.split(/\n(?=\d+\.\s+)/).map((block) => block.trim()).filter(Boolean);
@@ -447,8 +487,15 @@ function bindEvents() {
   });
 
   els.startExamBtn.addEventListener("click", startCurrentExam);
-  els.submitExamBtn.addEventListener("click", () => submitCurrentExam("manual"));
+  els.submitExamBtn.addEventListener("click", () => {
+    submitCurrentExam("manual");
+  });
 
+  els.examForm.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-coding-nav]");
+    if (!button) return;
+    navigateCodingProblem(button.dataset.codingNav);
+  });
   els.examForm.addEventListener("input", saveExamDraft);
   els.examForm.addEventListener("change", saveExamDraft);
 
@@ -696,6 +743,10 @@ function renderExam() {
       `;
     })
     .join("");
+  const codingProblems = splitCodingProblems(course.exam.coding);
+  const codingAnswers = normalizeCodingAnswers(answers.coding, codingProblems.length);
+  const codingIndex = clampNumber(courseState.examSession.codingProblemIndex ?? 0, 0, codingProblems.length - 1);
+  const codingProblem = codingProblems[codingIndex];
 
   els.examForm.innerHTML = `
     <div class="exam-running-note">${escapeHtml(t("examRunningMessage"))}</div>
@@ -709,16 +760,28 @@ function renderExam() {
     </section>
     <section>
       <h3>${escapeHtml(t("codingExam"))}</h3>
-      <div class="exam-card">
-        ${markdownToHtml(course.exam.coding)}
+      <div class="exam-card coding-problem-card">
+        <div class="coding-problem-header">
+          <div>
+            <span>${escapeHtml(t("codingProblemProgress", { current: codingIndex + 1, total: codingProblems.length }))}</span>
+            <h4>${escapeHtml(codingProblem.title)}</h4>
+          </div>
+          <div class="coding-problem-nav">
+            <button class="secondary-button" type="button" data-coding-nav="previous" ${codingIndex === 0 ? "disabled" : ""}>${escapeHtml(t("previousProblem"))}</button>
+            <button class="secondary-button" type="button" data-coding-nav="next" ${codingIndex === codingProblems.length - 1 ? "disabled" : ""}>${escapeHtml(t("nextProblem"))}</button>
+          </div>
+        </div>
+        <div class="coding-problem-body">
+          ${markdownToHtml(codingProblem.body)}
+        </div>
         <h4>${escapeHtml(t("rubric"))}</h4>
         <ul>${(key?.rubric ?? []).map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
         <div class="code-editor">
           <div class="code-editor-bar">
             <span>Kotlin</span>
-            <span>Answer.kt</span>
+            <span>Answer-${codingIndex + 1}.kt</span>
           </div>
-          <textarea class="coding-answer" name="coding" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="${escapeHtml(t("codingPlaceholder"))}">${escapeHtml(answers.coding ?? "")}</textarea>
+          <textarea class="coding-answer" name="coding-${codingIndex}" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="${escapeHtml(t("codingPlaceholder"))}">${escapeHtml(codingAnswers[codingIndex] ?? "")}</textarea>
         </div>
       </div>
     </section>
@@ -765,20 +828,22 @@ function startCurrentExam() {
   const course = currentCourse();
   const courseState = getCourseState(course.index);
   const now = Date.now();
+  const codingProblems = splitCodingProblems(course.exam.coding);
   normalizeCourseExamState(courseState);
   courseState.examSession = {
     status: "active",
     startedAt: new Date(now).toISOString(),
     endsAt: new Date(now + EXAM_DURATION_MS).toISOString(),
     warningShown: false,
-    answers: { mcq: [], fill: [], coding: "" },
+    codingProblemIndex: 0,
+    answers: { mcq: [], fill: [], coding: Array(codingProblems.length).fill("") },
   };
   saveState();
   state.activeTab = "exam";
   render();
 }
 
-function submitCurrentExam(reason = "manual") {
+async function submitCurrentExam(reason = "manual") {
   if (!isSignedIn()) {
     showSignInRequired();
     return null;
@@ -789,18 +854,21 @@ function submitCurrentExam(reason = "manual") {
   return submitExamForCourse(course, courseState, reason);
 }
 
-function submitExamForCourse(course, courseState, reason = "manual") {
+async function submitExamForCourse(course, courseState, reason = "manual") {
   const key = answerKeyFor(course);
   if (!key) return null;
   normalizeCourseExamState(courseState);
   const answers = courseState.examSession?.answers ?? collectExamAnswers(key);
   const mcqAnswers = key.mcq.map((_, index) => answers.mcq?.[index] ?? "");
   const fillAnswers = key.fill.map((_, index) => String(answers.fill?.[index] ?? "").trim());
-  const coding = String(answers.coding ?? "");
+  const coding = normalizeCodingAnswers(answers.coding, splitCodingProblems(course.exam.coding).length);
   const mcqCorrect = mcqAnswers.filter((answer, index) => answer === key.mcq[index]).length;
   const fillCorrect = fillAnswers.filter((answer, index) => matchesAnswer(answer, key.fill[index])).length;
-  const total = key.mcq.length + key.fill.length;
-  const correct = mcqCorrect + fillCorrect;
+  const codingResults = await gradeCodingAnswers(course, coding, key);
+  const codingCorrect = codingResults.reduce((sum, result) => sum + result.score, 0);
+  const codingTotal = codingResults.reduce((sum, result) => sum + result.maxScore, 0);
+  const total = key.mcq.length + key.fill.length + codingTotal;
+  const correct = mcqCorrect + fillCorrect + codingCorrect;
   const percent = Math.round((correct / total) * 100);
   const now = new Date();
   const attempt = {
@@ -815,6 +883,9 @@ function submitExamForCourse(course, courseState, reason = "manual") {
     },
     mcqCorrect,
     fillCorrect,
+    codingCorrect,
+    codingTotal,
+    codingResults,
     correct,
     total,
     percent,
@@ -828,8 +899,10 @@ function submitExamForCourse(course, courseState, reason = "manual") {
   courseState.examSession = null;
   saveState();
   stopExamTicker();
+  if (reason !== "left-tab") {
+    state.activeTab = "exam";
+  }
   render();
-  state.activeTab = "exam";
   renderTabs();
   return attempt;
 }
@@ -882,6 +955,34 @@ function renderAttemptReview(course, attempt) {
       return reviewCardHtml(`Fill ${index + 1}`, prompt, attempt.answers.fill?.[index] || t("noAnswer"), expected, `fill-answer-${index}`);
     })
     .join("");
+  const codingProblems = splitCodingProblems(course.exam.coding);
+  const codingAnswers = normalizeCodingAnswers(attempt.answers.coding, codingProblems.length);
+  const codingReview = codingProblems
+    .map((problem, index) => {
+      const answer = codingAnswers[index] || t("noAnswer");
+      const result = attempt.codingResults?.[index] ?? runStaticCodingCheck(problem, codingAnswers[index] ?? "", key?.coding?.[index], { problemIndex: index });
+      const tests = (result.tests ?? [])
+        .map((test) => `
+          <li class="${test.passed ? "is-pass" : "is-fail"}">
+            <strong>${escapeHtml(test.passed ? t("codingPassed") : t("codingFailed"))}</strong>
+            <span>${escapeHtml(test.label)}</span>
+          </li>
+        `)
+        .join("");
+      return `
+        <div class="coding-review-card">
+          <h4>${escapeHtml(t("codingProblemProgress", { current: index + 1, total: codingProblems.length }))}: ${escapeHtml(problem.title)}</h4>
+          <div class="checker-line">
+            <span class="checker-badge ${result.source === "judge" ? "is-judge" : "is-fallback"}">${escapeHtml(result.label ?? t("checkedByStaticFallback"))}</span>
+            <span>${escapeHtml(t("codingScoreLabel", { score: `${result.score}/${result.maxScore}` }))}</span>
+          </div>
+          <p class="muted">${escapeHtml(t("yourAnswer"))}</p>
+          <pre><code>${escapeHtml(answer)}</code></pre>
+          <ul class="test-results">${tests}</ul>
+        </div>
+      `;
+    })
+    .join("");
   return `
     <section class="attempt-review">
       <h3>${escapeHtml(t("latestAttemptTitle"))}</h3>
@@ -889,8 +990,7 @@ function renderAttemptReview(course, attempt) {
       ${fillReview}
       <article class="review-card">
         <h4>${escapeHtml(t("codingExam"))}</h4>
-        <p class="muted">${escapeHtml(t("yourAnswer"))}</p>
-        <pre><code>${escapeHtml(attempt.answers.coding || t("noAnswer"))}</code></pre>
+        ${codingReview}
         <button class="secondary-button" type="button" data-answer-toggle="coding-answer-review">${escapeHtml(t("viewAnswer"))}</button>
         <div class="answer-reveal" id="coding-answer-review" hidden>
           <p class="muted">${escapeHtml(t("correctAnswer"))}</p>
@@ -917,10 +1017,19 @@ function reviewCardHtml(label, prompt, given, correct, id) {
 
 function collectExamAnswers(key) {
   const data = new FormData(els.examForm);
+  const course = currentCourse();
+  const courseState = getCourseState(course.index);
+  const codingProblems = splitCodingProblems(course.exam.coding);
+  const coding = normalizeCodingAnswers(courseState.examSession?.answers?.coding ?? [], codingProblems.length);
+  coding.forEach((_, index) => {
+    if (data.has(`coding-${index}`)) {
+      coding[index] = String(data.get(`coding-${index}`) ?? "");
+    }
+  });
   return {
     mcq: key.mcq.map((_, index) => data.get(`mcq-${index}`) ?? ""),
     fill: key.fill.map((_, index) => String(data.get(`fill-${index}`) ?? "").trim()),
-    coding: String(data.get("coding") ?? ""),
+    coding,
   };
 }
 
@@ -932,6 +1041,244 @@ function saveExamDraft() {
   const key = answerKeyFor(course);
   courseState.examSession.answers = collectExamAnswers(key);
   saveState();
+}
+
+function navigateCodingProblem(direction) {
+  if (!isSignedIn()) return;
+  const course = currentCourse();
+  const courseState = getCourseState(course.index);
+  if (!isExamActive(courseState)) return;
+  const key = answerKeyFor(course);
+  courseState.examSession.answers = collectExamAnswers(key);
+  const codingProblems = splitCodingProblems(course.exam.coding);
+  const currentIndex = clampNumber(courseState.examSession.codingProblemIndex ?? 0, 0, codingProblems.length - 1);
+  const nextIndex = direction === "next" ? currentIndex + 1 : currentIndex - 1;
+  courseState.examSession.codingProblemIndex = clampNumber(nextIndex, 0, codingProblems.length - 1);
+  saveState();
+  renderExam();
+}
+
+async function gradeCodingAnswers(course, codingAnswers, key) {
+  const problems = splitCodingProblems(course.exam.coding);
+  const results = [];
+  for (let index = 0; index < problems.length; index += 1) {
+    const problem = problems[index];
+    const submission = codingAnswers[index] ?? "";
+    const spec = key?.coding?.[index];
+    const judgeResult = await runJudgeCheck(course, problem, index, submission, spec);
+    results.push(judgeResult ?? runStaticCodingCheck(problem, submission, spec, { problemIndex: index }));
+  }
+  return results;
+}
+
+async function runJudgeCheck(course, problem, problemIndex, submission, spec) {
+  if (!state.judgeApiUrl || isLocalExamMode()) return null;
+  const quota = consumeJudgeQuota();
+  if (!quota.ok) {
+    return staticFallbackEnvelope("rate_limited", problem, problemIndex, submission, spec);
+  }
+
+  const token = await getAccessToken();
+  if (!token) return null;
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), JUDGE_TIMEOUT_MS);
+  try {
+    const response = await fetch(`${state.judgeApiUrl}/judge/kotlin`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        coursePath: course.path,
+        problemIndex,
+        submission,
+      }),
+      signal: controller.signal,
+    });
+    clearTimeout(timeoutId);
+
+    if (response.status === 429) {
+      return staticFallbackEnvelope("rate_limited", problem, problemIndex, submission, spec);
+    }
+    if (response.status >= 500) {
+      return staticFallbackEnvelope("server_error", problem, problemIndex, submission, spec);
+    }
+    if (!response.ok) {
+      return staticFallbackEnvelope("server_error", problem, problemIndex, submission, spec);
+    }
+
+    const payload = await response.json();
+    return normalizeJudgeResult(payload, problemIndex);
+  } catch (error) {
+    clearTimeout(timeoutId);
+    const reason = error?.name === "AbortError" ? "timeout" : "network_error";
+    return staticFallbackEnvelope(reason, problem, problemIndex, submission, spec);
+  }
+}
+
+function staticFallbackEnvelope(reason, problem, problemIndex, submission, spec) {
+  return runStaticCodingCheck(problem, submission, spec, {
+    reason,
+    problemIndex,
+    label: reason === "rate_limited" ? t("checkedByStaticFallback") : t("judgeFallbackUsed"),
+  });
+}
+
+function normalizeJudgeResult(payload, problemIndex) {
+  const tests = Array.isArray(payload?.tests)
+    ? payload.tests.map((test, index) => ({
+        id: String(test.id ?? `test${index + 1}`),
+        label: String(test.label ?? test.message ?? `Test ${index + 1}`),
+        passed: Boolean(test.passed),
+        message: String(test.message ?? ""),
+      }))
+    : [];
+  const maxScore = Number.isFinite(payload?.maxScore) ? Number(payload.maxScore) : tests.length;
+  const score = Number.isFinite(payload?.score) ? Number(payload.score) : tests.filter((test) => test.passed).length;
+  return {
+    problemIndex,
+    source: "judge",
+    reason: "ok",
+    label: t("checkedByCompiler"),
+    compilePassed: Boolean(payload?.compilePassed ?? payload?.ok),
+    score: clamp(score, 0, maxScore),
+    maxScore,
+    tests,
+    stderr: String(payload?.stderr ?? ""),
+  };
+}
+
+function runStaticCodingCheck(problem, submission, spec, fallback = {}) {
+  const tests = buildStaticCodingTests(problem, spec).map((test) => runStaticCodingTest(test, submission));
+  const score = tests.filter((test) => test.passed).length;
+  return {
+    problemIndex: fallback.problemIndex ?? 0,
+    source: "staticFallback",
+    reason: fallback.reason ?? "network_error",
+    label: fallback.label ?? t("checkedByStaticFallback"),
+    compilePassed: null,
+    score,
+    maxScore: tests.length,
+    tests,
+    stderr: "",
+  };
+}
+
+function buildStaticCodingTests(problem, spec) {
+  if (Array.isArray(spec?.tests) && spec.tests.length) return spec.tests;
+  const body = `${problem?.title ?? ""}\n${problem?.body ?? ""}`;
+  const tests = [
+    {
+      id: "static-not-empty",
+      label: "Answer has Kotlin code.",
+      type: "lineCountAtLeast",
+      value: 1,
+    },
+    {
+      id: "static-no-dart-types",
+      label: "Does not use Dart-style type names.",
+      type: "notRegex",
+      value: "\\b(final\\s+String|final\\s+int|var\\s+bool|var\\s+double|double|bool|string|boolean)\\b",
+      flags: "",
+    },
+    {
+      id: "static-kotlin-signal",
+      label: "Uses Kotlin syntax from the task.",
+      type: "containsAny",
+      caseSensitive: true,
+      values: expectedKotlinSignals(body),
+    },
+  ];
+  return tests;
+}
+
+function expectedKotlinSignals(text) {
+  const signals = ["val ", "var ", "fun ", "class ", "data class", "when", "if", "for", "listOf", "mapOf", "?.", "?:", "->", "suspend", "async", "launch"];
+  if (/Double|double/i.test(text)) signals.push("Double");
+  if (/Boolean|bool/i.test(text)) signals.push("Boolean");
+  if (/String/i.test(text)) signals.push("String");
+  if (/Int|integer/i.test(text)) signals.push("Int");
+  if (/Char/i.test(text)) signals.push("Char");
+  return [...new Set(signals)];
+}
+
+function runStaticCodingTest(test, submission) {
+  const answer = String(submission ?? "");
+  let passed = false;
+  if (test.type === "containsAll") {
+    passed = (test.values ?? []).every((value) => includesCode(answer, value, test.caseSensitive !== false));
+  } else if (test.type === "containsAny") {
+    passed = (test.values ?? []).some((value) => includesCode(answer, value, test.caseSensitive !== false));
+  } else if (test.type === "notContainsAny") {
+    passed = !(test.values ?? []).some((value) => includesCode(answer, value, test.caseSensitive !== false));
+  } else if (test.type === "regex") {
+    passed = new RegExp(test.value, test.flags ?? "").test(answer);
+  } else if (test.type === "notRegex") {
+    passed = !new RegExp(test.value, test.flags ?? "").test(answer);
+  } else if (test.type === "lineCountAtLeast") {
+    const lines = answer.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+    passed = lines.length >= Number(test.value ?? 1);
+  }
+  return {
+    id: String(test.id ?? "static-test"),
+    label: String(test.label ?? test.id ?? "Static test"),
+    passed,
+    message: passed ? t("codingPassed") : t("codingFailed"),
+  };
+}
+
+function includesCode(answer, value, caseSensitive) {
+  const haystack = normalizeCodeForSearch(answer, caseSensitive);
+  const needle = normalizeCodeForSearch(value, caseSensitive);
+  return haystack.includes(needle);
+}
+
+function normalizeCodeForSearch(value, caseSensitive) {
+  const text = String(value ?? "").replace(/\s+/g, " ").trim();
+  return caseSensitive ? text : text.toLowerCase();
+}
+
+async function getAccessToken() {
+  if (!state.supabase) return "";
+  const { data } = await state.supabase.auth.getSession();
+  return data.session?.access_token ?? "";
+}
+
+function consumeJudgeQuota() {
+  const userId = state.user?.id ?? "guest";
+  const now = Date.now();
+  const today = new Date(now).toISOString().slice(0, 10);
+  const quota = readJudgeQuota();
+  const userQuota = quota[userId] ?? { minute: [], day: today, dayCount: 0 };
+  userQuota.minute = (userQuota.minute ?? []).filter((timestamp) => now - timestamp < 60000);
+  if (userQuota.day !== today) {
+    userQuota.day = today;
+    userQuota.dayCount = 0;
+  }
+  if (userQuota.minute.length >= JUDGE_RUN_LIMIT_PER_MINUTE || userQuota.dayCount >= JUDGE_RUN_LIMIT_PER_DAY) {
+    quota[userId] = userQuota;
+    writeJudgeQuota(quota);
+    return { ok: false };
+  }
+  userQuota.minute.push(now);
+  userQuota.dayCount += 1;
+  quota[userId] = userQuota;
+  writeJudgeQuota(quota);
+  return { ok: true };
+}
+
+function readJudgeQuota() {
+  try {
+    return JSON.parse(localStorage.getItem(JUDGE_QUOTA_KEY)) ?? {};
+  } catch {
+    return {};
+  }
+}
+
+function writeJudgeQuota(quota) {
+  localStorage.setItem(JUDGE_QUOTA_KEY, JSON.stringify(quota));
 }
 
 function normalizeCourseExamState(courseState) {
@@ -1456,10 +1803,48 @@ function normalize(value) {
 }
 
 function matchesAnswer(answer, expected) {
-  if (Array.isArray(expected)) {
-    return expected.some((item) => normalize(answer) === normalize(item));
+  if (expected && typeof expected === "object" && !Array.isArray(expected)) {
+    return matchesAnswerWithMode(answer, expected.answer, expected.mode ?? "caseSensitiveCode");
   }
-  return normalize(answer) === normalize(expected);
+  if (Array.isArray(expected)) {
+    return expected.some((item) => matchesAnswer(answer, item));
+  }
+  return matchesAnswerWithMode(answer, expected, inferAnswerMode(expected));
+}
+
+function matchesAnswerWithMode(answer, expected, mode) {
+  if (Array.isArray(expected)) {
+    return expected.some((item) => matchesAnswerWithMode(answer, item, mode));
+  }
+  if (mode === "exact") {
+    return String(answer).trim() === String(expected).trim();
+  }
+  if (mode === "textLoose") {
+    return normalizeLooseText(answer) === normalizeLooseText(expected);
+  }
+  return normalizeCodeAnswer(answer, mode === "caseInsensitiveCode") === normalizeCodeAnswer(expected, mode === "caseInsensitiveCode");
+}
+
+function inferAnswerMode(expected) {
+  const text = String(expected ?? "");
+  const hasCodePunctuation = /[`"'$(){}[\].?:=<>+\-*/\\]/.test(text);
+  const isPhrase = /\s/.test(text.trim());
+  return isPhrase && !hasCodePunctuation ? "textLoose" : "caseSensitiveCode";
+}
+
+function normalizeCodeAnswer(value, ignoreCase) {
+  let text = String(value ?? "").trim();
+  text = text.replace(/^`(.+)`$/, "$1");
+  text = text.replace(/\s+/g, " ");
+  return ignoreCase ? text.toLowerCase() : text;
+}
+
+function normalizeLooseText(value) {
+  return String(value ?? "")
+    .trim()
+    .toLowerCase()
+    .replace(/[`"'.,!?()]/g, " ")
+    .replace(/\s+/g, " ");
 }
 
 function clamp(value, min, max) {
