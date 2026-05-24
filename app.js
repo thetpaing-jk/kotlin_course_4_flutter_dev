@@ -86,7 +86,15 @@ const FALLBACK_ANSWER_KEY = {
 
 const STORAGE_KEY = "kotlinCourseStudio.v1";
 const THEME_KEY = "kotlinCourseStudio.theme";
+const LOCAL_EXAM_FLAG_KEY = "kotlinCourseStudio.localExamMode";
 const SYNC_DEBOUNCE_MS = 700;
+const EXAM_DURATION_MS = 30 * 60 * 1000;
+const EXAM_WARNING_MS = 5 * 60 * 1000;
+const LOCAL_TEST_USER = {
+  id: "local-exam-preview",
+  email: "local-exam-preview@localhost",
+  isLocalExamMode: true,
+};
 
 const TEXT = {
   brandSubtitle: "For Flutter developers",
@@ -102,6 +110,22 @@ const TEXT = {
   courseExamTitle: "Course Exam",
   courseExamDescription: "MCQ and fill-in-the-blank are auto checked. Coding answer is saved with a rubric.",
   submitExam: "Submit Exam",
+  startExam: "Start Exam",
+  retest: "Retest",
+  examReadyTitle: "Ready to start?",
+  examReadyMessage: "You will have 30 minutes. Lessons and Q&A are locked while the exam is running.",
+  examRunningMessage: "Exam is running. Submit before leaving this tab.",
+  examLeaveConfirm: "Exam is still running. Press OK to auto-submit and leave, or Cancel to continue the exam.",
+  examFiveMinuteWarning: "Only 5 minutes left.",
+  examTimeUp: "Time is up. Your exam will be submitted automatically.",
+  examHistoryTitle: "Exam History",
+  latestAttemptTitle: "Latest Answer Sheet",
+  viewAnswer: "View answer",
+  hideAnswer: "Hide answer",
+  yourAnswer: "Your answer",
+  correctAnswer: "Correct answer",
+  noAnswer: "No answer",
+  attemptLabel: "Attempt {number}: {score} - {date}",
   qaCheckpointTitle: "Q&A Checkpoint",
   researchPromptLabel: "Your research prompt",
   copyPrompt: "Copy Prompt",
@@ -132,6 +156,7 @@ const TEXT = {
   supabaseMissing: "Supabase is not configured. Progress is saved on this browser only.",
   supabaseClientMissing: "Could not load Supabase client. Progress is saved on this browser only.",
   googleConfigureFirst: "Google sign-in is not configured yet. Add Vercel environment variables first.",
+  localExamModeEnabled: "Local exam preview mode is enabled. Progress is saved in this browser only.",
   signInRequired: "Please sign in first. Progress, exams, and Q&A are saved per account.",
   configureSignInRequired: "Please configure Google sign-in first. Progress and exams are account-only.",
   resetConfirm: "Reset current progress, exam answers, and Q&A drafts?",
@@ -162,6 +187,7 @@ const state = {
   syncStatus: "offlineLocalOnly",
   authMessage: "",
   syncTimer: null,
+  examTimerId: null,
   loadingCloud: false,
 };
 
@@ -180,7 +206,9 @@ const els = {
   examAverage: document.querySelector("#examAverage"),
   examForm: document.querySelector("#examForm"),
   scorePanel: document.querySelector("#scorePanel"),
+  startExamBtn: document.querySelector("#startExamBtn"),
   submitExamBtn: document.querySelector("#submitExamBtn"),
+  examTimer: document.querySelector("#examTimer"),
   qaQuestions: document.querySelector("#qaQuestions"),
   qaPrompt: document.querySelector("#qaPrompt"),
   copyPromptBtn: document.querySelector("#copyPromptBtn"),
@@ -201,6 +229,7 @@ init();
 
 async function init() {
   applyTheme(state.theme);
+  initLocalExamMode();
   const [courseFiles, answerKey] = await Promise.all([loadCourseFiles(), loadAnswerKey()]);
   state.answerKey = answerKey;
   const markdownFiles = await Promise.all(courseFiles.map(loadMarkdown));
@@ -344,9 +373,13 @@ function parseMcq(text) {
   const blocks = text.split(/\n(?=\d+\.\s+)/).map((block) => block.trim()).filter(Boolean);
   for (const block of blocks) {
     const lines = block.split(/\r?\n/).filter(Boolean);
-    const prompt = lines[0].replace(/^\d+\.\s+/, "").trim();
+    const firstOptionIndex = lines.findIndex((line) => /^-\s+[A-D]\.\s+/.test(line.trim()));
+    const promptLines = (firstOptionIndex >= 0 ? lines.slice(0, firstOptionIndex) : lines).map((line, index) =>
+      index === 0 ? line.replace(/^\d+\.\s+/, "").trim() : line
+    );
+    const prompt = promptLines.join("\n").trim();
     const options = lines
-      .slice(1)
+      .slice(firstOptionIndex >= 0 ? firstOptionIndex : 1)
       .map((line) => line.trim().match(/^-\s+([A-D])\.\s+(.+)$/))
       .filter(Boolean)
       .map((match) => ({ key: match[1], text: match[2] }));
@@ -380,6 +413,7 @@ function bindEvents() {
   els.courseList.addEventListener("click", (event) => {
     const button = event.target.closest("[data-course-index]");
     if (!button) return;
+    if (!canLeaveExam("learn")) return;
     state.activeCourse = Number(button.dataset.courseIndex);
     if (isSignedIn()) {
       state.saved.activeCourse = state.activeCourse;
@@ -390,6 +424,7 @@ function bindEvents() {
 
   document.querySelectorAll(".tab").forEach((tab) => {
     tab.addEventListener("click", () => {
+      if (!canLeaveExam(tab.dataset.tab)) return;
       state.activeTab = tab.dataset.tab;
       renderTabs();
     });
@@ -411,7 +446,21 @@ function bindEvents() {
     render();
   });
 
-  els.submitExamBtn.addEventListener("click", gradeCurrentExam);
+  els.startExamBtn.addEventListener("click", startCurrentExam);
+  els.submitExamBtn.addEventListener("click", () => submitCurrentExam("manual"));
+
+  els.examForm.addEventListener("input", saveExamDraft);
+  els.examForm.addEventListener("change", saveExamDraft);
+
+  els.scorePanel.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-answer-toggle]");
+    if (!button) return;
+    const target = document.querySelector(`#${button.dataset.answerToggle}`);
+    if (!target) return;
+    const isHidden = target.hidden;
+    target.hidden = !isHidden;
+    button.textContent = isHidden ? t("hideAnswer") : t("viewAnswer");
+  });
 
   els.copyPromptBtn.addEventListener("click", async () => {
     if (!isSignedIn()) {
@@ -468,6 +517,7 @@ function bindEvents() {
 }
 
 function render() {
+  reconcileExamTimers();
   renderCourseList();
   renderHeader();
   renderProgress();
@@ -490,9 +540,9 @@ function renderCourseList() {
         : t("signInToTrack");
       return `
         <button class="course-button ${course.index === state.activeCourse ? "is-active" : ""} ${complete ? "is-done" : ""}" data-course-index="${course.index}" type="button">
-          <span>
+          <span class="course-copy">
             <strong>${escapeHtml(course.shortTitle)}</strong>
-            <span>${progressLabel}</span>
+            <span class="course-progress">${progressLabel}</span>
           </span>
           <span class="course-badge">${complete ? "OK" : course.index + 1}</span>
         </button>
@@ -539,14 +589,16 @@ function renderProgress() {
 function renderAccount() {
   const signedIn = isSignedIn();
   els.syncStatus.textContent = t(state.syncStatus);
-  els.loginForm.hidden = signedIn;
-  els.googleLoginBtn.hidden = signedIn;
+  els.loginForm.hidden = signedIn || isLocalExamMode();
+  els.googleLoginBtn.hidden = signedIn || isLocalExamMode();
   els.signedInPanel.hidden = !signedIn;
   els.signOutBtn.hidden = !signedIn;
   els.signedInEmail.textContent = state.user?.email ?? "";
   els.googleLoginBtn.disabled = !state.supabase;
   const fallbackMessage = state.user
-    ? t("cloudEnabled")
+    ? isLocalExamMode()
+      ? t("localExamModeEnabled")
+      : t("cloudEnabled")
     : state.supabase
       ? t("signInToSync")
       : t("supabaseMissing");
@@ -573,18 +625,39 @@ function renderLearn() {
 
 function renderExam() {
   if (!isSignedIn()) {
+    els.startExamBtn.hidden = true;
     els.submitExamBtn.disabled = true;
+    els.submitExamBtn.hidden = true;
+    els.examTimer.hidden = true;
     els.examForm.innerHTML = lockedPanelHtml(t("examLockedTitle"), t("examLockedMessage"));
     els.scorePanel.hidden = true;
     els.scorePanel.innerHTML = "";
     return;
   }
 
-  els.submitExamBtn.disabled = false;
   const course = currentCourse();
   const courseState = getCourseState(course.index);
-  const answers = courseState.examAnswers ?? {};
+  normalizeCourseExamState(courseState);
+  const active = isExamActive(courseState);
+  const answers = active ? courseState.examSession.answers ?? {} : {};
   const key = answerKeyFor(course);
+  els.startExamBtn.hidden = active;
+  els.startExamBtn.textContent = courseState.examAttempts.length ? t("retest") : t("startExam");
+  els.submitExamBtn.hidden = !active;
+  els.submitExamBtn.disabled = !active;
+  els.examTimer.hidden = !active;
+
+  if (!active) {
+    els.examForm.innerHTML = `
+      <div class="exam-start-panel">
+        <h3>${escapeHtml(t("examReadyTitle"))}</h3>
+        <p>${escapeHtml(t("examReadyMessage"))}</p>
+      </div>
+    `;
+    renderScorePanel(course, courseState);
+    return;
+  }
+
   const mcqHtml = course.exam.mcq
     .map((question, qIndex) => {
       const options = question.options
@@ -600,7 +673,10 @@ function renderExam() {
         .join("");
       return `
         <section class="exam-card">
-          <h4>${qIndex + 1}. ${escapeHtml(question.prompt)}</h4>
+          <div class="question-prompt">
+            <strong>${qIndex + 1}.</strong>
+            <div>${markdownToHtml(question.prompt)}</div>
+          </div>
           ${options}
         </section>
       `;
@@ -622,6 +698,7 @@ function renderExam() {
     .join("");
 
   els.examForm.innerHTML = `
+    <div class="exam-running-note">${escapeHtml(t("examRunningMessage"))}</div>
     <section>
       <h3>${escapeHtml(t("multipleChoice"))}</h3>
       ${mcqHtml}
@@ -636,12 +713,20 @@ function renderExam() {
         ${markdownToHtml(course.exam.coding)}
         <h4>${escapeHtml(t("rubric"))}</h4>
         <ul>${(key?.rubric ?? []).map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
-        <textarea class="coding-answer" name="coding" placeholder="${escapeHtml(t("codingPlaceholder"))}">${escapeHtml(answers.coding ?? "")}</textarea>
+        <div class="code-editor">
+          <div class="code-editor-bar">
+            <span>Kotlin</span>
+            <span>Answer.kt</span>
+          </div>
+          <textarea class="coding-answer" name="coding" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="${escapeHtml(t("codingPlaceholder"))}">${escapeHtml(answers.coding ?? "")}</textarea>
+        </div>
       </div>
     </section>
   `;
 
-  renderScorePanel(courseState);
+  renderExamTimer();
+  els.scorePanel.hidden = true;
+  els.scorePanel.innerHTML = "";
 }
 
 function renderQa() {
@@ -672,53 +757,290 @@ function renderTabs() {
   });
 }
 
-function gradeCurrentExam() {
+function startCurrentExam() {
   if (!isSignedIn()) {
     showSignInRequired();
     return;
   }
   const course = currentCourse();
+  const courseState = getCourseState(course.index);
+  const now = Date.now();
+  normalizeCourseExamState(courseState);
+  courseState.examSession = {
+    status: "active",
+    startedAt: new Date(now).toISOString(),
+    endsAt: new Date(now + EXAM_DURATION_MS).toISOString(),
+    warningShown: false,
+    answers: { mcq: [], fill: [], coding: "" },
+  };
+  saveState();
+  state.activeTab = "exam";
+  render();
+}
+
+function submitCurrentExam(reason = "manual") {
+  if (!isSignedIn()) {
+    showSignInRequired();
+    return null;
+  }
+  saveExamDraft();
+  const course = currentCourse();
+  const courseState = getCourseState(course.index);
+  return submitExamForCourse(course, courseState, reason);
+}
+
+function submitExamForCourse(course, courseState, reason = "manual") {
   const key = answerKeyFor(course);
-  if (!key) return;
-  const data = new FormData(els.examForm);
-  const mcqAnswers = key.mcq.map((_, index) => data.get(`mcq-${index}`) ?? "");
-  const fillAnswers = key.fill.map((_, index) => String(data.get(`fill-${index}`) ?? "").trim());
-  const coding = String(data.get("coding") ?? "");
+  if (!key) return null;
+  normalizeCourseExamState(courseState);
+  const answers = courseState.examSession?.answers ?? collectExamAnswers(key);
+  const mcqAnswers = key.mcq.map((_, index) => answers.mcq?.[index] ?? "");
+  const fillAnswers = key.fill.map((_, index) => String(answers.fill?.[index] ?? "").trim());
+  const coding = String(answers.coding ?? "");
   const mcqCorrect = mcqAnswers.filter((answer, index) => answer === key.mcq[index]).length;
   const fillCorrect = fillAnswers.filter((answer, index) => matchesAnswer(answer, key.fill[index])).length;
   const total = key.mcq.length + key.fill.length;
   const correct = mcqCorrect + fillCorrect;
   const percent = Math.round((correct / total) * 100);
-  const courseState = getCourseState(course.index);
-
-  courseState.examAnswers = {
-    mcq: mcqAnswers,
-    fill: fillAnswers,
-    coding,
+  const now = new Date();
+  const attempt = {
+    id: now.toISOString(),
+    reason,
+    startedAt: courseState.examSession?.startedAt ?? now.toISOString(),
+    submittedAt: now.toISOString(),
+    answers: {
+      mcq: mcqAnswers,
+      fill: fillAnswers,
+      coding,
+    },
+    mcqCorrect,
+    fillCorrect,
+    correct,
+    total,
+    percent,
+    scoreText: `${correct}/${total} (${percent}%)`,
   };
+
+  courseState.examAttempts.push(attempt);
+  courseState.examAnswers = attempt.answers;
   courseState.examPercent = percent;
-  courseState.examScoreText = `${correct}/${total} (${percent}%)`;
+  courseState.examScoreText = attempt.scoreText;
+  courseState.examSession = null;
   saveState();
+  stopExamTicker();
   render();
   state.activeTab = "exam";
   renderTabs();
+  return attempt;
 }
 
-function renderScorePanel(courseState) {
-  if (!courseState.examScoreText) {
+function renderScorePanel(course, courseState) {
+  normalizeCourseExamState(courseState);
+  if (!courseState.examAttempts.length) {
     els.scorePanel.hidden = true;
     els.scorePanel.innerHTML = "";
     return;
   }
-  const labelClass = courseState.examPercent >= 70 ? "" : "needs-work";
+  const latest = courseState.examAttempts[courseState.examAttempts.length - 1];
+  const labelClass = latest.percent >= 70 ? "" : "needs-work";
   els.scorePanel.hidden = false;
+  const historyHtml = courseState.examAttempts
+    .map((attempt, index) => {
+      const label = t("attemptLabel", {
+        number: index + 1,
+        score: attempt.scoreText,
+        date: new Date(attempt.submittedAt).toLocaleString(),
+      });
+      return `<li>${escapeHtml(label)}</li>`;
+    })
+    .join("");
   els.scorePanel.innerHTML = `
-    <p><strong class="${labelClass}">${escapeHtml(t("latestScore", { score: courseState.examScoreText }))}</strong></p>
+    <p><strong class="${labelClass}">${escapeHtml(t("latestScore", { score: latest.scoreText }))}</strong></p>
     <p class="muted">${escapeHtml(t("codingReviewNote"))}</p>
+    <section class="exam-history">
+      <h3>${escapeHtml(t("examHistoryTitle"))}</h3>
+      <ol>${historyHtml}</ol>
+    </section>
+    ${renderAttemptReview(course, latest)}
   `;
 }
 
+function renderAttemptReview(course, attempt) {
+  const key = answerKeyFor(course);
+  const mcqReview = course.exam.mcq
+    .map((question, index) => {
+      const given = attempt.answers.mcq?.[index] || t("noAnswer");
+      const correctKey = key.mcq[index];
+      const correctOption = question.options.find((option) => option.key === correctKey);
+      const correct = correctOption ? `${correctKey}. ${correctOption.text}` : correctKey;
+      return reviewCardHtml(`MCQ ${index + 1}`, question.prompt, given, correct, `mcq-answer-${index}`);
+    })
+    .join("");
+  const fillReview = course.exam.fill
+    .map((prompt, index) => {
+      const expected = Array.isArray(key.fill[index]) ? key.fill[index].join(" / ") : key.fill[index];
+      return reviewCardHtml(`Fill ${index + 1}`, prompt, attempt.answers.fill?.[index] || t("noAnswer"), expected, `fill-answer-${index}`);
+    })
+    .join("");
+  return `
+    <section class="attempt-review">
+      <h3>${escapeHtml(t("latestAttemptTitle"))}</h3>
+      ${mcqReview}
+      ${fillReview}
+      <article class="review-card">
+        <h4>${escapeHtml(t("codingExam"))}</h4>
+        <p class="muted">${escapeHtml(t("yourAnswer"))}</p>
+        <pre><code>${escapeHtml(attempt.answers.coding || t("noAnswer"))}</code></pre>
+        <button class="secondary-button" type="button" data-answer-toggle="coding-answer-review">${escapeHtml(t("viewAnswer"))}</button>
+        <div class="answer-reveal" id="coding-answer-review" hidden>
+          <p class="muted">${escapeHtml(t("correctAnswer"))}</p>
+          <ul>${(key.rubric ?? []).map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+        </div>
+      </article>
+    </section>
+  `;
+}
+
+function reviewCardHtml(label, prompt, given, correct, id) {
+  return `
+    <article class="review-card">
+      <div class="review-prompt">
+        <strong>${escapeHtml(label)}.</strong>
+        <div>${markdownToHtml(prompt)}</div>
+      </div>
+      <p><strong>${escapeHtml(t("yourAnswer"))}:</strong> ${escapeHtml(given)}</p>
+      <button class="secondary-button" type="button" data-answer-toggle="${escapeHtml(id)}">${escapeHtml(t("viewAnswer"))}</button>
+      <p class="answer-reveal" id="${escapeHtml(id)}" hidden><strong>${escapeHtml(t("correctAnswer"))}:</strong> ${escapeHtml(correct)}</p>
+    </article>
+  `;
+}
+
+function collectExamAnswers(key) {
+  const data = new FormData(els.examForm);
+  return {
+    mcq: key.mcq.map((_, index) => data.get(`mcq-${index}`) ?? ""),
+    fill: key.fill.map((_, index) => String(data.get(`fill-${index}`) ?? "").trim()),
+    coding: String(data.get("coding") ?? ""),
+  };
+}
+
+function saveExamDraft() {
+  if (!isSignedIn()) return;
+  const course = currentCourse();
+  const courseState = getCourseState(course.index);
+  if (!isExamActive(courseState)) return;
+  const key = answerKeyFor(course);
+  courseState.examSession.answers = collectExamAnswers(key);
+  saveState();
+}
+
+function normalizeCourseExamState(courseState) {
+  if (!Array.isArray(courseState.examAttempts)) {
+    courseState.examAttempts = [];
+  }
+  if (courseState.examScoreText && !courseState.examAttempts.length) {
+    courseState.examAttempts.push({
+      id: courseState.examSubmittedAt ?? new Date().toISOString(),
+      reason: "legacy",
+      startedAt: courseState.examSubmittedAt ?? new Date().toISOString(),
+      submittedAt: courseState.examSubmittedAt ?? new Date().toISOString(),
+      answers: courseState.examAnswers ?? { mcq: [], fill: [], coding: "" },
+      correct: Number(courseState.examScoreText.split("/")[0]) || 0,
+      total: 0,
+      percent: courseState.examPercent ?? 0,
+      scoreText: courseState.examScoreText,
+    });
+  }
+  if (courseState.examSession?.status !== "active") {
+    courseState.examSession = null;
+  }
+}
+
+function isExamActive(courseState = getCourseState(state.activeCourse)) {
+  return Boolean(courseState?.examSession?.status === "active");
+}
+
+function canLeaveExam(targetTab) {
+  if (targetTab === "exam" || !isSignedIn()) return true;
+  const course = currentCourse();
+  const courseState = getCourseState(course.index);
+  if (!isExamActive(courseState)) return true;
+  const ok = window.confirm(t("examLeaveConfirm"));
+  if (!ok) return false;
+  submitExamForCourse(course, courseState, "left-tab");
+  return true;
+}
+
+function reconcileExamTimers() {
+  if (!isSignedIn() || !state.courses.length) {
+    stopExamTicker();
+    return;
+  }
+  const courseState = getCourseState(state.activeCourse);
+  if (!isExamActive(courseState)) {
+    stopExamTicker();
+    return;
+  }
+  const remaining = remainingExamMs(courseState);
+  if (remaining <= 0) {
+    window.alert(t("examTimeUp"));
+    submitExamForCourse(currentCourse(), courseState, "time-up");
+    return;
+  }
+  if (remaining <= EXAM_WARNING_MS && !courseState.examSession.warningShown) {
+    courseState.examSession.warningShown = true;
+    saveState();
+    window.alert(t("examFiveMinuteWarning"));
+  }
+  if (!state.examTimerId) {
+    state.examTimerId = setInterval(() => {
+      const latestState = getCourseState(state.activeCourse);
+      if (!isExamActive(latestState)) {
+        stopExamTicker();
+        return;
+      }
+      const latestRemaining = remainingExamMs(latestState);
+      if (latestRemaining <= 0) {
+        window.alert(t("examTimeUp"));
+        submitExamForCourse(currentCourse(), latestState, "time-up");
+        return;
+      }
+      if (latestRemaining <= EXAM_WARNING_MS && !latestState.examSession.warningShown) {
+        latestState.examSession.warningShown = true;
+        saveState();
+        window.alert(t("examFiveMinuteWarning"));
+      }
+      renderExamTimer();
+    }, 1000);
+  }
+}
+
+function renderExamTimer() {
+  const courseState = getCourseState(state.activeCourse);
+  const remaining = Math.max(0, remainingExamMs(courseState));
+  const minutes = Math.floor(remaining / 60000);
+  const seconds = Math.floor((remaining % 60000) / 1000);
+  els.examTimer.textContent = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+  els.examTimer.classList.toggle("is-warning", remaining <= EXAM_WARNING_MS);
+}
+
+function remainingExamMs(courseState) {
+  return new Date(courseState.examSession?.endsAt ?? 0).getTime() - Date.now();
+}
+
+function stopExamTicker() {
+  if (state.examTimerId) {
+    clearInterval(state.examTimerId);
+    state.examTimerId = null;
+  }
+}
+
 async function initSupabase() {
+  if (isLocalExamMode()) {
+    setSyncStatus("localOnly");
+    return;
+  }
+
   const config = await loadSupabaseConfig();
   if (!config) {
     setSyncStatus("offlineLocalOnly");
@@ -821,6 +1143,11 @@ async function loadCloudProgress() {
 }
 
 function scheduleCloudSave() {
+  if (isLocalExamMode()) {
+    setSyncStatus("localOnly");
+    return;
+  }
+
   if (!state.supabase || !state.user || state.loadingCloud) {
     setSyncStatus(state.supabase ? "localOnly" : "offlineLocalOnly");
     return;
@@ -862,6 +1189,34 @@ function setSyncStatus(status) {
 function setAuthMessage(message) {
   state.authMessage = message;
   renderAccount();
+}
+
+function initLocalExamMode() {
+  const params = new URLSearchParams(window.location.search);
+  if (!isLocalDevHost()) {
+    localStorage.removeItem(LOCAL_EXAM_FLAG_KEY);
+    return;
+  }
+  if (params.get("localExam") === "1") {
+    localStorage.setItem(LOCAL_EXAM_FLAG_KEY, "1");
+  }
+  if (params.get("localExam") === "0") {
+    localStorage.removeItem(LOCAL_EXAM_FLAG_KEY);
+  }
+  if (!isLocalExamMode()) return;
+
+  state.user = LOCAL_TEST_USER;
+  state.saved = loadUserCache() ?? loadState();
+  state.syncStatus = "localOnly";
+  state.authMessage = t("localExamModeEnabled");
+}
+
+function isLocalExamMode() {
+  return isLocalDevHost() && localStorage.getItem(LOCAL_EXAM_FLAG_KEY) === "1";
+}
+
+function isLocalDevHost() {
+  return ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname);
 }
 
 function isSignedIn() {

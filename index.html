@@ -12,7 +12,7 @@
         document.documentElement.dataset.theme = saved || (prefersDark ? "dark" : "light");
       })();
     </script>
-    <link rel="stylesheet" href="styles.css?v=5" />
+    <link rel="stylesheet" href="styles.css?v=8" />
   </head>
   <body>
     <div class="app-shell">
@@ -105,7 +105,11 @@
               <h3>Course Exam</h3>
               <p>MCQ and fill-in-the-blank are auto checked. Coding answer is saved with a rubric.</p>
             </div>
-            <button class="primary-button" id="submitExamBtn" type="button">Submit Exam</button>
+            <div class="exam-actions">
+              <span class="exam-timer" id="examTimer" hidden>30:00</span>
+              <button class="primary-button" id="startExamBtn" type="button">Start Exam</button>
+              <button class="primary-button" id="submitExamBtn" type="button" hidden>Submit Exam</button>
+            </div>
           </div>
           <form class="exam-form" id="examForm"></form>
           <div class="score-panel" id="scorePanel" hidden></div>
@@ -128,6 +132,6 @@
       </main>
     </div>
 
-    <script src="app.js?v=6"></script>
+    <script src="app.js?v=12"></script>
   </body>
 </html>

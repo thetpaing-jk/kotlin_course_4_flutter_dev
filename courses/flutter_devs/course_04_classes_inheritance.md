@@ -1,8 +1,6 @@
 # Course 04 - Classes နဲ့ Inheritance
 
-## Goal
-
-Study this module from `files.zip` and use the included exam questions as the source of truth for assessment.
+> **Module:** 4 of 10 | **Level:** Intermediate | **For:** Flutter Developers learning Kotlin
 
 ## Lessons
 

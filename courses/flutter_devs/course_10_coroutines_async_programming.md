@@ -1,8 +1,6 @@
 # Course 10 - Coroutines (Async Programming)
 
-## Goal
-
-Study this module from `files.zip` and use the included exam questions as the source of truth for assessment.
+> **Module:** 10 of 10 | **Level:** Advanced | **For:** Flutter Developers learning Kotlin
 
 ## Lessons
 

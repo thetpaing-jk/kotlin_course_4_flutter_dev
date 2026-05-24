@@ -1,8 +1,6 @@
 # Course 03 - Control Flow
 
-## Goal
-
-Study this module from `files.zip` and use the included exam questions as the source of truth for assessment.
+> **Module:** 3 of 10 | **Level:** Beginner | **For:** Flutter Developers learning Kotlin
 
 ## Lessons
 
