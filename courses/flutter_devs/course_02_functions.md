@@ -2,7 +2,7 @@
 
 ## Goal
 
-Study **Functions** using the provided `Kotlin for Flutter Developers` module as the single source for this course.
+Study this module from `files.zip` and use the included exam questions as the source of truth for assessment.
 
 ## Lessons
 
@@ -15,28 +15,28 @@ fun greet(name: String): String {
 }
 ```
 
-**Dart (Flutter) နဲ့ နှိုင်းယှဉ်:**
+**Dart နဲ့ နှိုင်းယှဉ်:**
 ```dart
 String greet(String name) {
     return "Hello, $name!";
 }
 ```
 
-> 💡 **Key difference:** Kotlin မှာ keyword `fun` ကို အရင်ထည့်ပြီး return type ကို function name **နောက်မှာ** ထည့်တယ်။
+> 💡 Kotlin မှာ `fun` keyword ကိုအရင်ထည့်တယ်၊ return type ကို function name **နောက်မှာ** ထည့်တယ်။
 
 ---
 
 ### 2.2 Single Expression Functions
 
-Flutter မှာ arrow function `=>` သုံးသလို Kotlin မှာ `=` ကိုသုံးတယ်။
+Flutter ရဲ့ `=>` arrow function လိုပဲ Kotlin မှာ `=` သုံးနိုင်တယ်။
 
 **Kotlin:**
 ```kotlin
 fun double(x: Int): Int = x * 2
-fun add(a: Int, b: Int) = a + b     // return type ကို infer လုပ်တယ်
+fun add(a: Int, b: Int) = a + b   // return type infer လုပ်
 ```
 
-**Dart (Flutter) နဲ့ နှိုင်းယှဉ်:**
+**Dart နဲ့ နှိုင်းယှဉ်:**
 ```dart
 int double(int x) => x * 2;
 int add(int a, int b) => a + b;
@@ -45,8 +45,6 @@ int add(int a, int b) => a + b;
 ---
 
 ### 2.3 Default Parameters
-
-Flutter developer တွေ named parameters နဲ့ default values ကို ကျွမ်းကျင်ပြီးဆိုရင် Kotlin မှာ ပိုလွယ်ပါမယ်။
 
 **Kotlin:**
 ```kotlin
@@ -58,84 +56,140 @@ fun createButton(
     println("Button: $text, Color: $color, Enabled: $isEnabled")
 }
 
-// ခေါ်ပုံ
-createButton("Click Me")                        // default values သုံး
-createButton("Submit", color = "red")           // named argument
-createButton("Cancel", isEnabled = false)       // specific parameter ကိုသာ ပြောင်း
+createButton("Click Me")
+createButton("Submit", color = "red")
+createButton("Cancel", isEnabled = false)
 ```
 
-**Dart (Flutter) နဲ့ နှိုင်းယှဉ်:**
+**Dart နဲ့ နှိုင်းယှဉ်:**
 ```dart
 void createButton({
     required String text,
     String color = "blue",
     bool isEnabled = true,
-}) {
-    print("Button: $text, Color: $color, Enabled: $isEnabled");
-}
+}) { ... }
 
-// ခေါ်ပုံ
 createButton(text: "Click Me");
 createButton(text: "Submit", color: "red");
 ```
 
-> 💡 **Key difference:** Kotlin မှာ parameter ကို named ဖြစ်ချင်ရင် curly braces မလိုဘဲ ခေါ်တဲ့အချိန်မှ name သုံးလို့ရတယ်။ Dart မှာတော့ function definition မှာပဲ `{}` ထည့်ပြီး named ဖြစ်တယ်။
+> 💡 Kotlin မှာ function definition မှာ `{}` မလိုဘဲ call ချိန်မှာ named argument သုံးလို့ရတယ်။
 
 ---
 
 ### 2.4 Unit Return Type
 
-Dart မှာ `void` နဲ့ ညီတဲ့ Kotlin keyword က `Unit` ပါ (ချန်လှပ်လည်းရတယ်)။
+Dart ရဲ့ `void` = Kotlin ရဲ့ `Unit` (ချန်လှပ်လည်းရတယ်)
 
 ```kotlin
-fun logMessage(msg: String): Unit {
-    println(msg)
-}
-
-// Unit ကို ချန်လှပ်လို့ရ
-fun logMessage(msg: String) {
-    println(msg)
-}
+fun logMessage(msg: String): Unit { println(msg) }
+fun logMessage(msg: String) { println(msg) }  // Unit ချန်လှပ်
 ```
 
 ---
 
 ## Flutter Bridge
 
-This module already compares Kotlin with Dart/Flutter. Use those comparisons as the main bridge when reading Android native code, Flutter plugin code, or Kotlin examples inside Android SDK documentation.
+Use the Dart/Flutter comparisons in this course when reading Kotlin code in Android plugins, native SDK integrations, or platform-channel work.
 
 ## Practice
 
-1. Re-type one Kotlin example from this module and run through the meaning line by line.
-2. Write the matching Dart/Flutter version shown in the module, then note the syntax differences.
-3. Pick one idea from this module and describe where it could appear in a Flutter Android plugin.
+1. Re-type one Kotlin example from the lesson.
+2. Write the comparable Dart/Flutter version where the course provides one.
+3. Note one Kotlin syntax difference that matters for Flutter Android work.
 
 ## Q&A Checkpoint
 
-- What part of **Functions** feels closest to Dart or Flutter?
-- What syntax difference from this module should I remember when reading Kotlin code?
-- Where would this module appear in real Flutter + Android native work?
+- What Kotlin idea from this course feels closest to Dart/Flutter?
+- Which syntax difference from this course should I remember in Android plugin code?
+- How would this concept appear in real Flutter + Android native work?
 
 ## Exam
 
 ### Multiple Choice
+1. Kotlin မှာ function ကြေငြာတဲ့ keyword ကဘာလဲ?
+- A. `func`
+- B. `def`
+- C. `fun`
+- D. `function`
 
-1. The main topic of this course is:
-   - A. Functions
-   - B. CSS layout only
-   - C. SQL indexes only
-   - D. Figma export settings
-2. A good way for a Flutter developer to learn this module is to:
-   - A. Compare the Kotlin examples with the Dart/Flutter examples in the lesson
-   - B. Ignore all Dart comparisons
-   - C. Memorize Android Studio shortcuts only
-   - D. Skip all code samples
+2. Kotlin function ရဲ့ return type ကို ဘယ်နေရာမှာ ထားတယ်?
+- A. function name ရဲ့ ရှေ့မှာ
+- B. function name နောက်မှာ colon ထည့်ပြီး
+- C. parameter list ရဲ့ ရှေ့မှာ
+- D. return keyword နောက်မှာ
+
+3. Dart ရဲ့ `void` နဲ့ ညီတဲ့ Kotlin type ကဘာလဲ?
+- A. `Nothing`
+- B. `Null`
+- C. `Unit`
+- D. `Empty`
+
+4. Single expression function ကို Kotlin မှာ ဘယ်လိုရေးတယ်?
+- A. `fun add(a: Int, b: Int) => a + b`
+- B. `fun add(a: Int, b: Int) = a + b`
+- C. `fun add(a: Int, b: Int) -> a + b`
+- D. `fun add(a: Int, b: Int) : a + b`
+
+5. Dart မှာ named parameter သုံးဖို့ function definition မှာ ဘာထည့်ရတယ်?
+- A. `[]`
+- B. `()`
+- C. `{}`
+- D. `<>`
+
+6. အောက်ပါ Kotlin code မှာ `color` မထည့်ဘဲ call လုပ်ရင် ဘာဖြစ်မလဲ?
+```kotlin
+fun setup(name: String, color: String = "blue") { }
+setup("App")
+```
+- A. Compilation error
+- B. Runtime error
+- C. `color` က `"blue"` ဖြစ်မည်
+- D. `color` က `null` ဖြစ်မည်
+
+7. Kotlin function မှာ return type ကို ချန်လှပ်ရင် default return type က ဘာဖြစ်တယ်?
+- A. `null`
+- B. `void`
+- C. `Unit`
+- D. `Any`
+
+8. Named argument သုံးပြီး function call လုပ်တဲ့ Kotlin syntax က ဘယ်လိုဖြစ်တယ်?
+- A. `createButton("text", color: "red")`
+- B. `createButton(text = "text", color = "red")`
+- C. `createButton(text: "text", color: "red")`
+- D. `createButton("text", "red")`
 
 ### Fill In The Blank
-
-1. One important term from this module is ____.
-2. Another lesson topic from this module is ____.
+1. Kotlin မှာ function ကိုကြေငြာဖို့ `________` keyword သုံးတယ်။
+2. Dart ရဲ့ `void` return type နဲ့ ညီတဲ့ Kotlin type က `________` ဖြစ်တယ်။
+3. Single expression function မှာ curly braces အစား `________` symbol သုံးတယ်။
+4. Default parameter value ကို function call မှာ ချန်လှပ်ရင် `________` value ကို သုံးတယ်။
+5. Kotlin မှာ specific parameter ကိုသာ ပြောင်းချင်ရင် `________` argument သုံးတယ်။
+6. Dart ရဲ့ `String greet(String name)` ကို Kotlin ရေးဆိုရင် `________` ဖြစ်တယ်။
 
 ### Coding Exam
+**Problem 1 — Dart မှ Kotlin သို့ပြောင်းပါ**
 
-Write a small Kotlin snippet that demonstrates one idea from **Functions**. Add a short comment explaining the Dart/Flutter comparison from the module.
+```dart
+String fullName(String first, String last) {
+    return "$first $last";
+}
+
+double calculateArea(double width, double height) => width * height;
+
+void showMessage({required String msg, bool isError = false}) {
+    print("${isError ? 'ERROR' : 'INFO'}: $msg");
+}
+```
+
+**Problem 2 — Default Parameter Function**
+
+Flutter app ရဲ့ API request function တစ်ခု ရေးပါ။ `endpoint` (required), `method` (default `"GET"`), `timeout` (default `30`) parameter တွေပါရမည်။ Function body မှာ parameters တွေကို print လုပ်ပါ။
+
+**Problem 3 — Named Arguments**
+
+Problem 2 မှာ ရေးထားတဲ့ function ကို named arguments သုံးပြီး အောက်ပါ cases နှစ်ခု call လုပ်ပါ။
+- `/users` endpoint, method default, timeout default
+- `/posts` endpoint, method `"POST"`, timeout `60`
+
+---

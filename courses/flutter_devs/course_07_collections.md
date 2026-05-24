@@ -2,13 +2,13 @@
 
 ## Goal
 
-Study **Collections** using the provided `Kotlin for Flutter Developers` module as the single source for this course.
+Study this module from `files.zip` and use the included exam questions as the source of truth for assessment.
 
 ## Lessons
 
-### 7.1 Collections Overview
+### 7.1 Immutable vs Mutable
 
-Kotlin collections မှာ **immutable** နဲ့ **mutable** ဆိုပြီး ခွဲထားတာ Flutter developer တွေ သတိထားရမဲ့ အချက်ပါ။
+Kotlin collections မှာ immutable / mutable ကိုသပ်သပ် ခွဲထားတယ် — Flutter ရဲ့ `const` list နဲ့ regular list ကဲ့သို့။
 
 | Type | Immutable | Mutable |
 |------|-----------|---------|
@@ -20,160 +20,165 @@ Kotlin collections မှာ **immutable** နဲ့ **mutable** ဆိုပြ
 
 ### 7.2 List
 
-**Kotlin:**
 ```kotlin
-// Immutable List — Flutter ရဲ့ const List နဲ့ တူတူ
 val colors = listOf("red", "green", "blue")
-// colors.add("yellow")   // ❌ Error — immutable
+// colors.add("yellow")   // ❌ Error
 
-// Mutable List — Flutter ရဲ့ normal List
 val items = mutableListOf("apple", "banana")
 items.add("mango")
 items.remove("apple")
 
-// access
-println(colors[0])          // "red"
-println(colors.size)        // 3
-println(colors.first())     // "red"
-println(colors.last())      // "blue"
-```
-
-**Dart (Flutter) နဲ့ နှိုင်းယှဉ်:**
-```dart
-// Dart မှာ const = compile-time immutable
-const colors = ["red", "green", "blue"];
-
-// Dart normal list = mutable
-final items = ["apple", "banana"];
-items.add("mango");
-items.remove("apple");
+println(colors[0])       // "red"
+println(colors.size)     // 3
+println(colors.first())  // "red"
+println(colors.last())   // "blue"
 ```
 
 ---
 
 ### 7.3 Map
 
-**Kotlin:**
 ```kotlin
-// Immutable Map
 val userInfo = mapOf(
     "name" to "Aung",
-    "age" to 25,
     "city" to "Yangon"
 )
+println(userInfo["name"])
+println(userInfo.getOrDefault("phone", "N/A"))
 
-println(userInfo["name"])           // "Aung"
-println(userInfo.getOrDefault("phone", "N/A"))  // "N/A"
-
-// Mutable Map
 val scores = mutableMapOf("Math" to 90, "Science" to 85)
 scores["English"] = 92
-scores.remove("Math")
 ```
 
-**Dart (Flutter) နဲ့ နှိုင်းယှဉ်:**
-```dart
-final userInfo = {
-    "name": "Aung",
-    "age": 25,
-    "city": "Yangon",
-};
-
-print(userInfo["name"]);
-
-final scores = {"Math": 90, "Science": 85};
-scores["English"] = 92;
-scores.remove("Math");
-```
-
-> 💡 **Key syntax difference:** Kotlin မှာ Map entries တွဲဖွဲ့တဲ့နေရာမှာ `"key" to value` သုံးတယ်။ Dart မှာ `"key": value` သုံးတယ်။
+> 💡 Kotlin Map entries တွဲဖွဲ့တဲ့နေရာ `"key" to value`၊ Dart မှာ `"key": value`
 
 ---
 
-### 7.4 Collection Operations (Flutter Stream operations နဲ့ ယှဉ်)
+### 7.4 Collection Operations
 
-Kotlin collections မှာ functional operations တွေ built-in ပါတယ် — Flutter ရဲ့ Iterable methods တွေနဲ့ ဆင်တယ်။
-
-**Kotlin:**
 ```kotlin
 val numbers = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
 
-// filter
-val evens = numbers.filter { it % 2 == 0 }        // [2, 4, 6, 8, 10]
+val evens = numbers.filter { it % 2 == 0 }
+val doubled = numbers.map { it * 2 }
+val firstEven = numbers.first { it % 2 == 0 }
+val hasNegative = numbers.any { it < 0 }
+val allPositive = numbers.all { it > 0 }
+val sum = numbers.reduce { acc, n -> acc + n }
 
-// map / transform
-val doubled = numbers.map { it * 2 }              // [2, 4, 6, ...]
-
-// find first
-val firstEven = numbers.first { it % 2 == 0 }     // 2
-
-// any / all
-val hasNegative = numbers.any { it < 0 }           // false
-val allPositive = numbers.all { it > 0 }           // true
-
-// reduce
-val sum = numbers.reduce { acc, n -> acc + n }     // 55
-
-// chain operations
+// chain
 val result = numbers
     .filter { it % 2 == 0 }
     .map { it * it }
     .take(3)
-// [4, 16, 36]
 ```
 
-**Dart (Flutter) နဲ့ နှိုင်းယှဉ်:**
-```dart
-final numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+**Dart နဲ့ နှိုင်းယှဉ်:**
 
-final evens = numbers.where((n) => n % 2 == 0).toList();
-final doubled = numbers.map((n) => n * 2).toList();
-final firstEven = numbers.firstWhere((n) => n % 2 == 0);
-final hasNegative = numbers.any((n) => n < 0);
-final allPositive = numbers.every((n) => n > 0);
-final sum = numbers.reduce((acc, n) => acc + n);
-```
-
-> 💡 **Difference:** Dart မှာ `where` = Kotlin မှာ `filter`။ Dart မှာ `every` = Kotlin မှာ `all`။
+| Kotlin | Dart |
+|--------|------|
+| `filter { }` | `where((e) => )` |
+| `map { }` | `map((e) => )` |
+| `all { }` | `every((e) => )` |
+| `any { }` | `any((e) => )` |
+| `first { }` | `firstWhere((e) => )` |
 
 ---
 
 ## Flutter Bridge
 
-This module already compares Kotlin with Dart/Flutter. Use those comparisons as the main bridge when reading Android native code, Flutter plugin code, or Kotlin examples inside Android SDK documentation.
+Use the Dart/Flutter comparisons in this course when reading Kotlin code in Android plugins, native SDK integrations, or platform-channel work.
 
 ## Practice
 
-1. Re-type one Kotlin example from this module and run through the meaning line by line.
-2. Write the matching Dart/Flutter version shown in the module, then note the syntax differences.
-3. Pick one idea from this module and describe where it could appear in a Flutter Android plugin.
+1. Re-type one Kotlin example from the lesson.
+2. Write the comparable Dart/Flutter version where the course provides one.
+3. Note one Kotlin syntax difference that matters for Flutter Android work.
 
 ## Q&A Checkpoint
 
-- What part of **Collections** feels closest to Dart or Flutter?
-- What syntax difference from this module should I remember when reading Kotlin code?
-- Where would this module appear in real Flutter + Android native work?
+- What Kotlin idea from this course feels closest to Dart/Flutter?
+- Which syntax difference from this course should I remember in Android plugin code?
+- How would this concept appear in real Flutter + Android native work?
 
 ## Exam
 
 ### Multiple Choice
+1. Kotlin မှာ immutable list ဆောက်ဖို့ ဘာ function သုံးတယ်?
+- A. `arrayOf()`
+- B. `listOf()`
+- C. `mutableListOf()`
+- D. `List()`
 
-1. The main topic of this course is:
-   - A. Collections
-   - B. CSS layout only
-   - C. SQL indexes only
-   - D. Figma export settings
-2. A good way for a Flutter developer to learn this module is to:
-   - A. Compare the Kotlin examples with the Dart/Flutter examples in the lesson
-   - B. Ignore all Dart comparisons
-   - C. Memorize Android Studio shortcuts only
-   - D. Skip all code samples
+2. `mutableListOf()` နဲ့ `listOf()` ကွာတာက?
+- A. Performance ကွာ
+- B. `mutableListOf()` က add/remove ရတယ်၊ `listOf()` မရဘူး
+- C. Type safety ကွာ
+- D. ကွာချက်မရှိ
+
+3. Kotlin Map မှာ key-value pair ဖော်ပြဖို့ ဘာ syntax သုံးတယ်?
+- A. `"key": value`
+- B. `"key" -> value`
+- C. `"key" to value`
+- D. `"key" = value`
+
+4. Dart ရဲ့ `.where()` နဲ့ ညီတဲ့ Kotlin method ကဘာလဲ?
+- A. `.find()`
+- B. `.search()`
+- C. `.filter()`
+- D. `.select()`
+
+5. Dart ရဲ့ `.every()` နဲ့ ညီတဲ့ Kotlin method ကဘာလဲ?
+- A. `.each()`
+- B. `.all()`
+- C. `.forEach()`
+- D. `.forAll()`
+
+6. `listOf("a", "b", "c").first()` က ဘာ return မလဲ?
+- A. `"c"`
+- B. `"b"`
+- C. `"a"`
+- D. the whole list
+
+7. `numbers.reduce { acc, n -> acc + n }` ဆိုတာ ဘာလုပ်တာလဲ?
+- A. list ကို filter လုပ်တယ်
+- B. elements တွေကို accumulate/combine လုပ်ပြီး single value ဆောက်တယ်
+- C. list ကို sort လုပ်တယ်
+- D. null values တွေ ဖယ်တယ်
+
+8. `mapOf()` နဲ့ `mutableMapOf()` ကွာတာက?
+- A. `mutableMapOf()` က entries add/remove/update ရတယ်
+- B. `mapOf()` က faster ဖြစ်တယ်
+- C. `mutableMapOf()` က Int keys ပဲ ရတယ်
+- D. ကွာချက်မရှိ
 
 ### Fill In The Blank
-
-1. One important term from this module is ____.
-2. Another lesson topic from this module is ____.
+1. Kotlin မှာ immutable list ဆောက်ဖို့ `________` function သုံးတယ်။
+2. Dart ရဲ့ `.where()` နဲ့ ညီတဲ့ Kotlin method က `________` ဖြစ်တယ်။
+3. Dart ရဲ့ `.every()` နဲ့ ညီတဲ့ Kotlin method က `________` ဖြစ်တယ်။
+4. Kotlin Map မှာ key-value pair ကို `"key" ________ value` syntax နဲ့ ရေးတယ်။
+5. Map မှာ key မရှိရင် default value return ဖို့ `________` function သုံးတယ်။
+6. Collection operations တွေကို chain လုပ်ရင် ပထမဆုံး operation ပြီးမှ နောက် operation ကို `________` notation သုံးပြီး ဆက်ရေးတယ်။
 
 ### Coding Exam
+**Problem 1 — List Operations**
 
-Write a small Kotlin snippet that demonstrates one idea from **Collections**. Add a short comment explaining the Dart/Flutter comparison from the module.
+`val products = listOf("Flutter Book", "Kotlin Guide", "Android Dev", "Flutter Plugin", "iOS Swift")` ဒီ list ကို သုံးပြီး:
+1. "Flutter" ပါတဲ့ products တွေပဲ filter ပါ
+2. Filter ရလာတဲ့ items တွေကို uppercase ပြောင်းပါ
+3. Result ကို print ပါ
+
+**Problem 2 — Map Operations**
+
+Student grades map တစ်ခု ဆောက်ပါ (at least 4 students)၊ ပြီးနောက်:
+1. Grades တွေကို loop ပြီး `"Student: X, Grade: Y"` format နဲ့ print ပါ
+2. 80 အထက် grade ရတဲ့ student count ကို print ပါ
+
+**Problem 3 — Collection Transform**
+
+`val orders = listOf(150000, 85000, 320000, 45000, 200000)` (kyats ဖြင့်) ဒီ list ကိုသုံးပြီး:
+1. 100,000 ကျပ်အထက် orders ပဲ filter ပါ
+2. Filter ရလာတဲ့ amount တွေကို 10% discount နုတ်ပြီး map ပါ
+3. Total sum ကိုတွက်ပြပါ
+
+---

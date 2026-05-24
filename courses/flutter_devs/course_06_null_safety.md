@@ -2,86 +2,64 @@
 
 ## Goal
 
-Study **Null Safety** using the provided `Kotlin for Flutter Developers` module as the single source for this course.
+Study this module from `files.zip` and use the included exam questions as the source of truth for assessment.
 
 ## Lessons
-
-> **Flutter developer တွေအတွက် note:** Dart 2.12+ မှာ null safety ထည့်ပြီးဖြစ်တာကြောင့် ဒီ concept ကို နားလည်ပြီးဖြစ်မှာပါ။ Kotlin မှာ syntax နည်းနည်းကွဲပေမဲ့ philosophy အတူတူပါပဲ။
 
 ### 6.1 Nullable vs Non-Null Types
 
 **Kotlin:**
 ```kotlin
-var name: String = "Aung"       // null မဖြစ်နိုင် (non-null)
-name = null                      // ❌ Compilation error!
+var name: String = "Aung"
+name = null               // ❌ Compilation error
 
-var nickname: String? = "Aung"  // null ဖြစ်နိုင် (nullable)
-nickname = null                  // ✅ OK
+var nickname: String? = "Aung"
+nickname = null           // ✅ OK
 ```
 
-**Dart (Flutter) နဲ့ နှိုင်းယှဉ်:**
+**Dart နဲ့ နှိုင်းယှဉ်:**
 ```dart
-String name = "Aung";           // non-null
-name = null;                    // ❌ Compilation error
+String name = "Aung";
+name = null;              // ❌ Error
 
-String? nickname = "Aung";     // nullable
-nickname = null;                // ✅ OK
+String? nickname = "Aung";
+nickname = null;          // ✅ OK
 ```
 
-> 💡 Syntax တိုင်းတော်တော်ဆင်တယ်! Kotlin `String?` = Dart `String?`
+> 💡 `String?` syntax က Kotlin နဲ့ Dart မှာ တူတူပဲ!
 
 ---
 
 ### 6.2 Safe Call Operator `?.`
 
 ```kotlin
-val user: User? = getUser()     // null ဖြစ်နိုင်တဲ့ user
-
-// ❌ Unsafe — crash ဖြစ်နိုင်
-val name = user.name
-
-// ✅ Safe call — user null ဖြစ်ရင် null return လုပ်တယ်
-val name = user?.name
-
-// chaining
-val cityLength = user?.address?.city?.length
+val user: User? = getUser()
+val name = user?.name                  // null ဆိုရင် null return
+val cityLength = user?.address?.city?.length   // chain
 ```
-
-**Dart (Flutter) နဲ့ နှိုင်းယှဉ်:**
-```dart
-User? user = getUser();
-
-// ✅ Safe call — Dart မှာ အတူတူ!
-final name = user?.name;
-final cityLength = user?.address?.city?.length;
-```
-
-> 💡 `?.` operator က Kotlin နဲ့ Dart မှာ syntax အတူတူပါပဲ!
 
 ---
 
-### 6.3 Elvis Operator `?:` (Dart ရဲ့ `??` နဲ့ ယှဉ်)
+### 6.3 Elvis Operator `?:`
 
 **Kotlin:**
 ```kotlin
 val name: String? = null
-val displayName = name ?: "Anonymous"   // name null ဆိုရင် "Anonymous" သုံး
-println(displayName)  // "Anonymous"
+val displayName = name ?: "Anonymous"   // null ဆိုရင် fallback
 
-// function argument check
 fun processName(name: String?) {
-    val actual = name ?: return         // null ဆိုရင် function ကနေ ထွက်
+    val actual = name ?: return
     println("Processing: $actual")
 }
 ```
 
-**Dart (Flutter) နဲ့ နှိုင်းယှဉ်:**
+**Dart နဲ့ နှိုင်းယှဉ်:**
 ```dart
 String? name = null;
-final displayName = name ?? "Anonymous";  // Dart မှာ ?? operator
+final displayName = name ?? "Anonymous";   // Dart မှာ ??
 ```
 
-> 💡 **Kotlin `?:` = Dart `??`** — logic တူတူ၊ symbol ကွဲ
+> 💡 Kotlin `?:` = Dart `??` — logic တူတူ၊ symbol ကွဲ
 
 ---
 
@@ -89,37 +67,25 @@ final displayName = name ?? "Anonymous";  // Dart မှာ ?? operator
 
 ```kotlin
 val name: String? = "Aung"
-val length = name!!.length    // null မဟုတ်ဘူးဆိုတာ developer guarantee လုပ်တယ်
-                               // null ဆိုရင် NullPointerException ပစ်မည်
+val length = name!!.length    // null ဆိုရင် NullPointerException
 ```
 
-**Dart (Flutter) နဲ့ နှိုင်းယှဉ်:**
-```dart
-String? name = "Aung";
-final length = name!.length;  // Dart မှာ ! operator — concept တူတူ
-```
-
-> ⚠️ **`!!` / `!` operator ကိုတတ်နိုင်သမျှ avoid လုပ်ပါ** — crash risk ရှိတယ်။ `?.` နဲ့ `?:` ကို prefer လုပ်ပါ။
+> ⚠️ `!!` ကို တတ်နိုင်သမျှ avoid လုပ်ပါ — `?.` နဲ့ `?:` ကို prefer လုပ်ပါ။
 
 ---
 
 ### 6.5 Smart Cast
 
-Kotlin ရဲ့ special feature တစ်ခုက null check ပြီးရင် cast မလိုဘဲ automatically smart cast ဖြစ်တယ်။
-
 ```kotlin
 fun printLength(obj: Any) {
     if (obj is String) {
-        // ဒီ block ထဲမှာ obj ဟာ String ဆိုတာ compiler သိတဲ့အတွက်
-        // cast မလိုဘဲ .length ကိုတိုက်ရိုက် သုံးလို့ရ
-        println(obj.length)
+        println(obj.length)   // cast မလိုဘဲ String method သုံးနိုင်
     }
 }
 
-// nullable smart cast
 val name: String? = getName()
 if (name != null) {
-    println(name.length)   // name ဟာ null မဟုတ်တော့ String အနေနဲ့ use
+    println(name.length)      // smart cast — non-null String အဖြစ် သုံး
 }
 ```
 
@@ -127,40 +93,101 @@ if (name != null) {
 
 ## Flutter Bridge
 
-This module already compares Kotlin with Dart/Flutter. Use those comparisons as the main bridge when reading Android native code, Flutter plugin code, or Kotlin examples inside Android SDK documentation.
+Use the Dart/Flutter comparisons in this course when reading Kotlin code in Android plugins, native SDK integrations, or platform-channel work.
 
 ## Practice
 
-1. Re-type one Kotlin example from this module and run through the meaning line by line.
-2. Write the matching Dart/Flutter version shown in the module, then note the syntax differences.
-3. Pick one idea from this module and describe where it could appear in a Flutter Android plugin.
+1. Re-type one Kotlin example from the lesson.
+2. Write the comparable Dart/Flutter version where the course provides one.
+3. Note one Kotlin syntax difference that matters for Flutter Android work.
 
 ## Q&A Checkpoint
 
-- What part of **Null Safety** feels closest to Dart or Flutter?
-- What syntax difference from this module should I remember when reading Kotlin code?
-- Where would this module appear in real Flutter + Android native work?
+- What Kotlin idea from this course feels closest to Dart/Flutter?
+- Which syntax difference from this course should I remember in Android plugin code?
+- How would this concept appear in real Flutter + Android native work?
 
 ## Exam
 
 ### Multiple Choice
+1. Kotlin မှာ nullable variable ကိုကြေငြာဖို့ type ရဲ့ နောက်မှာ ဘာထည့်ရတယ်?
+- A. `!`
+- B. `?`
+- C. `*`
+- D. `~`
 
-1. The main topic of this course is:
-   - A. Null Safety
-   - B. CSS layout only
-   - C. SQL indexes only
-   - D. Figma export settings
-2. A good way for a Flutter developer to learn this module is to:
-   - A. Compare the Kotlin examples with the Dart/Flutter examples in the lesson
-   - B. Ignore all Dart comparisons
-   - C. Memorize Android Studio shortcuts only
-   - D. Skip all code samples
+2. Dart ရဲ့ `??` operator နဲ့ ညီတဲ့ Kotlin operator ကဘာလဲ?
+- A. `?.`
+- B. `!!`
+- C. `?:`
+- D. `?`
+
+3. Safe call operator `?.` ကိုသုံးရင် object null ဖြစ်နေရင် ဘာ return လုပ်မလဲ?
+- A. Exception ပစ်တယ်
+- B. Default value return
+- C. `null` return
+- D. Empty string return
+
+4. Smart cast ဆိုတာ ဘာကိုဆိုလိုတာလဲ?
+- A. AI-powered type conversion
+- B. Type check ပြီးနောက် explicit cast မလိုဘဲ compiler က type ကို automatically handle
+- C. Runtime type casting
+- D. Type alias
+
+5. `!!` operator ကိုသုံးပြီး variable null ဖြစ်နေရင် ဘာဖြစ်မလဲ?
+- A. Compilation error
+- B. `null` return
+- C. NullPointerException ပစ်မည်
+- D. Default value return
+
+6. `val length = user?.name?.length` မှာ `user` null ဖြစ်ရင် `length` က ဘာဖြစ်မလဲ?
+- A. 0
+- B. -1
+- C. `null`
+- D. Compilation error
+
+7. Dart ရဲ့ `!` (non-null assertion) နဲ့ ညီတဲ့ Kotlin operator ကဘာလဲ?
+- A. `?`
+- B. `?.`
+- C. `?:`
+- D. `!!`
+
+8. `val result = name ?: return` ဆိုတဲ့ code မှာ `name` null ဆိုရင် ဘာဖြစ်မလဲ?
+- A. `result` က null ဖြစ်မည်
+- B. Exception ပစ်မည်
+- C. function ကနေ ထွက်မည်
+- D. `"return"` string ကို assign လုပ်မည်
 
 ### Fill In The Blank
-
-1. One important term from this module is ____.
-2. Another lesson topic from this module is ____.
+1. Kotlin မှာ `String?` ဆိုတာ value က `String` သို့မဟုတ် `________` ဖြစ်နိုင်တယ်ဆိုလိုတာပဲ။
+2. Dart ရဲ့ `??` operator နဲ့ ညီတဲ့ Kotlin operator က `________` ဖြစ်တယ်။
+3. `?.` operator ကို `________` call operator လို့ ခေါ်တယ်။
+4. `!!` operator ကို overuse မလုပ်ဖို့ recommend လုပ်ကြောင်း — ဘုရင် `________` နဲ့ `________` ကို prefer လုပ်ပါ။
+5. Type check (`is`) ပြီးနောက် explicit cast မလိုတဲ့ feature ကို `________` cast လို့ ခေါ်တယ်။
+6. Non-null variable တစ်ခုကို null assign လုပ်ဖို့ကြိုးစားရင် `________` error ဖြစ်တယ်။
 
 ### Coding Exam
+**Problem 1 — Safe Navigation**
 
-Write a small Kotlin snippet that demonstrates one idea from **Null Safety**. Add a short comment explaining the Dart/Flutter comparison from the module.
+Flutter app မှာ API ကနေ ရလာတဲ့ optional user data handle လုပ်ဖို့ function ရေးပါ။ `getUserDisplayName(user: User?)` function — user null ဆိုရင် `"Guest"` return၊ user ရှိပေမဲ့ name blank ဆိုရင် `"Anonymous"` return၊ မဟုတ်ရင် name return။
+
+```kotlin
+data class User(val name: String?, val email: String?)
+```
+
+**Problem 2 — Elvis Chain**
+
+`getServerUrl(host: String?, port: Int?): String` function ရေးပါ။
+- host null ဆိုရင် `"localhost"` fallback
+- port null ဆိုရင် `8080` fallback
+- Result: `"http://host:port"` format
+
+**Problem 3 — Smart Cast**
+
+`processInput(input: Any?)` function ရေးပါ — input ကို type check လုပ်ပြီး:
+- `String` ဆိုရင် → uppercase လုပ်ပြီး print
+- `Int` ဆိုရင် → double လုပ်ပြီး print
+- `null` ဆိုရင် → `"No input"` print
+- အခြား → `"Unknown type"` print
+
+---

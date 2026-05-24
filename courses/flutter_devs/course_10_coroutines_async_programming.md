@@ -2,44 +2,36 @@
 
 ## Goal
 
-Study **Coroutines (Async Programming)** using the provided `Kotlin for Flutter Developers` module as the single source for this course.
+Study this module from `files.zip` and use the included exam questions as the source of truth for assessment.
 
 ## Lessons
 
-> **Flutter developer တွေအတွက် note:** Dart ရဲ့ `async/await` ကို သိပြီးဆိုရင် Kotlin coroutines ကို concept အနေနဲ့ နားလည်ပါမယ်။ Syntax ကနည်းနည်းကွဲတယ်။
-
 ### 10.1 Coroutines ဆိုတာ ဘာလဲ
 
-Flutter/Dart မှာ `Future` + `async/await` သုံးသလို Kotlin မှာ **Coroutines** သုံးတယ်။ ကွာခြားချက်ကတော့ Kotlin coroutines တွေဟာ lightweight thread တွေလိုပဲ — millions ကို concurrently run လုပ်လို့ရတယ်။
+Flutter/Dart ရဲ့ `Future` + `async/await` လိုပဲ Kotlin မှာ **Coroutines** သုံးတယ်။ Kotlin coroutines တွေဟာ lightweight thread တွေလိုပဲ — millions ကို concurrently run လုပ်လို့ရတယ်။
+
+| Dart | Kotlin |
+|------|--------|
+| `async` function | `suspend` function |
+| `await` keyword | (suspend call — keyword မလို) |
+| `Future<T>` | `Deferred<T>` |
+| `Future.wait()` | `async { }.await()` parallel |
 
 **Dart:**
 ```dart
 Future<String> fetchUser(int id) async {
-    final response = await http.get("https://api.example.com/users/$id");
+    final response = await http.get("...");
     return response.body;
 }
-
-void main() async {
-    final user = await fetchUser(1);
-    print(user);
-}
 ```
 
-**Kotlin Coroutines:**
+**Kotlin:**
 ```kotlin
 suspend fun fetchUser(id: Int): String {
-    val response = httpClient.get("https://api.example.com/users/$id")
+    val response = httpClient.get("...")
     return response.body()
 }
-
-fun main() = runBlocking {
-    val user = fetchUser(1)
-    println(user)
-}
 ```
-
-> 💡 Dart ရဲ့ `async` = Kotlin ရဲ့ `suspend`
-> Dart ရဲ့ `await` = Kotlin coroutines မှာ `suspend function` ကို call လုပ်တာပဲ (await keyword မလို)
 
 ---
 
@@ -48,60 +40,43 @@ fun main() = runBlocking {
 ```kotlin
 import kotlinx.coroutines.*
 
-// runBlocking — current thread ကို block လုပ်ပြီး run (main function / testing)
+// runBlocking — testing / main function
 fun main() = runBlocking {
-    println("Start")
-    delay(1000L)    // Thread block မဖြစ်ဘဲ suspend ဖြစ်တယ်
-    println("End")
+    delay(1000L)   // Thread block မဖြစ်ဘဲ suspend
+    println("Done")
 }
 
-// launch — fire and forget (return မလို)
-// Dart ရဲ့ unawaited(future) နဲ့ ဆင်တယ်
+// launch — fire and forget (Dart unawaited နဲ့ ဆင်)
 GlobalScope.launch {
     delay(500L)
-    println("Background task done")
+    println("Background done")
 }
 
-// async — result return လိုအပ်ရင်
-// Dart ရဲ့ Future နဲ့ ဆင်တယ်
+// async — result လိုတဲ့အခါ (Dart Future နဲ့ ဆင်)
 val deferred = GlobalScope.async {
     delay(1000L)
-    "Result from async"
+    "Result"
 }
 val result = deferred.await()
 ```
 
 ---
 
-### 10.3 Structured Concurrency
-
-Flutter ရဲ့ async ကို best practice အတိုင်း သုံးသလိုပဲ Kotlin မှာ structured concurrency ကို follow လုပ်ပါ။
+### 10.3 Parallel Execution
 
 ```kotlin
 fun main() = runBlocking {
-    
-    // Parallel execution — Dart ရဲ့ Future.wait() နဲ့ ဆင်
+    // Dart ရဲ့ Future.wait() နဲ့ ဆင်
     val result1 = async { fetchUser(1) }
     val result2 = async { fetchUser(2) }
-    
-    // နှစ်ခုစလုံး ပြီးအောင် စောင့်
     println("User 1: ${result1.await()}")
     println("User 2: ${result2.await()}")
 }
 ```
 
-**Dart (Flutter) နဲ့ နှိုင်းယှဉ်:**
+**Dart နဲ့ နှိုင်းယှဉ်:**
 ```dart
-void main() async {
-    // Parallel execution
-    final results = await Future.wait([
-        fetchUser(1),
-        fetchUser(2),
-    ]);
-    
-    print("User 1: ${results[0]}");
-    print("User 2: ${results[1]}");
-}
+final results = await Future.wait([fetchUser(1), fetchUser(2)]);
 ```
 
 ---
@@ -109,35 +84,27 @@ void main() async {
 ### 10.4 suspend Functions
 
 ```kotlin
-// suspend function — coroutine ထဲမှာပဲ call လုပ်လို့ရ
 suspend fun loadData(): List<String> {
-    delay(1000L)    // simulate network delay
+    delay(1000L)
     return listOf("item1", "item2", "item3")
 }
 
-suspend fun processData(data: List<String>): String {
-    return data.joinToString(", ")
-}
-
-// chain suspend functions
 fun main() = runBlocking {
-    val data = loadData()
-    val result = processData(data)
-    println(result)
+    val data = loadData()       // await keyword မလို
+    println(data.joinToString())
 }
 ```
 
 ---
 
-### 10.5 Exception Handling in Coroutines
+### 10.5 Exception Handling
 
-**Kotlin:**
 ```kotlin
 fun main() = runBlocking {
     try {
         val result = async {
             delay(100L)
-            throw RuntimeException("Something went wrong!")
+            throw RuntimeException("Error!")
         }
         result.await()
     } catch (e: Exception) {
@@ -146,99 +113,108 @@ fun main() = runBlocking {
 }
 ```
 
-**Dart (Flutter) နဲ့ နှိုင်းယှဉ်:**
+**Dart နဲ့ နှိုင်းယှဉ်:**
 ```dart
-void main() async {
-    try {
-        final result = await Future.delayed(
-            Duration(milliseconds: 100),
-            () => throw Exception("Something went wrong!"),
-        );
-    } catch (e) {
-        print("Caught: $e");
-    }
-}
+try {
+    final result = await Future.delayed(
+        Duration(milliseconds: 100),
+        () => throw Exception("Error!"),
+    );
+} catch (e) { print("Caught: $e"); }
 ```
 
 ---
 
-## 🎯 Quick Reference: Dart ↔ Kotlin Cheatsheet
-
-| Concept | Dart (Flutter) | Kotlin |
-|---------|----------------|--------|
-| Immutable variable | `final` | `val` |
-| Mutable variable | `var` | `var` |
-| Nullable type | `String?` | `String?` |
-| Null fallback | `??` | `?:` |
-| Safe call | `?.` | `?.` |
-| Non-null assertion | `!` | `!!` |
-| Function keyword | (return type ကိုပဲ) | `fun` |
-| Async function | `async` | `suspend` |
-| Await | `await` | (suspend function call) |
-| Parallel async | `Future.wait()` | `async { }.await()` |
-| Model class | Freezed / manual | `data class` |
-| Switch expression | `switch` (Dart 3) | `when` |
-| Cascade notation | `..` | `apply { }` |
-| List transform | `.map()` | `.map { }` |
-| List filter | `.where()` | `.filter { }` |
-| All match | `.every()` | `.all { }` |
-| Any match | `.any()` | `.any { }` |
-| Arrow function | `=>` | `= expression` |
-| Interface | `abstract class` / `interface` | `interface` |
-| Inheritance | `extends` | `: ParentClass()` |
-| Override annotation | `@override` | `override` keyword |
-| No-return type | `void` | `Unit` |
-
----
-
-## 📚 နောက်ဆက်တွဲ လေ့လာသင့်တာများ
-
-1. **Extension Functions** — Dart extension methods နဲ့ concept ဆင်
-2. **Sealed Classes** — Dart sealed classes (3.0) နဲ့ compare
-3. **Generics** — Dart generics နဲ့ ဆင်တယ်
-4. **Delegation** — Design pattern ကို Kotlin built-in support
-5. **Android-specific:** ViewModel, LiveData, Flows
-
----
-
-*Course created from: Kotlin Language Documentation | For Flutter developers learning Android native development*
-
 ## Flutter Bridge
 
-This module already compares Kotlin with Dart/Flutter. Use those comparisons as the main bridge when reading Android native code, Flutter plugin code, or Kotlin examples inside Android SDK documentation.
+Use the Dart/Flutter comparisons in this course when reading Kotlin code in Android plugins, native SDK integrations, or platform-channel work.
 
 ## Practice
 
-1. Re-type one Kotlin example from this module and run through the meaning line by line.
-2. Write the matching Dart/Flutter version shown in the module, then note the syntax differences.
-3. Pick one idea from this module and describe where it could appear in a Flutter Android plugin.
+1. Re-type one Kotlin example from the lesson.
+2. Write the comparable Dart/Flutter version where the course provides one.
+3. Note one Kotlin syntax difference that matters for Flutter Android work.
 
 ## Q&A Checkpoint
 
-- What part of **Coroutines (Async Programming)** feels closest to Dart or Flutter?
-- What syntax difference from this module should I remember when reading Kotlin code?
-- Where would this module appear in real Flutter + Android native work?
+- What Kotlin idea from this course feels closest to Dart/Flutter?
+- Which syntax difference from this course should I remember in Android plugin code?
+- How would this concept appear in real Flutter + Android native work?
 
 ## Exam
 
 ### Multiple Choice
+1. Dart ရဲ့ `async` keyword နဲ့ ညီတဲ့ Kotlin keyword ကဘာလဲ?
+- A. `async`
+- B. `coroutine`
+- C. `suspend`
+- D. `concurrent`
 
-1. The main topic of this course is:
-   - A. Coroutines (Async Programming)
-   - B. CSS layout only
-   - C. SQL indexes only
-   - D. Figma export settings
-2. A good way for a Flutter developer to learn this module is to:
-   - A. Compare the Kotlin examples with the Dart/Flutter examples in the lesson
-   - B. Ignore all Dart comparisons
-   - C. Memorize Android Studio shortcuts only
-   - D. Skip all code samples
+2. Kotlin coroutines မှာ `await` keyword မသုံးဘဲ suspend function ကို call လုပ်ရင် ဘာဖြစ်မလဲ?
+- A. Compilation error
+- B. Function ကို ignore လုပ်မည်
+- C. Automatically wait — result ready ဖြစ်မှ ဆက်သွားတယ်
+- D. Background thread မှာ run မည်
+
+3. `launch` coroutine builder ကဘာအတွက် သုံးတယ်?
+- A. Result return လိုတဲ့ async operation
+- B. Fire-and-forget — result မလိုတဲ့ background task
+- C. Main thread block လုပ်ဖို့
+- D. Exception handling
+
+4. Dart ရဲ့ `Future.wait()` နဲ့ ညီတဲ့ Kotlin pattern က ဘာလဲ?
+- A. `runBlocking { }`
+- B. `launch { } + join()`
+- C. `async { }.await()` multiple calls
+- D. `delay()`
+
+5. `runBlocking` ဘာအတွက် သုံးကြတာ များလဲ?
+- A. Production async code
+- B. Testing နဲ့ main function
+- C. UI thread operations
+- D. Database operations
+
+6. suspend function ကို ဘယ်နေရာမှာပဲ call လုပ်လို့ ရသလဲ?
+- A. Anywhere
+- B. Main function ထဲမှာပဲ
+- C. Coroutine scope သို့မဟုတ် အခြား suspend function ထဲမှာပဲ
+- D. Background thread ထဲမှာပဲ
+
+7. `async { }` builder က ဘာ return လုပ်တယ်?
+- A. `Job`
+- B. `Deferred<T>`
+- C. `Future<T>`
+- D. `Promise<T>`
+
+8. Kotlin coroutines မှာ `delay(1000L)` ဟာ Dart ရဲ့ ဘာနဲ့ ညီသလဲ?
+- A. `Thread.sleep(1000)`
+- B. `sleep(1000)`
+- C. `Future.delayed(Duration(milliseconds: 1000))`
+- D. `Timer(Duration(seconds: 1), () { })`
 
 ### Fill In The Blank
-
-1. One important term from this module is ____.
-2. Another lesson topic from this module is ____.
+1. Dart ရဲ့ `async` function keyword နဲ့ ညီတဲ့ Kotlin keyword က `________` ဖြစ်တယ်။
+2. Result return လိုတဲ့ coroutine ဖို့ `________` builder သုံးတယ်။
+3. Fire-and-forget background task ဖို့ `________` builder သုံးတယ်။
+4. Dart ရဲ့ `Future.wait([a, b])` pattern ကို Kotlin မှာ `________` builder တွေ parallel launch ပြီး `await()` call ပြီး ရေးတယ်။
+5. Testing နဲ့ main function မှာ coroutine run ဖို့ `________` builder သုံးတယ်။
+6. Suspend function ထဲမှာ blocking မဖြစ်ဘဲ wait လုပ်ဖို့ `________` function သုံးတယ်။
 
 ### Coding Exam
+**Problem 1 — suspend Function**
 
-Write a small Kotlin snippet that demonstrates one idea from **Coroutines (Async Programming)**. Add a short comment explaining the Dart/Flutter comparison from the module.
+`fetchProductDetails(id: Int): String` suspend function ရေးပါ — 500ms delay ပြီး `"Product #$id details"` return လုပ်ပါ။ `runBlocking` မှာ call လုပ်ပြီး result print ပါ။
+
+**Problem 2 — Parallel Execution**
+
+Flutter app မှာ API call နှစ်ခု parallel run ချင်တဲ့ pattern simulate လုပ်ပါ။
+- `fetchUserProfile(userId: Int)` — 300ms delay, `"Profile of $userId"` return
+- `fetchUserPosts(userId: Int)` — 500ms delay, `"Posts of $userId"` return
+
+`runBlocking` ထဲမှာ ၂ ခုကို parallel run ပြီး result နှစ်ခုစလုံး print ပါ။
+
+**Problem 3 — Exception Handling**
+
+`riskyOperation(shouldFail: Boolean): String` suspend function ရေးပါ — `shouldFail = true` ဆိုရင် `RuntimeException("Operation failed!")` throw ပါ။ `runBlocking` ထဲမှာ try-catch သုံးပြီး error handle လုပ်ပြပါ (Dart style နဲ့ compare comment ထည့်ပါ)。
+
+---

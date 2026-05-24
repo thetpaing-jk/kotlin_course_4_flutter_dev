@@ -2,31 +2,23 @@
 
 ## Goal
 
-Study **Higher-Order Functions နဲ့ Lambdas** using the provided `Kotlin for Flutter Developers` module as the single source for this course.
+Study this module from `files.zip` and use the included exam questions as the source of truth for assessment.
 
 ## Lessons
 
 ### 8.1 Lambda Expressions
 
-Flutter developer တွေ callback functions တွေ မကြာမကြာသုံးနေတာကြောင့် lambdas ကို သိပ်ကြိုးစားလေ့လာစရာမလိုဘဲ နားလည်မှာပါ။
-
 **Kotlin:**
 ```kotlin
-// Lambda syntax: { parameters -> body }
 val multiply = { a: Int, b: Int -> a * b }
 println(multiply(3, 4))   // 12
 
-// Single parameter — it ကိုသုံးနိုင်
-val double = { it: Int -> it * 2 }
-// အတိုဆုံး
-val double: (Int) -> Int = { it * 2 }
+val double: (Int) -> Int = { it * 2 }   // single param → `it`
 ```
 
-**Dart (Flutter) နဲ့ နှိုင်းယှဉ်:**
+**Dart နဲ့ နှိုင်းယှဉ်:**
 ```dart
 final multiply = (int a, int b) => a * b;
-print(multiply(3, 4));  // 12
-
 final double = (int n) => n * 2;
 ```
 
@@ -34,25 +26,20 @@ final double = (int n) => n * 2;
 
 ### 8.2 Higher-Order Functions
 
-Function တစ်ခုကို parameter အနေနဲ့ pass လုပ်တာ — Flutter ရဲ့ `onPressed: () {}` နဲ့ concept တူတယ်။
+Function ကို parameter အနေနဲ့ pass လုပ်တာ — Flutter ရဲ့ `onPressed: () {}` pattern နဲ့ concept တူတယ်။
 
 **Kotlin:**
 ```kotlin
-// function ကို parameter အဖြစ် လက်ခံတယ်
 fun operate(a: Int, b: Int, operation: (Int, Int) -> Int): Int {
     return operation(a, b)
 }
 
-val sum = operate(10, 5) { a, b -> a + b }      // 15
-val product = operate(10, 5) { a, b -> a * b }  // 50
+val sum = operate(10, 5) { a, b -> a + b }
+val product = operate(10, 5) { a, b -> a * b }
 
-// Flutter widget callback pattern နဲ့ ဆင်တဲ့ ဥပမာ
-fun buildButton(
-    label: String,
-    onClick: () -> Unit
-) {
+fun buildButton(label: String, onClick: () -> Unit) {
     println("Button: $label")
-    onClick()  // callback invoke
+    onClick()
 }
 
 buildButton("Save") {
@@ -60,83 +47,127 @@ buildButton("Save") {
 }
 ```
 
-**Dart (Flutter) နဲ့ နှိုင်းယှဉ်:**
+**Dart နဲ့ နှိုင်းယှဉ်:**
 ```dart
 int operate(int a, int b, int Function(int, int) operation) {
     return operation(a, b);
 }
-
-final sum = operate(10, 5, (a, b) => a + b);
-
-// Flutter မှာ ကျွမ်းကျင်တဲ့ pattern
-ElevatedButton(
-    onPressed: () {
-        print("Saving...");
-    },
-    child: Text("Save"),
-)
+// Flutter pattern
+ElevatedButton(onPressed: () { print("Saving..."); }, child: Text("Save"))
 ```
 
 ---
 
 ### 8.3 Trailing Lambda Syntax
 
-Kotlin မှာ function ရဲ့ last parameter ကို lambda ဖြစ်ရင် parentheses ပြင်ပမှာ ထားလို့ရတယ် — Flutter ရဲ့ widget builder pattern နဲ့ concept ဆင်တယ်။
+Function ရဲ့ last parameter lambda ဆိုရင် parentheses ပြင်ပမှာ ထားလို့ရ — Flutter widget builder နဲ့ concept ဆင်တယ်။
 
 ```kotlin
-// function definition
 fun repeat(times: Int, action: (Int) -> Unit) {
     for (i in 1..times) action(i)
 }
 
-// trailing lambda — last lambda ကို () ပြင်ပမှာ ထည့်
 repeat(3) { index ->
     println("Step $index")
 }
-
-// ဒါက Flutter ရဲ့ Builder pattern နဲ့ ဆင်တာ
 // Flutter: Builder(builder: (context) { return Widget(); })
-// Kotlin: someFunction(params) { lambda body }
+// Kotlin: repeat(3) { index -> ... }
 ```
 
 ---
 
 ## Flutter Bridge
 
-This module already compares Kotlin with Dart/Flutter. Use those comparisons as the main bridge when reading Android native code, Flutter plugin code, or Kotlin examples inside Android SDK documentation.
+Use the Dart/Flutter comparisons in this course when reading Kotlin code in Android plugins, native SDK integrations, or platform-channel work.
 
 ## Practice
 
-1. Re-type one Kotlin example from this module and run through the meaning line by line.
-2. Write the matching Dart/Flutter version shown in the module, then note the syntax differences.
-3. Pick one idea from this module and describe where it could appear in a Flutter Android plugin.
+1. Re-type one Kotlin example from the lesson.
+2. Write the comparable Dart/Flutter version where the course provides one.
+3. Note one Kotlin syntax difference that matters for Flutter Android work.
 
 ## Q&A Checkpoint
 
-- What part of **Higher-Order Functions နဲ့ Lambdas** feels closest to Dart or Flutter?
-- What syntax difference from this module should I remember when reading Kotlin code?
-- Where would this module appear in real Flutter + Android native work?
+- What Kotlin idea from this course feels closest to Dart/Flutter?
+- Which syntax difference from this course should I remember in Android plugin code?
+- How would this concept appear in real Flutter + Android native work?
 
 ## Exam
 
 ### Multiple Choice
+1. Kotlin lambda ရဲ့ syntax က ဘာလဲ?
+- A. `(params) => body`
+- B. `{ params -> body }`
+- C. `[params] { body }`
+- D. `fun(params) { body }`
 
-1. The main topic of this course is:
-   - A. Higher-Order Functions နဲ့ Lambdas
-   - B. CSS layout only
-   - C. SQL indexes only
-   - D. Figma export settings
-2. A good way for a Flutter developer to learn this module is to:
-   - A. Compare the Kotlin examples with the Dart/Flutter examples in the lesson
-   - B. Ignore all Dart comparisons
-   - C. Memorize Android Studio shortcuts only
-   - D. Skip all code samples
+2. Lambda ထဲမှာ single parameter ရှိရင် default name က ဘာလဲ?
+- A. `self`
+- B. `this`
+- C. `it`
+- D. `param`
+
+3. Higher-order function ဆိုတာ ဘာကိုဆိုလိုတာလဲ?
+- A. Complex algorithm ပါတဲ့ function
+- B. Function ကို parameter အနေနဲ့ ယူတဲ့/return လုပ်တဲ့ function
+- C. Performance optimize လုပ်ထားတဲ့ function
+- D. Static function
+
+4. Kotlin မှာ function type `(Int, Int) -> String` ဆိုတာ ဘာကိုဆိုလိုတာလဲ?
+- A. Int parameter နှစ်ခု ယူပြီး String return လုပ်တဲ့ function type
+- B. String parameter ယူပြီး Int return လုပ်တဲ့ function
+- C. Int နဲ့ String ကို combine လုပ်တဲ့ function
+- D. Integer pair ကို String convert လုပ်တဲ့ method
+
+5. Trailing lambda syntax ကိုသုံးနိုင်တဲ့ condition က ဘာလဲ?
+- A. Lambda ကို function ရဲ့ first parameter ဖြစ်ရမည်
+- B. Lambda ကို function ရဲ့ last parameter ဖြစ်ရမည်
+- C. Function မှာ parameter တစ်ခုပဲ ရှိရမည်
+- D. Lambda ကို always trailing syntax သုံးရမည်
+
+6. Flutter ရဲ့ `onPressed: () { }` pattern နဲ့ concept အနီးဆုံး ဆင်တဲ့ Kotlin feature က ဘာလဲ?
+- A. Extension functions
+- B. Higher-order functions with lambda parameters
+- C. Companion objects
+- D. Operator overloading
+
+7. `operate(10, 5) { a, b -> a + b }` ဆိုတဲ့ call မှာ `{ a, b -> a + b }` က ဘာဖြစ်တာလဲ?
+- A. Object expression
+- B. Trailing lambda — last parameter ဖြစ်တဲ့ operation ကို pass လုပ်တာ
+- C. Anonymous class
+- D. Inline function
+
+8. Dart မှာ `int Function(int, int)` ဆိုတဲ့ type ကို Kotlin မှာ ဘယ်လိုရေးတယ်?
+- A. `Function<Int, Int, Int>`
+- B. `(Int, Int) -> Int`
+- C. `Int -> Int -> Int`
+- D. `fun(Int, Int): Int`
 
 ### Fill In The Blank
-
-1. One important term from this module is ____.
-2. Another lesson topic from this module is ____.
+1. Kotlin lambda expression ကို `{` နဲ့ `}` curly braces ထဲမှာ ရေးပြီး parameter နဲ့ body ကို `________` နဲ့ ခွဲတယ်။
+2. Single parameter lambda မှာ parameter name ကို ချန်လှပ်ပြီး `________` ကို default name အနေနဲ့ သုံးနိုင်တယ်။
+3. Function parameter အဖြစ် function type ကို ကြေငြာတဲ့ pattern ကို `________` function လို့ ခေါ်တယ်။
+4. Trailing lambda syntax ကိုသုံးနိုင်ဖို့ lambda parameter သည် function ရဲ့ `________` parameter ဖြစ်ရမည်။
+5. Flutter ရဲ့ `Builder(builder: (context) => widget)` pattern ကို Kotlin မှာ `________` lambda syntax နဲ့ ဆင်တယ်။
+6. `() -> Unit` ဆိုတဲ့ function type မှာ `Unit` ဆိုတာ Dart ရဲ့ `________` နဲ့ ညီတယ်။
 
 ### Coding Exam
+**Problem 1 — Lambda**
 
-Write a small Kotlin snippet that demonstrates one idea from **Higher-Order Functions နဲ့ Lambdas**. Add a short comment explaining the Dart/Flutter comparison from the module.
+Lambda expression သုံးပြီး အောက်ပါ operations ကြေငြာပါ:
+- နှစ်ခုရဲ့ maximum ကို return လုပ်တဲ့ lambda
+- String ကို reverse လုပ်တဲ့ lambda
+- Number တစ်ခု even ဖြစ်/မဖြစ် check လုပ်တဲ့ lambda
+
+**Problem 2 — Higher-Order Function**
+
+`transformList(items: List<String>, transform: (String) -> String): List<String>` function ရေးပါ။ ပြီးနောက် ဒီ function ကို:
+- All uppercase convert
+- Reverse each string
+- Add prefix `"Item: "` ဆိုပြီး သုံး မျိုးသုံးပါ
+
+**Problem 3 — Trailing Lambda**
+
+Flutter widget builder pattern ကို simulate လုပ်ဖို့ `buildCard(title: String, content: () -> String): String` function ရေးပါ। Result ကို `"[CARD] title: X | content: Y"` format နဲ့ return လုပ်ပါ။ Trailing lambda syntax သုံးပြီး test ပါ။
+
+---

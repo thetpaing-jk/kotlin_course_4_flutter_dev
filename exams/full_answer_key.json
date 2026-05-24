@@ -1,162 +1,262 @@
 {
   "courses/flutter_devs/course_01_variables_basic_types.md": {
     "mcq": [
+      "C",
+      "B",
+      "D",
+      "B",
       "A",
-      "A"
+      "A",
+      "C",
+      "C"
     ],
     "fill": [
-      "val",
-      "var"
+      "var",
+      "Double",
+      "type inference",
+      "$variableName",
+      "Char",
+      "val city: String = \"Yangon\""
     ],
     "rubric": [
-      "Demonstrates a concept from Variables နဲ့ Basic Types.",
+      "Solves each coding problem in the prompt.",
       "Uses valid Kotlin syntax.",
-      "Includes a short Dart/Flutter comparison comment.",
-      "Keeps the example focused and readable."
+      "Matches the expected behavior from the course answer key.",
+      "Keeps the answer readable."
     ]
   },
   "courses/flutter_devs/course_02_functions.md": {
     "mcq": [
-      "A",
-      "A"
+      "C",
+      "B",
+      "C",
+      "B",
+      "C",
+      "C",
+      "C",
+      "B"
     ],
     "fill": [
-      "kotlin\nfun greet(name: String): String {\n    return \"Hello, $name!\"\n}\n",
-      "\n\n**Dart (Flutter) နဲ့ နှိုင်းယှဉ်:**\n"
+      "fun",
+      "Unit",
+      "=",
+      "default",
+      "named",
+      "fun greet(name: String): String"
     ],
     "rubric": [
-      "Demonstrates a concept from Functions.",
+      "Solves each coding problem in the prompt.",
       "Uses valid Kotlin syntax.",
-      "Includes a short Dart/Flutter comparison comment.",
-      "Keeps the example focused and readable."
+      "Matches the expected behavior from the course answer key.",
+      "Keeps the answer readable."
     ]
   },
   "courses/flutter_devs/course_03_control_flow.md": {
     "mcq": [
-      "A",
-      "A"
+      "B",
+      "C",
+      "B",
+      "D",
+      "D",
+      "B",
+      "C",
+      "C"
     ],
     "fill": [
-      "if",
-      "kotlin\nval max = if (a > b) a else b\n\n// multiline ဆိုရင်\nval result = if (score >= 60) {\n    \"ကျော်\"\n} else {\n    \"ကျ\"\n}\n"
+      "expression",
+      "else",
+      "range operator",
+      "မပါ (exclude)",
+      "when",
+      "withIndex()"
     ],
     "rubric": [
-      "Demonstrates a concept from Control Flow.",
+      "Solves each coding problem in the prompt.",
       "Uses valid Kotlin syntax.",
-      "Includes a short Dart/Flutter comparison comment.",
-      "Keeps the example focused and readable."
+      "Matches the expected behavior from the course answer key.",
+      "Keeps the answer readable."
     ]
   },
   "courses/flutter_devs/course_04_classes_inheritance.md": {
     "mcq": [
-      "A",
-      "A"
+      "B",
+      "B",
+      "C",
+      "B",
+      "C",
+      "B",
+      "B",
+      "B"
     ],
     "fill": [
-      "kotlin\nclass Person(val firstName: String, val lastName: String, var age: Int) {\n    \n    fun fullName(): String = \"$firstName $lastName\"\n    \n    fun birthday() {\n        age++\n    }\n}\n\n// Instance create\nval person = Person(\"Aung\", \"Kyaw\", 25)\nprintln(person.fullName())\nperson.birthday()\n",
-      "\n\n**Dart (Flutter) နဲ့ နှိုင်းယှဉ်:**\n"
+      "open",
+      "override",
+      "new",
+      "ParentClass",
+      "init",
+      "အတူတူ"
     ],
     "rubric": [
-      "Demonstrates a concept from Classes နဲ့ Inheritance.",
+      "Solves each coding problem in the prompt.",
       "Uses valid Kotlin syntax.",
-      "Includes a short Dart/Flutter comparison comment.",
-      "Keeps the example focused and readable."
+      "Matches the expected behavior from the course answer key.",
+      "Keeps the answer readable."
     ]
   },
   "courses/flutter_devs/course_05_data_classes.md": {
     "mcq": [
+      "B",
+      "C",
+      "B",
+      "C",
+      "B",
       "A",
-      "A"
+      "B",
+      "B"
     ],
     "fill": [
-      "==",
-      "hashCode"
+      "Freezed",
+      "===",
+      "values",
+      "componentN()",
+      "data",
+      "toString()"
     ],
     "rubric": [
-      "Demonstrates a concept from Data Classes.",
+      "Solves each coding problem in the prompt.",
       "Uses valid Kotlin syntax.",
-      "Includes a short Dart/Flutter comparison comment.",
-      "Keeps the example focused and readable."
+      "Matches the expected behavior from the course answer key.",
+      "Keeps the answer readable."
     ]
   },
   "courses/flutter_devs/course_06_null_safety.md": {
     "mcq": [
-      "A",
-      "A"
+      "B",
+      "C",
+      "C",
+      "B",
+      "C",
+      "C",
+      "D",
+      "C"
     ],
     "fill": [
-      "kotlin\nvar name: String = \"Aung\"       // null မဖြစ်နိုင် (non-null)\nname = null                      // ❌ Compilation error!\n\nvar nickname: String? = \"Aung\"  // null ဖြစ်နိုင် (nullable)\nnickname = null                  // ✅ OK\n",
-      "\n\n**Dart (Flutter) နဲ့ နှိုင်းယှဉ်:**\n"
+      "null",
+      "?:",
+      "safe",
+      "?.` နဲ့ `?:",
+      "smart",
+      "compilation"
     ],
     "rubric": [
-      "Demonstrates a concept from Null Safety.",
+      "Solves each coding problem in the prompt.",
       "Uses valid Kotlin syntax.",
-      "Includes a short Dart/Flutter comparison comment.",
-      "Keeps the example focused and readable."
+      "Matches the expected behavior from the course answer key.",
+      "Keeps the answer readable."
     ]
   },
   "courses/flutter_devs/course_07_collections.md": {
     "mcq": [
-      "A",
+      "B",
+      "B",
+      "C",
+      "C",
+      "B",
+      "C",
+      "B",
       "A"
     ],
     "fill": [
       "listOf()",
-      "mutableListOf()"
+      "filter",
+      "all",
+      "to",
+      "getOrDefault()",
+      "dot (`.`)"
     ],
     "rubric": [
-      "Demonstrates a concept from Collections.",
+      "Solves each coding problem in the prompt.",
       "Uses valid Kotlin syntax.",
-      "Includes a short Dart/Flutter comparison comment.",
-      "Keeps the example focused and readable."
+      "Matches the expected behavior from the course answer key.",
+      "Keeps the answer readable."
     ]
   },
   "courses/flutter_devs/course_08_higher_order_functions_lambdas.md": {
     "mcq": [
+      "B",
+      "C",
+      "B",
       "A",
-      "A"
+      "B",
+      "B",
+      "B",
+      "B"
     ],
     "fill": [
-      "kotlin\n// Lambda syntax: { parameters -> body }\nval multiply = { a: Int, b: Int -> a * b }\nprintln(multiply(3, 4))   // 12\n\n// Single parameter — it ကိုသုံးနိုင်\nval double = { it: Int -> it * 2 }\n// အတိုဆုံး\nval double: (Int) -> Int = { it * 2 }\n",
-      "\n\n**Dart (Flutter) နဲ့ နှိုင်းယှဉ်:**\n"
+      "->",
+      "it",
+      "higher-order",
+      "last",
+      "trailing",
+      "void"
     ],
     "rubric": [
-      "Demonstrates a concept from Higher-Order Functions နဲ့ Lambdas.",
+      "Solves each coding problem in the prompt.",
       "Uses valid Kotlin syntax.",
-      "Includes a short Dart/Flutter comparison comment.",
-      "Keeps the example focused and readable."
+      "Matches the expected behavior from the course answer key.",
+      "Keeps the answer readable."
     ]
   },
   "courses/flutter_devs/course_09_scope_functions.md": {
     "mcq": [
+      "C",
+      "C",
+      "D",
+      "C",
+      "B",
+      "B",
       "A",
-      "A"
+      "B"
     ],
     "fill": [
-      "let",
-      "kotlin\nval name: String? = getUserName()\n\n// ❌ Traditional approach\nif (name != null) {\n    println(name.toUpperCase())\n}\n\n// ✅ Using let\nname?.let {\n    println(it.toUpperCase())\n}\n\n// chaining operations\nval result = \"  hello kotlin  \"\n    .let { it.trim() }\n    .let { it.capitalize() }\n    .let { \"Result: $it\" }\nprintln(result)  // \"Result: Hello kotlin\"\n"
+      "this",
+      "lambda's last expression",
+      "apply",
+      "it",
+      "skip/မ run",
+      "apply"
     ],
     "rubric": [
-      "Demonstrates a concept from Scope Functions.",
+      "Solves each coding problem in the prompt.",
       "Uses valid Kotlin syntax.",
-      "Includes a short Dart/Flutter comparison comment.",
-      "Keeps the example focused and readable."
+      "Matches the expected behavior from the course answer key.",
+      "Keeps the answer readable."
     ]
   },
   "courses/flutter_devs/course_10_coroutines_async_programming.md": {
     "mcq": [
-      "A",
-      "A"
+      "C",
+      "C",
+      "B",
+      "C",
+      "B",
+      "C",
+      "B",
+      "C"
     ],
     "fill": [
-      "async/await",
-      "Future"
+      "suspend",
+      "async",
+      "launch",
+      "async",
+      "runBlocking",
+      "delay()"
     ],
     "rubric": [
-      "Demonstrates a concept from Coroutines (Async Programming).",
+      "Solves each coding problem in the prompt.",
       "Uses valid Kotlin syntax.",
-      "Includes a short Dart/Flutter comparison comment.",
-      "Keeps the example focused and readable."
+      "Matches the expected behavior from the course answer key.",
+      "Keeps the answer readable."
     ]
   }
 }

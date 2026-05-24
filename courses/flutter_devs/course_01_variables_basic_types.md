@@ -2,7 +2,7 @@
 
 ## Goal
 
-Study **Variables နဲ့ Basic Types** using the provided `Kotlin for Flutter Developers` module as the single source for this course.
+Study this module from `files.zip` and use the included exam questions as the source of truth for assessment.
 
 ## Lessons
 
@@ -17,27 +17,25 @@ Flutter/Dart မှာ `final` နဲ့ `var` သုံးသလိုပဲ Ko
 
 **Kotlin:**
 ```kotlin
-val name: String = "Flutter Dev"   // ပြောင်းလို့မရ
-val age = 25                        // type inference — Int ဆိုတာ compiler သိ
-var score = 100                     // ပြောင်းလို့ရ
+val name: String = "Flutter Dev"
+val age = 25
+var score = 100
 score += 50
 ```
 
-**Dart (Flutter) နဲ့ နှိုင်းယှဉ်:**
+**Dart နဲ့ နှိုင်းယှဉ်:**
 ```dart
-final String name = "Flutter Dev";  // ပြောင်းလို့မရ
-final age = 25;                      // type inference
-var score = 100;                     // ပြောင်းလို့ရ
+final String name = "Flutter Dev";
+final age = 25;
+var score = 100;
 score += 50;
 ```
 
-> 💡 **Key difference:** Kotlin မှာ type ကို variable name **နောက်မှာ** ထည့်တယ် (`name: String`)။ Dart မှာတော့ **ရှေ့မှာ** ထည့်တယ် (`String name`)။
+> 💡 Kotlin မှာ type ကို variable name **နောက်မှာ** ထည့်တယ် (`name: String`)။ Dart မှာ **ရှေ့မှာ** ထည့်တယ် (`String name`)။
 
 ---
 
 ### 1.2 Basic Types
-
-Kotlin မှာ primitive types မရှိဘဲ object types ပဲရှိပါတယ် (Dart နဲ့ အတူတူပါပဲ)။
 
 | Kotlin | Dart | ဖော်ပြသည် |
 |--------|------|-----------|
@@ -61,9 +59,6 @@ val message: String = "Hello Kotlin"
 
 ### 1.3 String Templates
 
-Dart မှာ string interpolation ကို `${}` သုံးသလိုပဲ Kotlin မှာလည်း `${}` သုံးပါတယ်။
-
-**Kotlin:**
 ```kotlin
 val name = "Aung"
 val age = 25
@@ -71,54 +66,112 @@ println("ကျွန်တော်နာမည်က $name")
 println("သူ့အသက်က ${age + 1} နှစ်ဖြစ်မယ်")
 ```
 
-**Dart (Flutter) နဲ့ နှိုင်းယှဉ်:**
-```dart
-String name = "Aung";
-int age = 25;
-print("ကျွန်တော်နာမည်က $name");
-print("သူ့အသက်က ${age + 1} နှစ်ဖြစ်မယ်");
-```
-
-> 💡 **ဒီနေရာမှာ Dart နဲ့ syntax တော်တော်ဆင်တယ်။** Single variable → `$name`, expression → `${expression}`
+> 💡 Single variable → `$name` | Expression → `${expression}` — Dart နဲ့ syntax တူတူပဲ
 
 ---
 
 ## Flutter Bridge
 
-This module already compares Kotlin with Dart/Flutter. Use those comparisons as the main bridge when reading Android native code, Flutter plugin code, or Kotlin examples inside Android SDK documentation.
+Use the Dart/Flutter comparisons in this course when reading Kotlin code in Android plugins, native SDK integrations, or platform-channel work.
 
 ## Practice
 
-1. Re-type one Kotlin example from this module and run through the meaning line by line.
-2. Write the matching Dart/Flutter version shown in the module, then note the syntax differences.
-3. Pick one idea from this module and describe where it could appear in a Flutter Android plugin.
+1. Re-type one Kotlin example from the lesson.
+2. Write the comparable Dart/Flutter version where the course provides one.
+3. Note one Kotlin syntax difference that matters for Flutter Android work.
 
 ## Q&A Checkpoint
 
-- What part of **Variables နဲ့ Basic Types** feels closest to Dart or Flutter?
-- What syntax difference from this module should I remember when reading Kotlin code?
-- Where would this module appear in real Flutter + Android native work?
+- What Kotlin idea from this course feels closest to Dart/Flutter?
+- Which syntax difference from this course should I remember in Android plugin code?
+- How would this concept appear in real Flutter + Android native work?
 
 ## Exam
 
 ### Multiple Choice
+1. Kotlin မှာ read-only variable ကို ဘယ် keyword နဲ့ ကြေငြာတယ်?
+- A. `let`
+- B. `var`
+- C. `val`
+- D. `const`
 
-1. The main topic of this course is:
-   - A. Variables နဲ့ Basic Types
-   - B. CSS layout only
-   - C. SQL indexes only
-   - D. Figma export settings
-2. A good way for a Flutter developer to learn this module is to:
-   - A. Compare the Kotlin examples with the Dart/Flutter examples in the lesson
-   - B. Ignore all Dart comparisons
-   - C. Memorize Android Studio shortcuts only
-   - D. Skip all code samples
+2. Dart ရဲ့ `final` နဲ့ ညီတဲ့ Kotlin keyword ကဘာလဲ?
+- A. `var`
+- B. `val`
+- C. `static`
+- D. `fun`
+
+3. `val age = 25` မှာ `age` ရဲ့ type က ဘာဖြစ်မလဲ?
+- A. `String`
+- B. `Double`
+- C. `Long`
+- D. `Int`
+
+4. Kotlin မှာ type declaration ကို ဘယ်နေရာမှာ ထားတယ်?
+- A. variable name ရဲ့ ရှေ့မှာ
+- B. variable name နောက်မှာ colon ထည့်ပြီး
+- C. line အဆုံးမှာ
+- D. function ထဲမှာသာ ထည့်ရတယ်
+
+5. အောက်ပါ code မှာ ဘယ် line က compilation error ဖြစ်မလဲ?
+```kotlin
+val x = 10
+var y = 20
+x = 30     // line A
+y = 40     // line B
+```
+- A. Line A
+- B. Line B
+- C. နှစ်ခုလုံး error
+- D. error မရှိ
+
+6. Dart ရဲ့ `bool` type နဲ့ ညီတဲ့ Kotlin type ကဘာလဲ?
+- A. `Boolean`
+- B. `bool`
+- C. `boolean`
+- D. `Bool`
+
+7. String template မှာ expression ထည့်ချင်ရင် ဘယ် syntax သုံးရမလဲ?
+- A. `%(expression)`
+- B. `{expression}`
+- C. `${expression}`
+- D. `$(expression)`
+
+8. Kotlin ရဲ့ `Long` type နဲ့ ညီတဲ့ Dart type ရှိသလား?
+- A. ရှိတယ် — `long`
+- B. ရှိတယ် — `Long`
+- C. မရှိဘူး — Dart မှာ `int` တစ်မျိုးပဲ ရှိတယ်
+- D. ရှိတယ် — `int64`
 
 ### Fill In The Blank
-
-1. One important term from this module is ____.
-2. Another lesson topic from this module is ____.
+1. Kotlin မှာ reassign လုပ်လို့ရတဲ့ variable ကြေငြာဖို့ `________` keyword သုံးတယ်။
+2. Dart ရဲ့ `double` နဲ့ ညီတဲ့ Kotlin type က `________` ဖြစ်တယ်။
+3. Type ကို မရေးဘဲ compiler က အလိုအလျောက် သိနိုင်တဲ့ feature ကို `________` လို့ ခေါ်တယ်။
+4. String template မှာ variable တစ်ခုတည်းဆိုရင် `________` သုံးနိုင်တယ် (curly braces မလို)။
+5. Kotlin မှာ single character တစ်လုံး သိမ်းဆည်းတဲ့ type က `________` ဖြစ်တယ်။
+6. Dart ရဲ့ `final String city = "Yangon"` ကို Kotlin ရေးဆိုရင် `________` ဖြစ်တယ်။
 
 ### Coding Exam
+**Problem 1 — Dart မှ Kotlin သို့ပြောင်းပါ**
 
-Write a small Kotlin snippet that demonstrates one idea from **Variables နဲ့ Basic Types**. Add a short comment explaining the Dart/Flutter comparison from the module.
+```dart
+final String appName = "MyApp";
+final int version = 3;
+var bool isLoggedIn = false;
+var double rating = 4.5;
+isLoggedIn = true;
+```
+
+**Problem 2 — String Template သုံးပါ**
+
+`name`, `age`, `city` variable သုံးခုနဲ့ အောက်ပါ output ထွက်အောင် Kotlin code ရေးပါ။
+```
+ကျွန်တော်နာမည်က Mg Mg ဖြစ်ပြီး Yangon မှာနေတယ်။
+နောင်နှစ် အသက် 26 ဖြစ်မယ်။
+```
+
+**Problem 3 — Explicit vs Inference နှစ်မျိုးစလုံး ရေးပါ**
+
+Integer `100`, String `"Kotlin"`, Boolean `true`, Double `3.14` တို့ကို (a) explicit type နဲ့ (b) type inference နဲ့ နှစ်မျိုးစလုံး ကြေငြာပါ။
+
+---

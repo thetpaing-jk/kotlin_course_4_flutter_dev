@@ -2,51 +2,50 @@
 
 ## Goal
 
-Study **Scope Functions** using the provided `Kotlin for Flutter Developers` module as the single source for this course.
+Study this module from `files.zip` and use the included exam questions as the source of truth for assessment.
 
 ## Lessons
 
-Scope functions တွေဟာ Kotlin ရဲ့ unique feature တွေဖြစ်ပြီး code ကို ပိုသေသပ်တပ်ရပ်ဖြစ်အောင် ကူညီတယ်။
+### 9.1 Scope Functions ဆိုတာ ဘာလဲ
 
-### 9.1 `let` — Nullable checks နဲ့ transformations
+Object တစ်ခုရဲ့ context ထဲမှာ code block execute လုပ်ဖို့ သုံးတဲ့ special functions တွေ ဖြစ်တယ်။ `let`, `run`, `with`, `apply`, `also` ဆိုပြီး ၅ မျိုးရှိတယ်။
 
-Flutter မှာ null check ပြီးနောက် block of code run ချင်တဲ့ pattern နဲ့ ဆင်တယ်။
+| Function | Context object | Return value | Use case |
+|----------|---------------|--------------|----------|
+| `let` | `it` | Lambda result | Null check + transform |
+| `run` | `this` | Lambda result | Object ops + compute |
+| `with` | `this` | Lambda result | Multiple ops on object |
+| `apply` | `this` | Object itself | Object configuration |
+| `also` | `it` | Object itself | Side effects (logging) |
+
+---
+
+### 9.2 `let` — Null checks နဲ့ Transforms
 
 ```kotlin
 val name: String? = getUserName()
 
-// ❌ Traditional approach
-if (name != null) {
-    println(name.toUpperCase())
-}
+// Traditional
+if (name != null) { println(name.uppercase()) }
 
-// ✅ Using let
-name?.let {
-    println(it.toUpperCase())
-}
+// Using let
+name?.let { println(it.uppercase()) }
 
-// chaining operations
+// Chaining
 val result = "  hello kotlin  "
     .let { it.trim() }
     .let { it.capitalize() }
     .let { "Result: $it" }
-println(result)  // "Result: Hello kotlin"
 ```
 
 ---
 
-### 9.2 `apply` — Object configuration (Flutter ရဲ့ cascade `..` နဲ့ ဆင်)
+### 9.3 `apply` — Object Configuration
 
-Object ကို configure လုပ်ပြီး ထို object ကိုပဲ return — Flutter ရဲ့ cascade notation `..` နဲ့ concept ဆင်တယ်။
+Flutter ရဲ့ cascade `..` notation နဲ့ concept ဆင်တယ်။
 
 **Kotlin:**
 ```kotlin
-data class Config(
-    var host: String = "",
-    var port: Int = 0,
-    var timeout: Int = 0
-)
-
 val config = Config().apply {
     host = "api.example.com"
     port = 8080
@@ -54,37 +53,31 @@ val config = Config().apply {
 }
 ```
 
-**Dart (Flutter) နဲ့ နှိုင်းယှဉ်:**
+**Dart နဲ့ နှိုင်းယှဉ်:**
 ```dart
-// Dart မှာ cascade notation သုံး
 final paint = Paint()
     ..color = Colors.blue
-    ..strokeWidth = 2.0
-    ..style = PaintingStyle.stroke;
+    ..strokeWidth = 2.0;
 ```
 
 ---
 
-### 9.3 `also` — Side effects (logging, debugging)
-
-`apply` နဲ့ ဆင်ပြီး `it` ကိုသုံးတယ် — debugging/logging အတွက် သဘောကောင်းတယ်။
+### 9.4 `also` — Side Effects (Logging)
 
 ```kotlin
 val users = mutableListOf<String>()
     .also { println("List created: $it") }
 
 users.add("Aung")
-users.add("Mg Mg")
-    .also { println("Added user, list is now: $users") }
+    .also { println("After adding, list: $users") }
 ```
 
 ---
 
-### 9.4 `run` — Object operations + return result
+### 9.5 `run` — Result Return
 
 ```kotlin
 val user: User? = getUser()
-
 val greeting = user?.run {
     "Hello, $name! You are $age years old."
 } ?: "Hello, stranger!"
@@ -92,54 +85,110 @@ val greeting = user?.run {
 
 ---
 
-### 9.5 Scope Functions Summary
-
-| Function | Context object | Return value | Use case |
-|----------|---------------|--------------|----------|
-| `let` | `it` | Lambda result | Null check + transform |
-| `run` | `this` | Lambda result | Object ops + compute result |
-| `with` | `this` | Lambda result | Multiple operations on object |
-| `apply` | `this` | Object itself | Object configuration |
-| `also` | `it` | Object itself | Side effects (logging) |
-
----
-
 ## Flutter Bridge
 
-This module already compares Kotlin with Dart/Flutter. Use those comparisons as the main bridge when reading Android native code, Flutter plugin code, or Kotlin examples inside Android SDK documentation.
+Use the Dart/Flutter comparisons in this course when reading Kotlin code in Android plugins, native SDK integrations, or platform-channel work.
 
 ## Practice
 
-1. Re-type one Kotlin example from this module and run through the meaning line by line.
-2. Write the matching Dart/Flutter version shown in the module, then note the syntax differences.
-3. Pick one idea from this module and describe where it could appear in a Flutter Android plugin.
+1. Re-type one Kotlin example from the lesson.
+2. Write the comparable Dart/Flutter version where the course provides one.
+3. Note one Kotlin syntax difference that matters for Flutter Android work.
 
 ## Q&A Checkpoint
 
-- What part of **Scope Functions** feels closest to Dart or Flutter?
-- What syntax difference from this module should I remember when reading Kotlin code?
-- Where would this module appear in real Flutter + Android native work?
+- What Kotlin idea from this course feels closest to Dart/Flutter?
+- Which syntax difference from this course should I remember in Android plugin code?
+- How would this concept appear in real Flutter + Android native work?
 
 ## Exam
 
 ### Multiple Choice
+1. `apply` scope function ရဲ့ return value က ဘာဖြစ်မလဲ?
+- A. Lambda ရဲ့ last expression
+- B. `null`
+- C. Object itself (the receiver)
+- D. `Unit`
 
-1. The main topic of this course is:
-   - A. Scope Functions
-   - B. CSS layout only
-   - C. SQL indexes only
-   - D. Figma export settings
-2. A good way for a Flutter developer to learn this module is to:
-   - A. Compare the Kotlin examples with the Dart/Flutter examples in the lesson
-   - B. Ignore all Dart comparisons
-   - C. Memorize Android Studio shortcuts only
-   - D. Skip all code samples
+2. `let` scope function ထဲမှာ context object ကို ဘယ် name နဲ့ access လုပ်မလဲ?
+- A. `this`
+- B. `self`
+- C. `it`
+- D. `obj`
+
+3. Dart ရဲ့ cascade notation `..` နဲ့ concept အနီးဆုံး ဆင်တဲ့ Kotlin scope function ကဘာလဲ?
+- A. `let`
+- B. `also`
+- C. `run`
+- D. `apply`
+
+4. `also` ကို ဘာအတွက် အသုံးများတယ်?
+- A. Object configuration
+- B. Null safety check
+- C. Side effects (logging, debugging)
+- D. Type conversion
+
+5. `run` scope function ထဲမှာ context object ကို ဘယ် name နဲ့ access လုပ်မလဲ?
+- A. `it`
+- B. `this`
+- C. `self`
+- D. `context`
+
+6. `name?.let { ... }` pattern ဟာ ဘာကို handle လုပ်တာလဲ?
+- A. `name` ကို always execute
+- B. `name` null ဆိုရင် lambda ကို skip လုပ်
+- C. `name` ကို uppercase ပြောင်း
+- D. `name` ကို copy လုပ်
+
+7. `apply` နဲ့ `also` ကွာတာက?
+- A. `apply` မှာ `this`၊ `also` မှာ `it` — context object access ပုံကွဲ
+- B. `apply` ကို null objects ပဲ သုံးနိုင်
+- C. `also` က object return မလုပ်ဘူး
+- D. ကွာချက်မရှိ
+
+8. Scope functions ကို main purpose ကဘာလဲ?
+- A. Performance optimization
+- B. Code ကို ပိုသေသပ်/ဖတ်ရတာလွယ်အောင် လုပ်ဖို့
+- C. Thread safety
+- D. Memory management
 
 ### Fill In The Blank
-
-1. One important term from this module is ____.
-2. Another lesson topic from this module is ____.
+1. `apply` scope function ထဲမှာ context object ကို `________` keyword နဲ့ (သို့မဟုတ် ဖော်ပြမပြ) access လုပ်တယ်။
+2. `let` scope function ရဲ့ return value က `________` ဖြစ်တယ်။
+3. Dart ရဲ့ `..` cascade notation နဲ့ ဆင်တဲ့ Kotlin scope function က `________` ဖြစ်တယ်။
+4. `also` scope function ထဲမှာ context object ကို `________` keyword နဲ့ access လုပ်တယ်။
+5. Nullable object မှာ `?.let { }` သုံးရင် object null ဆိုတဲ့ အခြေအနေမှာ lambda ကို `________`။
+6. Scope functions ၅ မျိုးကတော့ `let`, `run`, `with`, `________`, `also` ဖြစ်တယ်။
 
 ### Coding Exam
+**Problem 1 — let**
 
-Write a small Kotlin snippet that demonstrates one idea from **Scope Functions**. Add a short comment explaining the Dart/Flutter comparison from the module.
+`data class AppConfig(val apiUrl: String?, val timeout: Int?)` ဒီ class ရှိတယ်ဆိုပါ။ `printConfig(config: AppConfig?)` function ရေးပါ — `let` သုံးပြီး:
+- config null → `"No config"` print
+- apiUrl null → `"URL: not set"` print
+- အားလုံးရှိ → `"URL: X | Timeout: Ys"` print
+
+**Problem 2 — apply**
+
+Flutter app settings object ကိုသုံးပြီး `apply` ဖြင့် configure လုပ်ပါ။
+
+```kotlin
+data class AppSettings(
+    var theme: String = "light",
+    var language: String = "en",
+    var notificationsEnabled: Boolean = false,
+    var fontSize: Int = 14
+)
+```
+
+`apply` သုံးပြီး theme `"dark"`, language `"my"`, notifications `true`, fontSize `16` set လုပ်ပါ။
+
+**Problem 3 — also (Debugging)**
+
+`val userList = mutableListOf<String>()` ကို `also` သုံးပြီး အောက်ပါ တစ်ဆင့်စီ debug log print လုပ်ပါ:
+1. List create ဖြစ်ကြောင်း log
+2. "Aung" add ပြီးနောက် log
+3. "Mg Mg" add ပြီးနောက် log
+4. Final list size log
+
+---

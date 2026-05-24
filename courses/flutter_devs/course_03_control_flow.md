@@ -2,19 +2,18 @@
 
 ## Goal
 
-Study **Control Flow** using the provided `Kotlin for Flutter Developers` module as the single source for this course.
+Study this module from `files.zip` and use the included exam questions as the source of truth for assessment.
 
 ## Lessons
 
 ### 3.1 if Expression
 
-Kotlin မှာ `if` ဟာ statement မဟုတ်ဘဲ **expression** ဖြစ်တယ် — value return လုပ်လို့ရတယ်။
+Kotlin မှာ `if` ဟာ **expression** ဖြစ်တယ် — value return လုပ်လို့ရတယ်။
 
 **Kotlin:**
 ```kotlin
 val max = if (a > b) a else b
 
-// multiline ဆိုရင်
 val result = if (score >= 60) {
     "ကျော်"
 } else {
@@ -22,21 +21,19 @@ val result = if (score >= 60) {
 }
 ```
 
-**Dart (Flutter) နဲ့ နှိုင်းယှဉ်:**
+**Dart နဲ့ နှိုင်းယှဉ်:**
 ```dart
-final max = a > b ? a : b;  // Dart မှာ ternary operator သုံးရတယ်
-
-// Dart မှာ if-expression မရှိ၊ ternary သာသုံးနိုင်
+final max = a > b ? a : b;           // ternary operator
 final result = score >= 60 ? "ကျော်" : "ကျ";
 ```
 
-> 💡 **Kotlin advantage:** `if` ကို expression အနေနဲ့ သုံးနိုင်တာကြောင့် ternary operator (`? :`) မလိုဘဲ ပိုဖတ်ရတာလွယ်တဲ့ code ရေးနိုင်တယ်။
+> 💡 Kotlin မှာ ternary operator (`? :`) မလိုဘဲ `if` ကိုတိုက်ရိုက် expression အနေနဲ့ သုံးနိုင်တယ်။
 
 ---
 
-### 3.2 when Expression (Dart switch ကို replace)
+### 3.2 when Expression
 
-Kotlin ရဲ့ `when` ကို Flutter မှာ `switch` statement တင်မဟုတ်ဘဲ Dart 3's pattern matching နဲ့ ယှဉ်ကြည့်နိုင်တယ်။
+Dart ရဲ့ `switch` ကို replace လုပ်တဲ့ Kotlin ရဲ့ powerful feature ဖြစ်တယ်။
 
 **Kotlin:**
 ```kotlin
@@ -48,18 +45,16 @@ val grade = when (score) {
     else       -> "F"
 }
 
-// type check လည်းလုပ်လို့ရ
 fun describe(obj: Any): String = when (obj) {
-    is String  -> "String of length ${obj.length}"
+    is String  -> "String: ${obj.length} chars"
     is Int     -> "Integer: $obj"
     is Boolean -> if (obj) "Yes" else "No"
     else       -> "Unknown"
 }
 ```
 
-**Dart (Flutter) နဲ့ နှိုင်းယှဉ်:**
+**Dart 3 နဲ့ နှိုင်းယှဉ်:**
 ```dart
-// Dart 3 pattern matching
 final grade = switch (score) {
     >= 90 => "A",
     >= 80 => "B",
@@ -69,7 +64,7 @@ final grade = switch (score) {
 };
 ```
 
-> 💡 Kotlin ရဲ့ `when` ဟာ Dart 3 ရဲ့ `switch` expression နဲ့ အတော်ဆင်တယ်။ `in 90..100` ဆိုတဲ့ range syntax ကသာ ကွဲတယ်။
+> 💡 `in 90..100` ဆိုတဲ့ range syntax ကသာ Dart နဲ့ ကွဲတယ်။
 
 ---
 
@@ -77,71 +72,116 @@ final grade = switch (score) {
 
 **Kotlin:**
 ```kotlin
-// range loop
 for (i in 1..5) println(i)         // 1,2,3,4,5
-for (i in 1 until 5) println(i)    // 1,2,3,4 (5 မပါ)
+for (i in 1 until 5) println(i)    // 1,2,3,4
 for (i in 5 downTo 1) println(i)   // 5,4,3,2,1
 
-// list iteration
 val fruits = listOf("apple", "banana", "mango")
 for (fruit in fruits) println(fruit)
 
-// index နဲ့ တွဲ
 for ((index, fruit) in fruits.withIndex()) {
     println("$index: $fruit")
 }
 ```
 
-**Dart (Flutter) နဲ့ နှိုင်းယှဉ်:**
+**Dart နဲ့ နှိုင်းယှဉ်:**
 ```dart
 for (int i = 1; i <= 5; i++) print(i);
-
-final fruits = ["apple", "banana", "mango"];
 for (final fruit in fruits) print(fruit);
-
-fruits.asMap().forEach((index, fruit) {
-    print("$index: $fruit");
-});
+fruits.asMap().forEach((index, fruit) { print("$index: $fruit"); });
 ```
 
 ---
 
 ## Flutter Bridge
 
-This module already compares Kotlin with Dart/Flutter. Use those comparisons as the main bridge when reading Android native code, Flutter plugin code, or Kotlin examples inside Android SDK documentation.
+Use the Dart/Flutter comparisons in this course when reading Kotlin code in Android plugins, native SDK integrations, or platform-channel work.
 
 ## Practice
 
-1. Re-type one Kotlin example from this module and run through the meaning line by line.
-2. Write the matching Dart/Flutter version shown in the module, then note the syntax differences.
-3. Pick one idea from this module and describe where it could appear in a Flutter Android plugin.
+1. Re-type one Kotlin example from the lesson.
+2. Write the comparable Dart/Flutter version where the course provides one.
+3. Note one Kotlin syntax difference that matters for Flutter Android work.
 
 ## Q&A Checkpoint
 
-- What part of **Control Flow** feels closest to Dart or Flutter?
-- What syntax difference from this module should I remember when reading Kotlin code?
-- Where would this module appear in real Flutter + Android native work?
+- What Kotlin idea from this course feels closest to Dart/Flutter?
+- Which syntax difference from this course should I remember in Android plugin code?
+- How would this concept appear in real Flutter + Android native work?
 
 ## Exam
 
 ### Multiple Choice
+1. Kotlin မှာ `if` ဟာ Dart နဲ့ ကွာခြားချက်က ဘာလဲ?
+- A. Kotlin မှာ `if` မရှိဘူး
+- B. Kotlin မှာ `if` ဟာ expression ဖြစ်ပြီး value return လုပ်နိုင်တယ်
+- C. Kotlin မှာ `if` ကို function ထဲမှာပဲ သုံးနိုင်တယ်
+- D. Dart နဲ့ အတူတူပဲ ကွာချက်မရှိ
 
-1. The main topic of this course is:
-   - A. Control Flow
-   - B. CSS layout only
-   - C. SQL indexes only
-   - D. Figma export settings
-2. A good way for a Flutter developer to learn this module is to:
-   - A. Compare the Kotlin examples with the Dart/Flutter examples in the lesson
-   - B. Ignore all Dart comparisons
-   - C. Memorize Android Studio shortcuts only
-   - D. Skip all code samples
+2. `when` expression မှာ default case ကို ဘာနဲ့ ရေးတယ်?
+- A. `default ->`
+- B. `_`
+- C. `else ->`
+- D. `other ->`
+
+3. `for (i in 1 until 5)` loop ဟာ ဘာတွေ print မလဲ?
+- A. 1, 2, 3, 4, 5
+- B. 1, 2, 3, 4
+- C. 0, 1, 2, 3, 4
+- D. 2, 3, 4, 5
+
+4. Kotlin ရဲ့ `in 90..100` syntax ကို Dart မှာ ဘယ်လိုရေးတယ်?
+- A. `in range(90, 100)`
+- B. `>= 90 && <= 100`
+- C. `between(90, 100)`
+- D. `>= 90`
+
+5. `when` expression ထဲမှာ type check လုပ်ဖို့ ဘာ keyword သုံးတယ်?
+- A. `instanceof`
+- B. `typeof`
+- C. `as`
+- D. `is`
+
+6. `for (i in 5 downTo 1)` loop ဟာ ဘာတွေ print မလဲ?
+- A. 1, 2, 3, 4, 5
+- B. 5, 4, 3, 2, 1
+- C. 5, 3, 1
+- D. 1, 3, 5
+
+7. Dart မှာ ternary operator `condition ? a : b` နဲ့ ညီတဲ့ Kotlin expression က ဘာလဲ?
+- A. `condition then a else b`
+- B. `if condition a else b`
+- C. `if (condition) a else b`
+- D. `when (condition) { true -> a; false -> b }`
+
+8. `fruits.withIndex()` ကို Dart မှာ equivalent ကဘာလဲ?
+- A. `fruits.indexed`
+- B. `fruits.enumerate()`
+- C. `fruits.asMap().forEach(...)`
+- D. `fruits.mapIndexed(...)`
 
 ### Fill In The Blank
-
-1. One important term from this module is ____.
-2. Another lesson topic from this module is ____.
+1. Kotlin မှာ `if` ဟာ statement မဟုတ်ဘဲ `________` ဖြစ်တယ်။
+2. `when` expression ရဲ့ default case ကို `________` keyword နဲ့ ရေးတယ်။
+3. `for (i in 1..5)` မှာ `..` operator ကို `________` လို့ ခေါ်တယ်။
+4. `for (i in 1 until 5)` မှာ `until` ကိုသုံးရင် last number ဖြစ်တဲ့ 5 ကို loop `________`။
+5. Dart ရဲ့ `switch` expression နဲ့ ညီတဲ့ Kotlin keyword က `________` ဖြစ်တယ်။
+6. List ကို index နဲ့ တွဲ iterate လုပ်ဖို့ `________` function သုံးတယ်။
 
 ### Coding Exam
+**Problem 1 — if Expression**
 
-Write a small Kotlin snippet that demonstrates one idea from **Control Flow**. Add a short comment explaining the Dart/Flutter comparison from the module.
+`temperature` (Int) parameter တစ်ခုယူပြီး Kotlin `if` expression သုံးကာ အောက်ပါ result return လုပ်တဲ့ function ရေးပါ။
+- 30 နဲ့ အထက် → `"ပူတယ်"`
+- 20–29 → `"သာယာတယ်"`
+- 20 အောက် → `"အေးတယ်"`
+
+**Problem 2 — when Expression**
+
+Flutter ရဲ့ route name (`"/home"`, `"/profile"`, `"/settings"`, others) ကို လက်ခံပြီး page title return လုပ်တဲ့ function ကို `when` expression သုံးပြီး ရေးပါ။
+
+**Problem 3 — for Loop**
+
+String list တစ်ခု (`val items = listOf("Flutter", "Kotlin", "Android", "iOS")`) ကို loop လုပ်ပြီး `"1. Flutter"`, `"2. Kotlin"` စသဖြင့် numbered list အနေနဲ့ print လုပ်ပါ။ (index 0 မဟုတ်ဘဲ 1 ကနေ စတင်ပါ)
+
+---
