@@ -1,0 +1,42 @@
+[
+  {
+    "path": "courses/en/course_01_variables_basic_types.md",
+    "title": "Course 01 — Variables and Basic Types"
+  },
+  {
+    "path": "courses/en/course_02_functions.md",
+    "title": "Course 02 — Functions"
+  },
+  {
+    "path": "courses/en/course_03_control_flow.md",
+    "title": "Course 03 — Control Flow"
+  },
+  {
+    "path": "courses/en/course_04_classes_inheritance.md",
+    "title": "Course 04 — Classes and Inheritance"
+  },
+  {
+    "path": "courses/en/course_05_data_classes.md",
+    "title": "Course 05 — Data Classes"
+  },
+  {
+    "path": "courses/en/course_06_null_safety.md",
+    "title": "Course 06 — Null Safety"
+  },
+  {
+    "path": "courses/en/course_07_collections.md",
+    "title": "Course 07 — Collections"
+  },
+  {
+    "path": "courses/en/course_08_higher_order_functions_lambdas.md",
+    "title": "Course 08 — Higher-Order Functions and Lambdas"
+  },
+  {
+    "path": "courses/en/course_09_scope_functions.md",
+    "title": "Course 09 — Scope Functions"
+  },
+  {
+    "path": "courses/en/course_10_coroutines.md",
+    "title": "Course 10 — Coroutines (Async Programming)"
+  }
+]

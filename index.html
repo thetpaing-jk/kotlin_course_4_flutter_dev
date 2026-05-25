@@ -13,7 +13,7 @@
         document.documentElement.dataset.theme = saved || (prefersDark ? "dark" : "light");
       })();
     </script>
-    <link rel="stylesheet" href="styles.css?v=11" />
+    <link rel="stylesheet" href="styles.css?v=13" />
   </head>
   <body>
     <div class="app-shell">
@@ -66,6 +66,13 @@
             <h2 id="courseTitle">Loading...</h2>
           </div>
           <div class="top-actions">
+            <label class="language-select">
+              <span>Language</span>
+              <select id="languageSelect" aria-label="Language">
+                <option value="my">မြန်မာ</option>
+                <option value="en">English</option>
+              </select>
+            </label>
             <button class="theme-toggle" id="themeToggle" type="button" aria-pressed="false">
               <span class="toggle-track" aria-hidden="true"><span></span></span>
               <span id="themeToggleLabel">Dark</span>
@@ -135,6 +142,6 @@
       </main>
     </div>
 
-    <script src="app.js?v=15"></script>
+    <script src="app.js?v=16"></script>
   </body>
 </html>

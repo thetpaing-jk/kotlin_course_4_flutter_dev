@@ -1,5 +1,13 @@
-const COURSE_MANIFEST = "courses/full/manifest.json";
-const ANSWER_KEY_FILE = "exams/full_answer_key.json";
+const COURSE_SETS = {
+  my: {
+    manifest: "courses/full/manifest.json",
+    answerKey: "exams/full_answer_key.json",
+  },
+  en: {
+    manifest: "courses/en/manifest.json",
+    answerKey: "exams/full_answer_key_en.json",
+  },
+};
 const SUPABASE_CONFIG_ENDPOINT = "/api/config";
 
 const FALLBACK_ANSWER_KEY = {
@@ -86,6 +94,7 @@ const FALLBACK_ANSWER_KEY = {
 
 const STORAGE_KEY = "kotlinCourseStudio.v1";
 const THEME_KEY = "kotlinCourseStudio.theme";
+const LANGUAGE_KEY = "kotlinCourseStudio.language";
 const LOCAL_EXAM_FLAG_KEY = "kotlinCourseStudio.localExamMode";
 const SYNC_DEBOUNCE_MS = 700;
 const EXAM_DURATION_MS = 30 * 60 * 1000;
@@ -188,6 +197,7 @@ const TEXT = {
   codingReviewNote: "Coding is auto checked. Compiler results are used when the judge is available; static fallback is used otherwise.",
   qaDefaultPrompt: "Course: {course}\nQuestion:\n\nContext:\nI am a Flutter developer learning Kotlin. Please research current Kotlin/Android docs and explain with Flutter comparisons.",
   resetProgressTitle: "Reset progress",
+  languageLabel: "Language",
 };
 
 const state = {
@@ -195,6 +205,7 @@ const state = {
   answerKey: FALLBACK_ANSWER_KEY,
   activeCourse: 0,
   activeTab: "learn",
+  language: localStorage.getItem(LANGUAGE_KEY) === "en" ? "en" : "my",
   theme: document.documentElement.dataset.theme || "light",
   saved: loadState(),
   supabase: null,
@@ -232,6 +243,7 @@ const els = {
   resetProgressBtn: document.querySelector("#resetProgressBtn"),
   themeToggle: document.querySelector("#themeToggle"),
   themeToggleLabel: document.querySelector("#themeToggleLabel"),
+  languageSelect: document.querySelector("#languageSelect"),
   syncStatus: document.querySelector("#syncStatus"),
   loginForm: document.querySelector("#loginForm"),
   googleLoginBtn: document.querySelector("#googleLoginBtn"),
@@ -246,11 +258,7 @@ init();
 async function init() {
   applyTheme(state.theme);
   initLocalExamMode();
-  const [courseFiles, answerKey] = await Promise.all([loadCourseFiles(), loadAnswerKey()]);
-  state.answerKey = answerKey;
-  const markdownFiles = await Promise.all(courseFiles.map(loadMarkdown));
-  state.courses = markdownFiles.map(parseCourse);
-  state.activeCourse = clamp(state.saved.activeCourse ?? 0, 0, state.courses.length - 1);
+  await loadLocalizedCourses();
   bindEvents();
   render();
   await initSupabase();
@@ -268,8 +276,16 @@ async function loadMarkdown(path) {
   };
 }
 
-async function loadCourseFiles() {
-  const response = await fetch(COURSE_MANIFEST);
+async function loadLocalizedCourses() {
+  const [courseFiles, answerKey] = await Promise.all([loadCourseFiles(state.language), loadAnswerKey(state.language)]);
+  state.answerKey = answerKey;
+  const markdownFiles = await Promise.all(courseFiles.map(loadMarkdown));
+  state.courses = markdownFiles.map(parseCourse);
+  state.activeCourse = clamp(state.saved.activeCourse ?? 0, 0, state.courses.length - 1);
+}
+
+async function loadCourseFiles(language = state.language) {
+  const response = await fetch(COURSE_SETS[language]?.manifest ?? COURSE_SETS.my.manifest);
   if (!response.ok) {
     return [
       "courses/course_01_orientation_basic_syntax.md",
@@ -286,8 +302,8 @@ async function loadCourseFiles() {
   return manifest.map((item) => item.path);
 }
 
-async function loadAnswerKey() {
-  const response = await fetch(ANSWER_KEY_FILE);
+async function loadAnswerKey(language = state.language) {
+  const response = await fetch(COURSE_SETS[language]?.answerKey ?? COURSE_SETS.my.answerKey);
   if (!response.ok) {
     return FALLBACK_ANSWER_KEY;
   }
@@ -412,12 +428,12 @@ function clampNumber(value, min, max) {
 
 function parseMcq(text) {
   const questions = [];
-  const blocks = text.split(/\n(?=\d+\.\s+)/).map((block) => block.trim()).filter(Boolean);
+  const blocks = text.split(/\n(?=(?:\*\*)?\d+\.\s*(?:\*\*)?)/).map((block) => block.trim()).filter(Boolean);
   for (const block of blocks) {
     const lines = block.split(/\r?\n/).filter(Boolean);
     const firstOptionIndex = lines.findIndex((line) => /^-\s+[A-D]\.\s+/.test(line.trim()));
     const promptLines = (firstOptionIndex >= 0 ? lines.slice(0, firstOptionIndex) : lines).map((line, index) =>
-      index === 0 ? line.replace(/^\d+\.\s+/, "").trim() : line
+      index === 0 ? line.replace(/^(?:\*\*)?\d+\.\s*(?:\*\*)?\s*/, "").trim() : line
     );
     const prompt = promptLines.join("\n").trim();
     const options = lines
@@ -491,6 +507,19 @@ function bindEvents() {
   els.startExamBtn.addEventListener("click", startCurrentExam);
   els.submitExamBtn.addEventListener("click", () => {
     submitCurrentExam("manual");
+  });
+
+  els.languageSelect.addEventListener("change", async () => {
+    const nextLanguage = els.languageSelect.value === "en" ? "en" : "my";
+    if (nextLanguage === state.language) return;
+    if (!canLeaveExam("learn")) {
+      els.languageSelect.value = state.language;
+      return;
+    }
+    state.language = nextLanguage;
+    localStorage.setItem(LANGUAGE_KEY, state.language);
+    await loadLocalizedCourses();
+    render();
   });
 
   els.examForm.addEventListener("click", (event) => {
@@ -567,6 +596,7 @@ function bindEvents() {
 
 function render() {
   reconcileExamTimers();
+  renderLanguage();
   renderCourseList();
   renderHeader();
   renderProgress();
@@ -575,6 +605,12 @@ function render() {
   renderQa();
   renderAccount();
   renderTabs();
+}
+
+function renderLanguage() {
+  if (els.languageSelect) {
+    els.languageSelect.value = state.language;
+  }
 }
 
 function renderCourseList() {

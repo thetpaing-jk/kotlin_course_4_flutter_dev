@@ -311,6 +311,37 @@ button {
   align-items: center;
 }
 
+.language-select {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--control);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.language-select span {
+  color: var(--muted);
+}
+
+.language-select select {
+  min-width: 92px;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font-weight: 800;
+}
+
+.language-select select option {
+  background: var(--panel);
+  color: var(--ink);
+}
+
 .topbar h2 {
   margin: 2px 0 0;
   font-size: clamp(24px, 3vw, 38px);
@@ -1075,14 +1106,19 @@ button {
 
   .top-actions {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 40px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 40px;
     justify-content: stretch;
     width: 100%;
   }
 
+  .language-select,
   .theme-toggle,
   .icon-button {
     width: 100%;
+  }
+
+  .language-select {
+    justify-content: center;
   }
 
 

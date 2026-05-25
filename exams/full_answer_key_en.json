@@ -1,0 +1,262 @@
+{
+  "courses/en/course_01_variables_basic_types.md": {
+    "mcq": [
+      "C",
+      "B",
+      "D",
+      "B",
+      "A",
+      "A",
+      "C",
+      "C"
+    ],
+    "fill": [
+      "var",
+      "Double",
+      "type inference",
+      "$variableName",
+      "Char",
+      "val city: String = \"Yangon\""
+    ],
+    "rubric": [
+      "Solves each coding problem in the prompt.",
+      "Uses valid Kotlin syntax.",
+      "Matches the expected behavior from the course answer key.",
+      "Keeps the answer readable."
+    ]
+  },
+  "courses/en/course_02_functions.md": {
+    "mcq": [
+      "C",
+      "B",
+      "C",
+      "B",
+      "C",
+      "C",
+      "C",
+      "B"
+    ],
+    "fill": [
+      "fun",
+      "Unit",
+      "=",
+      "default",
+      "named",
+      "fun greet(name: String): String"
+    ],
+    "rubric": [
+      "Solves each coding problem in the prompt.",
+      "Uses valid Kotlin syntax.",
+      "Matches the expected behavior from the course answer key.",
+      "Keeps the answer readable."
+    ]
+  },
+  "courses/en/course_03_control_flow.md": {
+    "mcq": [
+      "B",
+      "C",
+      "B",
+      "D",
+      "D",
+      "B",
+      "C",
+      "C"
+    ],
+    "fill": [
+      "expression",
+      "else",
+      "range",
+      "excluded",
+      "when",
+      "withIndex()"
+    ],
+    "rubric": [
+      "Solves each coding problem in the prompt.",
+      "Uses valid Kotlin syntax.",
+      "Matches the expected behavior from the course answer key.",
+      "Keeps the answer readable."
+    ]
+  },
+  "courses/en/course_04_classes_inheritance.md": {
+    "mcq": [
+      "B",
+      "B",
+      "C",
+      "B",
+      "C",
+      "B",
+      "B",
+      "B"
+    ],
+    "fill": [
+      "open",
+      "override",
+      "new",
+      "ParentClass",
+      "init",
+      ":"
+    ],
+    "rubric": [
+      "Solves each coding problem in the prompt.",
+      "Uses valid Kotlin syntax.",
+      "Matches the expected behavior from the course answer key.",
+      "Keeps the answer readable."
+    ]
+  },
+  "courses/en/course_05_data_classes.md": {
+    "mcq": [
+      "B",
+      "C",
+      "B",
+      "C",
+      "B",
+      "A",
+      "B",
+      "B"
+    ],
+    "fill": [
+      "Freezed",
+      "===",
+      "original",
+      "componentN()",
+      "data",
+      "toString()"
+    ],
+    "rubric": [
+      "Solves each coding problem in the prompt.",
+      "Uses valid Kotlin syntax.",
+      "Matches the expected behavior from the course answer key.",
+      "Keeps the answer readable."
+    ]
+  },
+  "courses/en/course_06_null_safety.md": {
+    "mcq": [
+      "B",
+      "C",
+      "C",
+      "B",
+      "C",
+      "C",
+      "D",
+      "C"
+    ],
+    "fill": [
+      "null",
+      "?:",
+      "safe",
+      "?.` and `?:",
+      "smart",
+      "compilation"
+    ],
+    "rubric": [
+      "Solves each coding problem in the prompt.",
+      "Uses valid Kotlin syntax.",
+      "Matches the expected behavior from the course answer key.",
+      "Keeps the answer readable."
+    ]
+  },
+  "courses/en/course_07_collections.md": {
+    "mcq": [
+      "B",
+      "B",
+      "C",
+      "C",
+      "B",
+      "C",
+      "B",
+      "A"
+    ],
+    "fill": [
+      "listOf()",
+      "filter",
+      "all",
+      "to",
+      "getOrDefault()",
+      "dot (`.`)"
+    ],
+    "rubric": [
+      "Solves each coding problem in the prompt.",
+      "Uses valid Kotlin syntax.",
+      "Matches the expected behavior from the course answer key.",
+      "Keeps the answer readable."
+    ]
+  },
+  "courses/en/course_08_higher_order_functions_lambdas.md": {
+    "mcq": [
+      "B",
+      "C",
+      "B",
+      "A",
+      "B",
+      "B",
+      "B",
+      "B"
+    ],
+    "fill": [
+      "->",
+      "it",
+      "higher-order",
+      "last",
+      "trailing",
+      "void"
+    ],
+    "rubric": [
+      "Solves each coding problem in the prompt.",
+      "Uses valid Kotlin syntax.",
+      "Matches the expected behavior from the course answer key.",
+      "Keeps the answer readable."
+    ]
+  },
+  "courses/en/course_09_scope_functions.md": {
+    "mcq": [
+      "C",
+      "C",
+      "D",
+      "C",
+      "B",
+      "B",
+      "A",
+      "B"
+    ],
+    "fill": [
+      "this",
+      "the lambda's last expression",
+      "apply",
+      "it",
+      "skipped",
+      "apply"
+    ],
+    "rubric": [
+      "Solves each coding problem in the prompt.",
+      "Uses valid Kotlin syntax.",
+      "Matches the expected behavior from the course answer key.",
+      "Keeps the answer readable."
+    ]
+  },
+  "courses/en/course_10_coroutines.md": {
+    "mcq": [
+      "C",
+      "C",
+      "B",
+      "C",
+      "B",
+      "C",
+      "B",
+      "C"
+    ],
+    "fill": [
+      "suspend",
+      "async",
+      "launch",
+      "async",
+      "runBlocking",
+      "delay()"
+    ],
+    "rubric": [
+      "Solves each coding problem in the prompt.",
+      "Uses valid Kotlin syntax.",
+      "Matches the expected behavior from the course answer key.",
+      "Keeps the answer readable."
+    ]
+  }
+}
