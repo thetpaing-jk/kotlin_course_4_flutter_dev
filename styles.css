@@ -100,11 +100,17 @@ button {
   width: 44px;
   height: 44px;
   place-items: center;
-  border-radius: 8px;
-  background: var(--blue);
-  color: #fff;
-  font-size: 24px;
-  font-weight: 800;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--code-bg);
+  box-shadow: 0 8px 20px rgba(24, 32, 43, 0.14);
+}
+
+.brand-mark img {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .brand-block h1 {
