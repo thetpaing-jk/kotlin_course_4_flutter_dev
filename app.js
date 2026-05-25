@@ -128,6 +128,8 @@ const TEXT = {
   hideAnswer: "Hide answer",
   yourAnswer: "Your answer",
   correctAnswer: "Correct answer",
+  correctStatus: "Correct",
+  incorrectStatus: "Incorrect",
   noAnswer: "No answer",
   checkedByCompiler: "Checked by Kotlin compiler",
   checkedByStaticFallback: "Checked by static fallback",
@@ -946,13 +948,14 @@ function renderAttemptReview(course, attempt) {
       const correctKey = key.mcq[index];
       const correctOption = question.options.find((option) => option.key === correctKey);
       const correct = correctOption ? `${correctKey}. ${correctOption.text}` : correctKey;
-      return reviewCardHtml(`MCQ ${index + 1}`, question.prompt, given, correct, `mcq-answer-${index}`);
+      return reviewCardHtml(`MCQ ${index + 1}`, question.prompt, given, correct, `mcq-answer-${index}`, given === correctKey);
     })
     .join("");
   const fillReview = course.exam.fill
     .map((prompt, index) => {
+      const rawAnswer = attempt.answers.fill?.[index] || "";
       const expected = Array.isArray(key.fill[index]) ? key.fill[index].join(" / ") : key.fill[index];
-      return reviewCardHtml(`Fill ${index + 1}`, prompt, attempt.answers.fill?.[index] || t("noAnswer"), expected, `fill-answer-${index}`);
+      return reviewCardHtml(`Fill ${index + 1}`, prompt, rawAnswer || t("noAnswer"), expected, `fill-answer-${index}`, Boolean(rawAnswer) && matchesAnswer(rawAnswer, key.fill[index]));
     })
     .join("");
   const codingProblems = splitCodingProblems(course.exam.coding);
@@ -1001,16 +1004,23 @@ function renderAttemptReview(course, attempt) {
   `;
 }
 
-function reviewCardHtml(label, prompt, given, correct, id) {
+function reviewCardHtml(label, prompt, given, correct, id, isCorrect) {
+  const statusClass = isCorrect ? "is-correct" : "is-incorrect";
+  const statusIcon = isCorrect ? "✓" : "×";
+  const statusText = isCorrect ? t("correctStatus") : t("incorrectStatus");
   return `
-    <article class="review-card">
+    <article class="review-card ${statusClass}">
       <div class="review-prompt">
         <strong>${escapeHtml(label)}.</strong>
         <div>${markdownToHtml(prompt)}</div>
       </div>
-      <p><strong>${escapeHtml(t("yourAnswer"))}:</strong> ${escapeHtml(given)}</p>
+      <div class="answer-status ${statusClass}">
+        <span class="status-icon" aria-hidden="true">${statusIcon}</span>
+        <strong>${escapeHtml(statusText)}</strong>
+      </div>
+      <p class="answer-line ${statusClass}"><strong>${escapeHtml(t("yourAnswer"))}:</strong> <span>${escapeHtml(given)}</span></p>
       <button class="secondary-button" type="button" data-answer-toggle="${escapeHtml(id)}">${escapeHtml(t("viewAnswer"))}</button>
-      <p class="answer-reveal" id="${escapeHtml(id)}" hidden><strong>${escapeHtml(t("correctAnswer"))}:</strong> ${escapeHtml(correct)}</p>
+      <p class="answer-reveal correct-answer" id="${escapeHtml(id)}" hidden><strong>${escapeHtml(t("correctAnswer"))}:</strong> ${escapeHtml(correct)}</p>
     </article>
   `;
 }
